@@ -1,0 +1,2325 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BRobot</name>
+    </assembly>
+    <members>
+        <!-- Badly formed XML comment ignored for member "T:BRobot.ActionType" -->
+        <member name="T:BRobot.Action">
+            <summary>
+            Actions represent high-level abstract operations such as movements, rotations, 
+            transformations or joint manipulations, both in absolute and relative terms. 
+            They are independent from the device's properties, and their translation into
+            actual robotic instructions depends on the robot's properties and state. 
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionSpeed">
+            <summary>
+            An Action to change the current speed setting.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionZone">
+            <summary>
+            An Action to change current zone setting.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionMotion">
+            <summary>
+            An Action to change current MotionType.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionCoordinates">
+            <summary>
+            An Action to change current Reference Coordinate System.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionPushPop">
+            <summary>
+            An Action to Push or Pop current device settings (such as speed, zone, etc.)
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionTranslation">
+            <summary>
+            An action representing a Translation transform in along a guiding vector.
+            </summary>
+        </member>
+        <member name="M:BRobot.ActionTranslation.#ctor(BRobot.Point,System.Boolean)">
+            <summary>
+            Full constructor.
+            </summary>
+            <param name="world"></param>
+            <param name="trans"></param>
+            <param name="relTrans"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+        </member>
+        <member name="T:BRobot.ActionRotation">
+            <summary>
+            An Action representing a Rotation transformation in Quaternion represnetation.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionTransformation">
+            <summary>
+            An Action representing a combined Translation and Rotation Transformation.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionJoints">
+            <summary>
+            An Action representing the raw angular values of the device's joint rotations.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionMessage">
+            <summary>
+            An Action representing a string message sent to the device to be displayed.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionWait">
+            <summary>
+            An Action represening the device staying idle for a period of time.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionBuffer">
+            <summary>
+            A class that manages a FIFO list of Actions.
+            </summary>
+        </member>
+        <member name="F:BRobot.ActionBuffer.pending">
+            <summary>
+            Actions pending to be released.
+            </summary>
+        </member>
+        <member name="F:BRobot.ActionBuffer.released">
+            <summary>
+            Keep track of past released actions.
+            </summary>
+        </member>
+        <member name="F:BRobot.ActionBuffer.blockCounts">
+            <summary>
+            Stores the amount of Actions per 'block'. 
+            A 'block' is a set of Actions flagged to be released as a group,
+            like in Execute mode. 
+            </summary>
+        </member>
+        <member name="M:BRobot.ActionBuffer.#ctor">
+            <summary>
+            Main constructor.
+            </summary>
+        </member>
+        <member name="M:BRobot.ActionBuffer.Add(BRobot.Action)">
+            <summary>
+            Add an Action to the pending buffer.
+            </summary>
+            <param name="act"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.GetNext">
+            <summary>
+            Release the next pending Action with the highest priority.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.GetLast">
+            <summary>
+            Returns the last Action that was released by the buffer
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.GetAllPending(System.Boolean)">
+            <summary>
+            Release all pending Actions in the order they were issued.
+            </summary>
+            <param name="flush">If true, pending actions will be flushed from the buffer and flagged as released</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.GetAllPending">
+            <summary>
+            Release all pending Actions in the order they were issued.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.SetBlock">
+            <summary>
+            Wraps all pending actions outside release blocks into one.
+            </summary>
+        </member>
+        <member name="M:BRobot.ActionBuffer.GetBlockPending(System.Boolean)">
+            <summary>
+            Returns the next block of Actions to be released. If no block
+            is present, it will return all pending Actions. 
+            </summary>
+            <param name="flush">If true, this block will be moved 
+            from pending to released.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.AreActionsPending">
+            <summary>
+            Is there any Action pending in the buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.ActionsPending">
+            <summary>
+            How many Actions are pending in the buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.IsVirgin">
+            <summary>
+            Has any Action ever been issued to this buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.ActionBuffer.Flush">
+            <summary>
+            Clear all buffered and past released Actions.
+            </summary>
+        </member>
+        <member name="M:BRobot.ActionBuffer.LogBufferedActions">
+            <summary>
+            Writes a description of each pending Action to the Console.
+            </summary>
+        </member>
+        <member name="T:BRobot.Communication">
+            <summary>
+            A class to handle communication with external controllers, real or virtual
+            </summary>
+        </member>
+        <member name="F:BRobot.Communication.masterControl">
+            <summary>
+            A reference to parent BRobot Control object commanding this Comm.
+            </summary>
+        </member>
+        <member name="F:BRobot.Communication.isConnected">
+            <summary>
+            Is the connection to the controller fully operative?
+            </summary>
+        </member>
+        <member name="F:BRobot.Communication.isRunning">
+            <summary>
+            Is the device currently running a program?
+            </summary>
+        </member>
+        <member name="M:BRobot.Communication.Reset">
+            <summary>
+            Reverts the Comm object to a blank state before any connection attempt, objects retrieved, subscriptions, etc,
+            </summary>
+        </member>
+        <member name="M:BRobot.Communication.ConnectToDevice(System.Int32)">
+            <summary>
+            Performs all necessary operations for a successful real-time connection to a real/virtual device.
+            </summary>
+            <param name="deviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.DisconnectFromDevice">
+            <summary>
+            Performs all necessary operations and disposals for a full disconnection (and reset) from a real/virtual device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.SetRunMode(BRobot.RunMode)">
+            <summary>
+            Sets the execution mode on the device to once or loop (useful for ControlMode.Execute)
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.LoadProgramToController(System.String,System.String,System.String)">
+            <summary>
+            Loads a program to the device.
+            </summary>
+            <param name="dirname"></param>
+            <param name="filename"></param>
+            <param name="extension"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.LoadProgramToController(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a program to the device.
+            </summary>
+            <param name="program"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.StartProgramExecution">
+            <summary>
+            Request the start of the program loaded on the device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.StopProgramExecution(System.Boolean)">
+            <summary>
+            Request immediate or deferred stop of the program running on the device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.GetCurrentPosition">
+            <summary>
+            Returns a Point object representing the current robot's TCP position.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.GetCurrentOrientation">
+            <summary>
+            Returns a Rotation object representing the current robot's TCP orientation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.GetCurrentJoints">
+            <summary>
+            Returns a Joints object representing the rotations of the 6 axes of this robot.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Communication.TickStreamQueue(System.Boolean)">
+            <summary>
+            Ticks the queue manager and potentially triggers streaming of targets to the controller.
+            </summary>
+            <param name="priority"></param>
+        </member>
+        <member name="M:BRobot.Communication.DebugDump">
+            <summary>
+            Dumps a bunch of info to the console.
+            </summary>
+        </member>
+        <member name="M:BRobot.Communication.SaveProgramToFilename(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Saves a string representation of a program to a local file. 
+            </summary>
+            <param name="module"></param>
+            <param name="filepath"></param>
+        </member>
+        <member name="M:BRobot.CommunicationABB.#ctor(BRobot.Control)">
+            <summary>
+            Main constructor
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.Reset">
+            <summary>
+            Reverts the Comm object to a blank state before any connection attempt. 
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.ConnectToDevice(System.Int32)">
+            <summary>
+            Performs all necessary actions to establish a connection to a real/virtual device, 
+            including connecting to the controller, loggin in, checking required states, etc.
+            </summary>
+            <param name="deviceId"></param>
+        </member>
+        <member name="M:BRobot.CommunicationABB.DisconnectFromDevice">
+            <summary>
+            Forces disconnection from current controller and manages associated logoffs, disposals, etc.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.SetRunMode(BRobot.RunMode)">
+            <summary>
+            Sets the Rapid ExecutionCycle to Once, Forever or None.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LoadProgramToController(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a module to the ABB controller given as a string list of Rapid code lines.
+            </summary>
+            <param name="module"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LoadProgramToController(System.String,System.String,System.String)">
+            <summary>
+            Loads a module into de controller from a local file. 
+            @TODO: This is an expensive operation, should probably become threaded. 
+            @TODO: By default, wipes out all previous modules --> parameterize.
+            </summary>
+            <param name="dirname"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.StartProgramExecution">
+            <summary>
+            Requests start executing the program in the main task. Remember to call ResetProgramPointer() before. 
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.StopProgramExecution(System.Boolean)">
+            <summary>
+            Requests stop executing the program in the main task.
+            </summary>
+            <param name="immediate">Stop right now or wait for current cycle to complete?</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.GetCurrentPosition">
+            <summary>
+            Returns a Point object representing the current robot's TCP position.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.GetCurrentOrientation">
+            <summary>
+            Returns a Rotation object representing the current robot's TCP orientation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.GetCurrentJoints">
+            <summary>
+            Returns a Joints object representing the rotations of the 6 axes of this robot.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.TickStreamQueue(System.Boolean)">
+            <summary>
+            This function will look at the state of the program pointer, the streamQueue, 
+            and if necessary will add a new target to the stream. This is meant to be called
+            to initiate the stream update chain, like when adding a new target, or pnum event handling.
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.DebugDump">
+            <summary>
+            Dumps a bunch of controller info to the console.
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LoadController(System.Int32)">
+            <summary>
+            Searches the network for a robot controller and establishes a connection with the specified one by position.
+            Performs no LogOn actions or similar. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.ReleaseController">
+            <summary>
+            Disposes the controller object. This has to be done manually, since COM objects are not
+            automatically garbage collected. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LoadIP">
+            <summary>
+            Load the controller's IP address into the object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.ReleaseIP">
+            <summary>
+            Resets IP address. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LogOn">
+            <summary>
+            Logs on to the controller with a default user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LogOff">
+            <summary>
+            Logs off from the controller.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.IsControllerInAutoMode">
+            <summary>
+            Returns true if controller is in automatic mode.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.IsControllerMotorsOn">
+            <summary>
+            Returns true if controller has Motors On
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LoadMainTask">
+            <summary>
+            Retrieves the main task from the ABB controller, typically 't_rob1'.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.ReleaseMainTask">
+            <summary>
+            Disposes the task object. This has to be done manually, since COM objects are not
+            automatically garbage collected. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.TestMastershipRapid">
+            <summary>
+            Pings the controller's Rapid resource with a bogus request to check if it is available for
+            Mastership, or it is held by someone else.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.SubscribeToEvents">
+            <summary>
+            Subscribe to relevant events in the controller and assign them handlers.
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.ClearAllModules">
+            <summary>
+            Deletes all existing modules from main task in the controller. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.ResetProgramPointer">
+            <summary>
+            Resets the program pointer in the controller to the main entry point. Needs to be called
+            before starting execution of a program, otherwise the controller will throw an error. 
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.SetupStreamingMode">
+            <summary>
+            Performs necessary operations to set up 'stream' control mode in the controller
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LoadStreamingModule">
+            <summary>
+            Loads the default StreamModule designed for streaming.
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.HookUpStreamingVariables">
+            <summary>
+            Loads all relevant Rapid variables
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.LoadRapidDataVariable(System.String)">
+            <summary>
+            Retrieves a Rapid variable in current module and returns it
+            </summary>
+            <param name="varName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CommunicationABB.SetRapidDataVariable(ABB.Robotics.Controllers.RapidDomain.RapidData,System.String)">
+            <summary>
+            Sets the value of a Rapid variable from a string representation
+            </summary>
+            <param name="rd"></param>
+            <param name="declaration"></param>
+        </member>
+        <member name="M:BRobot.CommunicationABB.SetNextVirtualTarget(System.Boolean)">
+            <summary>
+            Figures out the appropriate virtual target in the streaming module and 
+            sets new values according to the streaming queue.
+            </summary>
+            <param name="hasPriority"></param>
+        </member>
+        <member name="F:BRobot.CommunicationABB.StreamModuleV2">
+            <summary>
+            The enhanced module used for ABB Online Stream mode
+            </summary>
+        </member>
+        <member name="M:BRobot.CommunicationABB.OnRapidExecutionStatusChanged(System.Object,ABB.Robotics.Controllers.RapidDomain.ExecutionStatusChangedEventArgs)">
+            <summary>
+            What to do when the robot starts running or stops.
+            @TODO: add new behavior here when execution changes
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:BRobot.CommunicationABB.OnRapidMastershipChanged(System.Object,ABB.Robotics.Controllers.MastershipChangedEventArgs)">
+            <summary>
+            What to do when Mastership changes.
+            @TODO: add behaviors...
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:BRobot.CommunicationABB.OnRapidTaskEnabledChanged(System.Object,ABB.Robotics.Controllers.RapidDomain.TaskEnabledChangedEventArgs)">
+            <summary>
+            What to do when the Task Enabled property changes.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:BRobot.CommunicationABB.OnOperatingModeChanged(System.Object,ABB.Robotics.Controllers.OperatingModeChangeEventArgs)">
+            <summary>
+            What to do when the controller changes Operating Mode.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:BRobot.CommunicationABB.OnRD_pnum_ValueChanged(System.Object,ABB.Robotics.Controllers.RapidDomain.DataValueChangedEventArgs)">
+            <summary>
+            What to do when the 'pnum' rapid var changes value
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:BRobot.Control">
+            <summary>
+            The core class that centralizes all private control.
+            </summary>
+        </member>
+        <member name="F:BRobot.Control.controlMode">
+            <summary>
+            Operation modes by default
+            </summary>
+        </member>
+        <member name="F:BRobot.Control.comm">
+            <summary>
+            Instances of the main robot Controller and Task
+            </summary>
+        </member>
+        <member name="F:BRobot.Control.virtualCursor">
+            <summary>
+            A virtual representation of the state of the device after application of issued actions.
+            </summary>
+        </member>
+        <member name="F:BRobot.Control.writeCursor">
+            <summary>
+            A virtual representation of the state of the device after releasing pending actions to the controller.
+            Keeps track of the state of a virtual robot immediately following all the actions released from the 
+            actionsbuffer to target device defined by controlMode, like an offline program, a full intruction execution 
+            or a streamed target.
+            </summary>
+        </member>
+        <member name="F:BRobot.Control.motionCursor">
+            <summary>
+            A virtual representation of the current motion state of the device.
+            </summary>
+        </member>
+        <member name="F:BRobot.Control.actionsExecuter">
+            <summary>
+            A shared instance of a Thread to manage sending and executing actions
+            in the controller, which typically takes a lot of resources
+            and halts program execution
+            </summary>
+        </member>
+        <member name="F:BRobot.Control.areCursorsInitialized">
+            <summary>
+            Are cursors ready to start working?
+            </summary>
+        </member>
+        <member name="M:BRobot.Control.#ctor(BRobot.Robot)">
+            <summary>
+            Main constructor.
+            </summary>
+        </member>
+        <member name="M:BRobot.Control.Reset">
+            <summary>
+            Resets all internal state properties to default values. To be invoked upon
+            an internal robot reset.
+            @TODO rethink this
+            </summary>
+        </member>
+        <member name="M:BRobot.Control.SetControlMode(BRobot.ControlMode)">
+            <summary>
+            Sets current Control Mode and establishes communication if applicable.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetControlMode">
+            <summary>
+            Returns current Control Mode.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.SetRunMode(BRobot.RunMode)">
+            <summary>
+            Sets current RunMode. 
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetRunMode(BRobot.RunMode)">
+            <summary>
+            Returns current RunMode.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.ConnectToDevice(System.Int32)">
+            <summary>
+            Searches the network for a robot controller and establishes a connection with the specified one by position. 
+            Necessary for "online" modes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.DisconnectFromDevice">
+            <summary>
+            Requests the Communication object to disconnect from controller and reset.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IsConnectedToDevice">
+            <summary>
+            Is this robot connected to a real/virtual device?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetControllerIP">
+            <summary>
+            If connected to a device, return the IP address
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.LoadProgramToDevice(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a programm to the connected device and executes it. 
+            </summary>
+            <param name="programLines">A string list representation of the program's code.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.LoadProgramToDevice(System.String)">
+            <summary>
+            Loads a programm to the connected device and executes it. 
+            </summary>
+            <param name="filepath">Full filepath including root, directory structure, filename and extension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.StartProgramOnDevice">
+            <summary>
+            Triggers program start on device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.StopProgramOnDevice(System.Boolean)">
+            <summary>
+            Stops execution of running program on device.
+            </summary>
+            <param name="immediate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentPosition">
+            <summary>
+            Returns a Point object representing the current robot's TCP position.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentOrientation">
+            <summary>
+            Returns a Rotation object representing the current robot's TCP orientation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentJoints">
+            <summary>
+            Returns a Joints object representing the rotations of the 6 axes of this robot.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.Export">
+            <summary>
+            For Offline modes, it flushes all pending actions and returns a devide-specific program 
+            as a stringList representation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.Export(System.String)">
+            <summary>
+            For Offline modes, it flushes all pending actions and exports them to a robot-specific program as a text file.
+            </summary>
+            <param name="filepath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.Execute">
+            <summary>
+            In 'execute' mode, flushes all pending actions, creates a program, 
+            uploads it to the controller and runs it.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentSpeedSetting">
+            <summary>
+            Gets current speed setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentZoneSetting">
+            <summary>
+            Gets current zone setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentMotionTypeSetting">
+            <summary>
+            Gets current Motion setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentReferenceCS">
+            <summary>
+            Gets the reference coordinate system used for relative transform actions.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueApplyActionRequest(BRobot.Action)">
+            <summary>
+            Issue an Action of whatever kind...
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueSpeedRequest(System.Int32,System.Boolean)">
+            <summary>
+            Sets the speed parameter for future issued actions.
+            </summary>
+            <param name="speed">In mm/s</param>
+        </member>
+        <member name="M:BRobot.Control.IssueTranslationRequest(BRobot.Point,System.Boolean)">
+            <summary>
+            Issue a Translation action request that falls back on the state of current settings.
+            </summary>
+            <param name="world"></param>
+            <param name="trans"></param>
+            <param name="relative"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueRotationRequest(BRobot.Rotation,System.Boolean)">
+            <summary>
+            Issue a Rotation action request with fully customized parameters.
+            </summary>
+            <param name="world"></param>
+            <param name="rot"></param>
+            <param name="relative"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueTransformationRequest(BRobot.Point,BRobot.Rotation,System.Boolean,System.Boolean)">
+            <summary>
+            Issue a Translation + Rotation action request with fully customized parameters.
+            </summary>
+            <param name="worldTrans"></param>
+            <param name="trans"></param>
+            <param name="relTrans"></param>
+            <param name="worldRot"></param>
+            <param name="rot"></param>
+            <param name="relRot"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <param name="mType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueJointsRequest(BRobot.Joints,System.Boolean)">
+            <summary>
+            Issue a request to set the values of joint angles in configuration space. 
+            </summary>
+            <param name="joints"></param>
+            <param name="relJnts"></param>
+            <param name="speed"></param>
+            <param name="zone"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueMessageRequest(System.String)">
+            <summary>
+            Issue a request to display a string message on the device.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueWaitRequest(System.Int64)">
+            <summary>
+            Issue a request for the device to stay idle for a certain amount of time.
+            </summary>
+            <param name="millis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.InitializeCommunication">
+            <summary>
+            Initializes the Communication object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.DropCommunication">
+            <summary>
+            Disconnects and resets the Communication object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.ResetCommunication">
+            <summary>
+            If there was a running Communication protocol, drop it and restart it again.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.InitializeRobotCursors(BRobot.Point,BRobot.Rotation,BRobot.Joints,System.Int32,System.Int32,BRobot.MotionType,BRobot.ReferenceCS)">
+            <summary>
+            Initializes all instances of robotCursors with base information
+            </summary>
+            <param name="position"></param>
+            <param name="rotation"></param>
+            <param name="joints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.SaveStringListToFile(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Saves a string List to a file.
+            </summary>
+            <param name="lines"></param>
+            <param name="filepath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.TickWriteCursor">
+            <summary>
+            Triggers a thread to send instructions to the connected device if applicable. 
+            </summary>
+        </member>
+        <member name="M:BRobot.Control.RunActionsBlockInController">
+            <summary>
+            Cretes a program with the first block of Actions in the cursor, uploads it to the controller
+            and runs it. 
+            </summary>
+        </member>
+        <member name="M:BRobot.Control.DebugBanner">
+            <summary>
+            Printlines a "DEBUG" ASCII banner... ;)
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.EPSILON">
+            <summary>
+            Precision for floating-point comparisons.
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.EPSILON_DECIMALS">
+            <summary>
+            Amount of digits for floating-point comparisons precision.
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.STRING_ROUND_DECIMALS">
+            <summary>
+            Amount of decimals for rounding on ToString() operations.
+            </summary>
+        </member>
+        <member name="T:BRobot.Point">
+            <summary>
+            Represents three coordinates in space.
+            </summary>
+        </member>
+        <member name="M:BRobot.Point.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Point from its XYZ coordinates.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:BRobot.Point.#ctor(BRobot.Point)">
+            <summary>
+            Creates a shallow copy of the specified Point.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:BRobot.Point.Set(BRobot.Point)">
+            <summary>
+            Shallow-copies the values of specified Point.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:BRobot.Point.Add(System.Double,System.Double,System.Double)">
+            <summary>
+            Add specified values to this Point.
+            </summary>
+            <param name="incX"></param>
+            <param name="incY"></param>
+            <param name="incZ"></param>
+        </member>
+        <member name="M:BRobot.Point.Add(BRobot.Point)">
+            <summary>
+            Add the coordinates of specified Point to this one.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:BRobot.Point.Length">
+            <summary>
+            Returns the length of this Vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.LengthSq">
+            <summary>
+            Returns the squared length of this Vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.Normalize">
+            <summary>
+            Unitizes this Vector. Will return false if Vector is not unitizable
+            (zero length Vector).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.IsUnit">
+            <summary>
+            Is this a unit Vector?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.Invert">
+            <summary>
+            Reverses the direction of this Vector.
+            </summary>
+        </member>
+        <member name="M:BRobot.Point.Flip">
+            <summary>
+            An alias for Invert().
+            </summary>
+        </member>
+        <member name="M:BRobot.Point.Reverse">
+            <summary>
+            An alias for Invert().
+            </summary>
+        </member>
+        <member name="M:BRobot.Point.Scale(System.Double)">
+            <summary>
+            Multiplies this Vector by a scalar. 
+            </summary>
+            <param name="factor"></param>
+        </member>
+        <member name="M:BRobot.Point.Rotate(BRobot.Rotation)">
+            <summary>
+            Rotates this Point by speficied Quaterion.
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Point.Rotate(BRobot.Point,System.Double)">
+            <summary>
+            Rotates this Point specified degrees around specified vector. 
+            </summary>
+            <param name="vec"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.Rotate(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Rotates this Point specified degrees around specified vector. 
+            </summary>
+            <param name="vec"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="F:BRobot.Point.XAxis">
+            <summary>
+            Unit X Vector.
+            </summary>
+        </member>
+        <member name="F:BRobot.Point.YAxis">
+            <summary>
+            Unit Y Vector.
+            </summary>
+        </member>
+        <member name="F:BRobot.Point.ZAxis">
+            <summary>
+            Unit Z Vector.
+            </summary>
+        </member>
+        <member name="M:BRobot.Point.op_Multiply(BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns the dot product of specified Vectors. 
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.DotProduct(BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Dot_product">Dot product</a> 
+            of specified Points (Vectors).
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.AngleBetween(BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns the angle between two vectors in radians.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.CrossProduct(BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Cross_product">Cross Product</a>
+            of specified Vectors (Points).
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.OrthogonalTo(BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns a unit Vector orthogonal to specified guiding Vector, contained
+            in the plane defined by guiding Vector and Point. The direction of the 
+            resulting Vector will be on the side of the guiding Point.
+            </summary>
+            <param name="vec"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.Distance(BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns the distance between two Points.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.SqDistance(BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns the squarde distance between two Points.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.AreParallel(BRobot.Point,BRobot.Point)">
+            <summary>
+            Are specified vectors parallel?
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.AreOrthogonal(BRobot.Point,BRobot.Point)">
+            <summary>
+            Are specified vectors orthogonal?
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.Rotation(BRobot.Point,BRobot.Rotation)">
+            <summary>
+            Returns a new Point as the rotation of Point 'p' by Rotation 'r'
+            </summary>
+            <param name="p"></param>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.SqSegmentDistance(BRobot.Point,BRobot.Point,BRobot.Point)">
+            <summary>
+            Returns the squared distance from 'p' to the segment 'p1-p2'.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="p"></param>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.SimplifyPointList(System.Collections.Generic.List{BRobot.Point},System.Double,System.Boolean)">
+            <summary>
+            Simplifies the path using a combination of radial distance and 
+            Ramer–Douglas–Peucker algorithm. 
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="tolerance"></param>
+            <param name="highQuality"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.SimplifyDouglasPeucker(System.Collections.Generic.List{BRobot.Point},System.Double)">
+            <summary>
+            The Ramer-Douglas-Peucker algorithm.
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="sqTolerance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.SimplifyRadialDistance(System.Collections.Generic.List{BRobot.Point},System.Double)">
+            <summary>
+            Simple distance-based simplification. Consecutive points under 
+            threshold distance are removed. 
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="sqTolerance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.Equals(System.Object)">
+            <summary>
+            Equality checks.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Point.Equals(BRobot.Point)">
+            <summary>
+            Equality checks.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Rotation">
+            <summary>
+            Represents a rotation using quaternions.
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.GlobalXY">
+            <summary>
+            The orientation of a global XYZ coordinate system (aka an identity rotation).
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.FlippedAroundX">
+            <summary>
+            A global XYZ coordinate system rotated 180 degs around its X axis.
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.FlippedAroundY">
+            <summary>
+            A global XYZ coordinate system rotated 180 degs around its Y axis. 
+            Recommended as the easiest orientation for the standard robot end effector to reach in positive XY octants.
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.FlippedAroundZ">
+            <summary>
+            A global XYZ coordinate system rotated 180 degs around its Z axis.
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.op_Multiply(BRobot.Rotation,BRobot.Rotation)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
+            of the first quaternion by the second.
+            Remember quaternion multiplication is non-commutative.
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Create a Rotation object from its Quaternion parameters: 
+            w + x * i + y * j + z * k. 
+            NOTE: it is very unlikely that any public user will input 
+            direct quaternion values when specifying rotations, and this
+            signature could be better used for vector + angle value.
+            Changed this to internal, and adding a public vectorXYZ + ang signature.
+            A public static Rotation.FromQuaterion() is added for 
+            advanced users.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a unit Quaternion representing a rotation of n degrees around a
+            vector, with right-hand positive convention.
+            </summary>
+            <param name="vecX"></param>
+            <param name="vecY"></param>
+            <param name="vecZ"></param>
+            <param name="angDegs"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(BRobot.Point,System.Double)">
+            <summary>
+            Creates a unit Quaternion representing a rotation of n degrees around a 
+            vector, with right-hand positive convention.
+            </summary>
+            <param name="vec"></param>
+            <param name="angDegs"></param>
+        </member>
+        <member name="M:BRobot.Rotation.FromQuaternion(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            A static constructor for Rotation objects from their Quaternion representation.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Rotation object from a CoordinateSystem defined by
+            the coordinates of its main X vector and the coordiantes of 
+            a guiding Y vector.
+            Vectors don't need to be normalized or orthogonal, the constructor 
+            will generate the best-fitting CoordinateSystem with this information. 
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(BRobot.Point,BRobot.Point)">
+            <summary>
+            Create a Rotation object from a CoordinateSystem defined by
+            the main Vector X and the guiding Vector Y.
+            Vectors don't need to be normalized or orthogonal, the constructor 
+            will generate the best-fitting CoordinateSystem with this information.
+            </summary>
+            <param name="vecX"></param>
+            <param name="vecY"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(BRobot.CoordinateSystem)">
+            <summary>
+            Create a Rotation object from a CoordinateSystem defined by
+            the coordinates of its main X vector and the coordiantes of 
+            a guiding Y vector.
+            Vectors don't need to be normalized or orthogonal, the constructor 
+            will generate the best-fitting CoordinateSystem with this information.
+            </summary>
+            <param name="cs"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(BRobot.Rotation)">
+            <summary>
+            Creates a new Rotation as a shallow copy of the passed one.
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor">
+            <summary>
+            Creates an identity Quaternion (no rotation).
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.Set(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Sets the values of this Quaternion's components.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:BRobot.Rotation.Set(BRobot.Rotation)">
+            <summary>
+            Shallow-copies the values of specified Quaternion.
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.Length">
+            <summary>
+            Returns the length (norm) of this Quaternion.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.SqLength">
+            <summary>
+            Returns the square length of this Quaternion.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Normalize">
+            <summary>
+            Turns this Quaternion into a <a href="https://en.wikipedia.org/wiki/Versor">Versor</a> (unit length quaternion).
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.IsUnit">
+            <summary>
+            Is this a unit length quaternion?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.IsZero">
+            <summary>
+            Is this a zero length quaternion?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Add(BRobot.Rotation)">
+            <summary>
+            Add a Quaternion to this one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.Addition(BRobot.Rotation,BRobot.Rotation)">
+            <summary>
+            Returns the addition of two quaternions.
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Subtract(BRobot.Rotation)">
+            <summary>
+            Subtract a quaternion from this one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.Subtraction(BRobot.Rotation,BRobot.Rotation)">
+            <summary>
+            Returns the subtraction of two quaternions.
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Multiply(BRobot.Rotation)">
+            <summary>
+            Multiply this Quaternion by the specified one, a.k.a. this = this * r. 
+            Conceptually, this means that a Rotation 'r' in Local coordinates is applied 
+            to this Rotation.
+            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.PreMultiply(BRobot.Rotation)">
+            <summary>
+            Premultiplies this Quaternion by the specified one, a.k.a. this = r * this. 
+            Conceptually, this means that a Rotation 'r' in Global coordinates is applied 
+            to this Rotation.
+            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.Multiply(BRobot.Rotation,BRobot.Rotation)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
+            of the first quaternion by the second.
+            Remember quaternion multiplication is non-commutative.
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Divide(BRobot.Rotation)">
+            <summary>
+            Divide this Quaternion by another one. 
+            In reality, this quaternion is post-multiplied by the inverse of the provided one.
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.Division(BRobot.Rotation,BRobot.Rotation)">
+            <summary>
+            Returns the division of r1 by r2.
+            Under the hood, r1 is post-multiplied by the inverse of r2.
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Conjugate">
+            <summary>
+            Turns this Rotation into its conjugate.
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.Conjugate(BRobot.Rotation)">
+            <summary>
+            Returns the conjugate of given quaternion.
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Invert">
+            <summary>
+            Inverts this quaternion.
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.GetCoordinateSystem">
+            <summary>
+            Returns a CoordinateSystem representation of current Quaternion
+            (a 3x3 rotation matrix).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Inverse(BRobot.Rotation)">
+            <summary>
+            Returns the inverse of given quaternion.
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.GetRotationVector">
+            <summary>
+            Returns the rotation axis represented by this Quaternion. 
+            Note it will always return the vector corresponding to a positive rotation, 
+            even if the quaternion was created from a negative one (flipped vector).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.GetRotationAngle">
+            <summary>
+            Returns the rotation angle represented by this Quaternion in degrees.
+            Note it will always yield the positive rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.RotateGlobal(BRobot.Rotation)">
+            <summary>
+            Rotate this Quaternion by specified Rotation around GLOBAL reference system.
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.RotateLocal(BRobot.Rotation)">
+            <summary>
+            Rotate this Quaternion by specified Rotation around LOCAL reference system.
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Joints">
+            <summary>
+            Represents the 6 angular rotations of the axes in a 6-axis manipulator, in degrees.
+            </summary>
+        </member>
+        <member name="M:BRobot.Joints.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Joints configuration from values.
+            </summary>
+            <param name="j1"></param>
+            <param name="j2"></param>
+            <param name="j3"></param>
+            <param name="j4"></param>
+            <param name="j5"></param>
+            <param name="j6"></param>
+        </member>
+        <member name="M:BRobot.Joints.Norm">
+            <summary>
+            Returns the norm (euclidean length) of this joints as a vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Joints.NormSq">
+            <summary>
+            Returns the square norm of this joints as a vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.CoordinateSystem">
+            <summary>
+            Represents a Coordinate System composed of a triplet of orthogonal XYZ unit vectors
+            following right-hand rule orientations. Useful for spatial and rotational orientation
+            operations. 
+            </summary>
+        </member>
+        <member name="M:BRobot.CoordinateSystem.#ctor">
+            <summary>
+            Creates a global XYZ reference system.
+            </summary>
+        </member>
+        <member name="M:BRobot.CoordinateSystem.#ctor(BRobot.Point,BRobot.Point)">
+            <summary>
+            Createa a CoordinateSystem based on the specified guiding Vecots. 
+            Vectors don't need to be normalized or orthogonal, the constructor 
+            will generate the best-fitting CoordinateSystem with this information. 
+            </summary>
+            <param name="vecX"></param>
+            <param name="vecY"></param>
+        </member>
+        <member name="M:BRobot.CoordinateSystem.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a CoordinateSystem based on the specified guiding Vecots. 
+            Vectors don't need to be normalized or orthogonal, the constructor 
+            will generate the best-fitting CoordinateSystem with this information. 
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+        </member>
+        <member name="M:BRobot.CoordinateSystem.FromComponents(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            A static constructor that returns a CoordinateSystem from specified vector components. 
+            It will return null if provided components do not form a valid 3x3 rotation matrix.
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+            <param name="z0"></param>
+            <param name="z1"></param>
+            <param name="z2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CoordinateSystem.GetQuaternion">
+            <summary>
+            Returns a Quaternion representation of the current CoordinateSystem. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CoordinateSystem.IsValid">
+            <summary>
+            Are the three axes unit vectors and orthonormal?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Frame">
+            <summary>
+            Represents a location and rotation in 3D space, with some additional
+            metadata representing speeds, zones, etc.
+            </summary>
+        </member>
+        <member name="F:BRobot.Frame.DefaultOrientation">
+            <summary>
+            This is the default rotation that will be assigned to Frames constructed only with location properties.
+            </summary>
+        </member>
+        <member name="M:BRobot.Frame.GetUNSAFEConfigurationDeclaration">
+            <summary>
+            WARNING: This library still doesn't perform IK calculation, and will always use
+            a default [0,0,0,0] axis configuration.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Frame.GetExternalAxesDeclaration">
+            <summary>
+            WARNING: no external axes are taken into account here... 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Frame.GetUNSAFERobTargetDeclaration">
+            <summary>
+            WARNING: This library still doesn't perform IK calculation, and will always return
+            a default [0,0,0,0] axis configuration.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Library">
+            <summary>
+            A class to store static descriptions of robot manipulators.
+            </summary>
+        </member>
+        <member name="T:BRobot.Compiler">
+            <summary>
+            A class that features methods to translate high-level robot actions into
+            platform-specific programs. 
+            </summary>
+        </member>
+        <member name="M:BRobot.Compiler.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using a brand-specific RobotCursor.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            
+            <returns></returns>
+        </member>
+        <member name="F:BRobot.CompilerABB.PredefinedZones">
+            <summary>
+            A Set of ABB's predefined zone values. 
+            </summary>
+        </member>
+        <member name="M:BRobot.CompilerABB.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using a brand-specific RobotCursor.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.ControlMode">
+            <summary>
+            Represents the type of control that will be performed over the real/virtual robot.
+            </summary>
+        </member>
+        <member name="F:BRobot.ControlMode.Offline">
+            <summary>
+            Not connected to any controller. Useful for robot code generation and export.
+            </summary>
+        </member>
+        <member name="F:BRobot.ControlMode.Execute">
+            <summary>
+            Online connection to a controller, the library will upload complete programs 
+            and run them. Provides robust and fluid movement, useful on real-time 
+            interactivity where response time is not a priority. 
+            </summary>
+        </member>
+        <member name="F:BRobot.ControlMode.Stream">
+            <summary>
+            Online connection to a controller, the library will stream individual targets
+            at run time as they get priority. Provides the closest approximation to real-time
+            interaction, useful on situations where low latency is required.
+            </summary>
+        </member>
+        <member name="T:BRobot.RunMode">
+            <summary>
+            Defines the different modes a program can be ran.
+            </summary>
+        </member>
+        <member name="T:BRobot.ReferenceCS">
+            <summary>
+            Defines which reference coordinate system to use for transform actions.
+            </summary>
+        </member>
+        <member name="T:BRobot.MotionType">
+            <summary>
+            Defines which type of motion to use for translation actions.;
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BRobot.Robot" -->
+        <member name="F:BRobot.Robot.Build">
+            <summary>
+            Build number.
+            </summary>
+        </member>
+        <member name="F:BRobot.Robot.Version">
+            <summary>
+            Version number.
+            </summary>
+        </member>
+        <member name="F:BRobot.Robot.c">
+            <summary>
+            The main Control object, acts as an interface to all classes that
+            manage robot control.
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.#ctor">
+            <summary>
+            Base constructor.
+            </summary>                                                       
+        </member>
+        <member name="M:BRobot.Robot.Mode(BRobot.ControlMode)">
+            <summary>
+            Sets the control mode the robot will operate under.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Mode(System.String)">
+            <summary>
+            Sets the control mode the robot will operate under.
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.RunMode(BRobot.RunMode)">
+            <summary>
+            Sets the cycle the robot will run program in (Once or Loop).
+            </summary>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.RunMode(System.String)">
+            <summary>
+            Sets the cycle the robot will run program in (Once or Loop).
+            </summary>
+            <param name="mode"></param>
+        </member>
+        <member name="M:BRobot.Robot.Connect(System.Int32)">
+            <summary>
+            Scans the network for robotic devices, real or virtual, and performs all necessary 
+            operations to connect to it. This is necessary for 'online' modes such as 'execute' and 'stream.'
+            </summary>
+            <param name="mode">If multiple devices are connected, choose this id from the list.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Connect">
+            <summary>
+            Performs all necessary operations to connect to the first robot device found on the network, real or virtual.
+            This is necessary for 'online' modes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Disconnect">
+            <summary>
+            Performs all necessary instructions to disconnect from and dispose a robot device, real or virtual. 
+            This is necessary before leaving current execution thread.
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.GetIP">
+            <summary>
+            Returns a string representation of the IP of the currently connected robot device.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.LoadProgram(System.String)">
+            <summary>
+            Loads a program to the robot from a local file.
+            </summary>
+            <param name="filepath">Full absolute filepath including root, directory structure, filename and extension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.LoadProgram(System.Collections.Generic.List{System.String})">
+            <summary>
+            Loads a program to the robot from a string list of code.
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Start">
+            <summary>
+            Starts execution of the current module/s in the controller.
+            @TODO: The behavior of this method will change depending based on Off/Online mode
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.Stop">
+            <summary>
+            Immediately stops execution of the current program/s in the connected robot. 
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.GetCurrentPosition">
+            <summary>
+            Returns a Point representation of the Robot's TCP position in mm and World coordinates.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.GetCurrentOrientation">
+            <summary>
+            Returns a Rottaion representation of the Robot's TCP orientation in quaternions.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.GetCurrentJoints">
+            <summary>
+            Returns a Joint object representing the current angular rotations of the robot's 6 axes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Export">
+            <summary>
+            Create a program with all the buffered actions and return it as a string List.
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Export(System.String)">
+            <summary>
+            Create a program with all the buffered actions and save it to a file. 
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <param name="filepath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Execute">
+            <summary>
+            In 'execute' mode, flushes all pending actions, creates a program, 
+            uploads it to the controller and runs it.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Speed">
+            <summary>
+            Gets the current speed setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Speed(System.Int32)">
+            <summary>
+            Increase the default velocity new actions will be run at.
+            </summary>
+            <param name="speedInc"></param>
+        </member>
+        <member name="M:BRobot.Robot.SpeedTo(System.Int32)">
+            <summary>
+            Sets the default velocity new actions will be run at.
+            </summary>
+            <param name="speed"></param>
+        </member>
+        <member name="M:BRobot.Robot.Zone">
+            <summary>
+            Gets the current zone setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Zone(System.Int32)">
+            <summary>
+            Increase the default zone value new actions will be given.
+            </summary>
+            <param name="zoneInc"></param>
+        </member>
+        <member name="M:BRobot.Robot.ZoneTo(System.Int32)">
+            <summary>
+            Sets the default zone value new actions will be given.
+            </summary>
+            <param name="zone"></param>
+        </member>
+        <member name="M:BRobot.Robot.Motion">
+            <summary>
+            Gets the current MotionType setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Motion(BRobot.MotionType)">
+            <summary>
+            Sets the motion type (linear, joint...) for future issued actions.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:BRobot.Robot.Motion(System.String)">
+            <summary>
+            Sets the motion type (linear, joint...) for future issued actions.
+            </summary>
+            <param name="type">"linear", "joint" or "joints"</param>
+        </member>
+        <member name="M:BRobot.Robot.Coordinates">
+            <summary>
+            Gets current ReferenceCS setting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Coordinates(BRobot.ReferenceCS)">
+            <summary>
+            Sets the reference system used for relative transformations.
+            </summary>
+            <param name="refcs"></param>
+        </member>
+        <member name="M:BRobot.Robot.Coordinates(System.String)">
+            <summary>
+            Sets the reference system used for relative transformations ('local', 'global'...)
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:BRobot.Robot.PushSettings">
+            <summary>
+            Buffers current state settings (speed, zone, motion type...), and opens up for 
+            temporary settings changes to be reverted by PopSettings().
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.PopSettings">
+            <summary>
+            Reverts the state settings (speed, zone, motion type...) to the previously buffered
+            state by PushSettings().
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.Do(BRobot.Action)">
+            <summary>
+            Applies an action to this robot. 
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Move(BRobot.Point)">
+            <summary>
+            Issue a relative movement action request on current coordinate system.
+            </summary>
+            <param name="direction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Move(System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a relative movement action request on current coordinate system.
+            </summary>
+            <param name="incX"></param>
+            <param name="incY"></param>
+            <param name="incZ"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.MoveTo(BRobot.Point)">
+            <summary>
+            Issue an absolute movement action request.
+            </summary>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.MoveTo(System.Double,System.Double,System.Double)">
+            <summary>
+            Issue an absolute movement action request.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Rotate(BRobot.Rotation)">
+            <summary>
+            Issue a relative rotation action request around local/global axes.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Rotate(BRobot.Point,System.Double)">
+            <summary>
+            Issue a relative rotation action request around local/global axes.
+            </summary>
+            <param name="vector"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Rotate(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a relative rotation action request around local/global axes.
+            </summary>
+            <param name="rotVecX"></param>
+            <param name="rotVecY"></param>
+            <param name="rotVecZ"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.RotateTo(BRobot.Rotation)">
+            <summary>
+            Issue an absolute global reorientation request.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.RotateTo(BRobot.CoordinateSystem)">
+            <summary>
+            Issue an absolute global reorientation request.
+            </summary>
+            <param name="cs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.RotateTo(BRobot.Point,BRobot.Point)">
+            <summary>
+            Issue an absolute global reorientation request.
+            </summary>
+            <param name="vecX"></param>
+            <param name="vecY"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.RotateTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue an absolute global reorientation request.
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Transform(BRobot.Point,BRobot.Rotation)">
+            <summary>
+            Issue a compound relative local Translation + Rotation request. 
+            Note that, if using local coordinates, order of actions will matter.
+            </summary>
+            <param name="position"></param>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Transform(BRobot.Rotation,BRobot.Point)">
+            <summary>
+            Issue a compound relative local Rotation + Translation request.
+            Note that, if using local coordinates, order of actions will matter.
+            </summary>
+            <param name="rotation"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.TransformTo(BRobot.Point,BRobot.Rotation)">
+            <summary>
+            Issue a compound absolute global Translation + Rotation request.
+            </summary>
+            <param name="position"></param>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.TransformTo(BRobot.Rotation,BRobot.Point)">
+            <summary>
+            Issue a compound absolute global Translation + Rotation request.
+            </summary>
+            <param name="rotation"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Joints(BRobot.Joints)">
+            <summary>
+            Issue a request to increment the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="incJoints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Joints(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a request to increment the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="incJ1"></param>
+            <param name="incJ2"></param>
+            <param name="incJ3"></param>
+            <param name="incJ4"></param>
+            <param name="incJ5"></param>
+            <param name="incJ6"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.JointsTo(BRobot.Joints)">
+            <summary>
+            Issue a request to set the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="joints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.JointsTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Issue a request to set the angular values of the robot joint rotations.
+            Values expressed in degrees.
+            </summary>
+            <param name="j1"></param>
+            <param name="j2"></param>
+            <param name="j3"></param>
+            <param name="j4"></param>
+            <param name="j5"></param>
+            <param name="j6"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Wait(System.Int64)">
+            <summary>
+            Issue a request to wait idle before moving to next action. 
+            </summary>
+            <param name="timeMillis">Time expressed in milliseconds</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Message(System.String)">
+            <summary>
+            Send a string message to the device, to be displayed based on device's capacities.
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.DebugDump">
+            <summary>
+            Dumps a bunch of information to the console about the controller, the main task, etc.
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.DebugBuffer">
+            <summary>
+            Dumps a list of the remaining buffered actions.
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.DebugRobotCursors">
+            <summary>
+            Dumps the state of the internal RobotPointers
+            </summary>
+        </member>
+        <member name="M:BRobot.Robot.DebugSettingsBuffer">
+            <summary>
+            Dumps current Settings values
+            </summary>
+        </member>
+        <member name="T:BRobot.RobotCursor">
+            <summary>
+            Represents an abstraction of the state of a robotic device. 
+            Keeps track of things such as position, orientation, joint configuration,
+            current speed, zone, etc.
+            Useful as virtual representation of a simulated or controller robot actuator. 
+            </summary>
+        </member>
+        <member name="F:BRobot.RobotCursor.child">
+            <summary>
+            Specified RobotCursor instance will be issued all Actions 
+            released from this one. 
+            </summary>
+        </member>
+        <member name="F:BRobot.RobotCursor.compiler">
+            <summary>
+            Robot program compilers now belong to the RobotCursor. 
+            It makes it easier to attach the right device-specific type, 
+            and to use the cursor's information to generate the program. 
+            </summary>
+        </member>
+        <member name="F:BRobot.RobotCursor.settingsBuffer">
+            <summary>
+            A buffer that stores Push and PopSettings() states.
+            </summary>
+        </member>
+        <member name="F:BRobot.RobotCursor.actionBuffer">
+            <summary>
+            Manages pending and released Actions, plus blocks. 
+            </summary>
+        </member>
+        <member name="F:BRobot.RobotCursor.actionBufferLock">
+            <summary>
+            A lock for buffer manipulation operations. 
+            </summary>
+        </member>
+        <member name="M:BRobot.RobotCursor.#ctor(System.String,System.Boolean)">
+            <summary>
+            Main constructor.
+            </summary>
+            <param name="name"></param>
+            <param name="applyImmediately"></param>
+        </member>
+        <member name="F:BRobot.RobotCursor.ActionsMap">
+            <summary>
+            A dict that maps Action types to the cursor's applicable method.
+            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
+            </summary>
+        </member>
+        <member name="M:BRobot.RobotCursor.Initialize(BRobot.Point,BRobot.Rotation,BRobot.Joints,System.Int32,System.Int32,BRobot.MotionType,BRobot.ReferenceCS)">
+            <summary>
+            Minimum information necessary to initialize a robot object.
+            </summary>
+            <param name="position"></param>
+            <param name="rotation"></param>
+            <param name="joints"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursor.SetChild(BRobot.RobotCursor)">
+            <summary>
+            Set specified RobotCursor as child to this one.
+            </summary>
+            <param name="childCursor"></param>
+        </member>
+        <member name="M:BRobot.RobotCursor.Issue(BRobot.Action)">
+            <summary>
+            Add an action to this cursor's buffer, to be released whenever assigned priority.
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:BRobot.RobotCursor.ApplyNextAction">
+            <summary>
+            Applies next single action pending in the buffer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursor.QueueActions">
+            <summary>
+            Requests all un-blocked pending Actions in the buffer to be flagged
+            as a block. 
+            </summary>
+        </member>
+        <member name="M:BRobot.RobotCursor.AreActionsPending">
+            <summary>
+            Are there Actions pending in the buffer?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursor.Apply(BRobot.Action)">
+            <summary>
+            Applies the directives of an Action to this cursor. 
+            </summary>
+            <remarks>
+            While this Dictionary dispatch pattern is a bit convoluted, it is faster than dynamic casting, 
+            more stable and allows for compiler-time checks and non-error fallback.
+            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
+            </remarks>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursor.ProgramFromBuffer">
+            <summary>
+            Return a device-specific program with all the Actions pending in the buffer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursor.ProgramFromBlock">
+            <summary>
+            Return a device-specific program with the next block of Actions pending in the buffer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="name"></param>
+            <param name="applyImmediately"></param>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionSpeed)">
+            <summary>
+            Apply Speed Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionZone)">
+            <summary>
+            Apply Zone Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionMotion)">
+            <summary>
+            Apply Motion Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionCoordinates)">
+            <summary>
+            Apply ReferenceCS Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionPushPop)">
+            <summary>
+            Apply a Push or Pop Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionTranslation)">
+            <summary>
+            Apply Translation Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionRotation)">
+            <summary>
+            Apply Rotation Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionTransformation)">
+            <summary>
+            Apply Transformation Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionJoints)">
+            <summary>
+            Apply Joints Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionMessage)">
+            <summary>
+            Apply Message Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionWait)">
+            <summary>
+            Apply Wait Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.GetUNSAFERobTargetValue">
+            <summary>
+            Returns an ABB robtarget representation of the current state of the cursor.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursorABB.GetJointTargetValue">
+            <summary>
+            Returns an ABB jointtarget representation of the current stat of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Solver">
+            <summary>
+            A class featuring FK/IK solvers. 
+            </summary>
+            <ref>Based on MARVIN</ref>
+        </member>
+        <member name="T:BRobot.StreamQueue">
+            <summary>
+            A queue manager for 'stream' mode and Frame objects
+            </summary>
+        </member>
+        <member name="T:BRobot.Tool">
+            <summary>
+            Represents a tool object that can be attached to the end effector of the robot
+            </summary>
+        </member>
+        <member name="T:BRobot.Util">
+            <summary>
+            Utility static methods
+            </summary>
+        </member>
+        <member name="M:BRobot.Util.Remap(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Remaps a value from source to target numerical domains.
+            </summary>
+            <param name="val"></param>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="newMin"></param>
+            <param name="newMax"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
