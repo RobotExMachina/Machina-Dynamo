@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BRobot-for-Dynamo</name>
+    </assembly>
+    <members>
+        <member name="M:BRobot.BRobot.Create">
+            <summary>
+            Create a new BRobot object.
+            </summary>
+            <returns name="BRobot">Your brand new BRobot</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Version">
+            <summary>
+            Checks version and build numbers for this BRobot
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.BRobot.Motion">
+            <summary>
+            Sets the current type of motion to be applied to future translation actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for linear transitions between joint angles (linear movement in robot configuration space).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.BRobot.Coordinates">
+            <summary>
+            Sets the coordinate system that will be used for future relative actions. This can be "global" or "world" (default) to refer to the system's global reference coordinates, or "local" to refer to the device's local reference frame. For example, for a robotic arm, the "global" coordinate system will be the robot's base, and the "local" one will be the coordinates of the end effector, after all translation and rotation transformations.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.BRobot.Speed(System.Double)">
+            <summary>
+            Increases the speed in mm/s at which future transformation actions will run. Default value is 20.
+            </summary>
+            <param name="speedInc"></param>
+            <returns name="action">Increase Speed Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.SpeedTo(System.Double)">
+            <summary>
+            Sets the speed in mm/s at which future transformation actions will run. Default value is 20.
+            </summary>
+            <param name="speed"></param>
+            <returns name="action">Set Speed Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Zone(System.Double)">
+            <summary>
+            Increases the zone radius in mm at which the device will start transitioning to its next target transformation. You can think of this as a 'proximity precision' parameter to blend movement along consecutive waypoints. Default value is 5 mm.
+            </summary>
+            <param name="zoneInc"></param>
+            <returns name="action">Increase Zone Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.ZoneTo(System.Double)">
+            <summary>
+            Sets the zone radius in mm at which the device will start transitioning to its next target transformation. You can think of this as a 'proximity precision' parameter to blend movement along consecutive waypoints. Default value is 5 mm.
+            </summary>
+            <param name="zone"></param>
+            <returns name="action">Set Zone Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.PushSettings">
+            <summary>
+            Stores current state settings to a buffer, so that temporary changes can be made, and settings can be reverted to the stored state later with PopSettings().
+            </summary>
+            <returns name="action">Push Settings Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.PopSettings">
+            <summary>
+            Reverts current settings to the state store by the last call to PushSettings().
+            </summary>
+            <returns name="action">Pop Settings Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Move(Autodesk.DesignScript.Geometry.Vector)">
+            <summary>
+            Moves the device along a speficied vector relative to its current position.
+            </summary>
+            <param name="direction"></param>
+            <returns name="action">Relative Translation Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.MoveTo(Autodesk.DesignScript.Geometry.Point)">
+            <summary>
+            Moves the device to an absolute position in global coordinates.
+            </summary>
+            <param name="location"></param>
+            <returns name="action">Absolute Translation Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Rotate(Autodesk.DesignScript.Geometry.Vector,System.Double)">
+            <summary>
+            Rotates the device a specified angle in degrees along the specified vector.
+            </summary>
+            <param name="axis"></param>
+            <param name="angDegs"></param>
+            <returns name="action">Relative Rotation Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.RotateTo(Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Rotate the devices to an absolute orientation defined by the two main X and Y axes of specified Plane.
+            </summary>
+            <param name="refPlane"></param>
+            <returns name="action">Absolute Rotation Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Transform(Autodesk.DesignScript.Geometry.Vector,Autodesk.DesignScript.Geometry.Vector,System.Double,System.Boolean)">
+            <summary>
+            Performs a compound relative rotation + translation transformation in a single action. Note that when performing relative transformations, the R+T versus T+R order matters.
+            </summary>
+            <param name="direction"></param>
+            <param name="axis"></param>
+            <param name="angDegs"></param>
+            <param name="moveFirst">Apply translation first? Otherwise, apply rotation first.</param>
+            <returns name="action">Relative Transform Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.TransformTo(Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Performs a compound absolute rotation + translation transformation, or in other words, sets both a new absolute position and orientation for the device in the same action, based on specified Plane.
+            </summary>
+            <param name="plane"></param>
+            <returns name="action">Absolute Transform Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Joints(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Increase the rotation angle in degrees of the joints in mechanical devices, specially robotic arms.
+            </summary>
+            <param name="j1"></param>
+            <param name="j2"></param>
+            <param name="j3"></param>
+            <param name="j4"></param>
+            <param name="j5"></param>
+            <param name="j6"></param>
+            <returns name="action">Increase Joint Angles Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.JointsTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Sets the rotation angle in degrees of the joints in mechanical devices, specially robotic arms.
+            </summary>
+            <param name="j1"></param>
+            <param name="j2"></param>
+            <param name="j3"></param>
+            <param name="j4"></param>
+            <param name="j5"></param>
+            <param name="j6"></param>
+            <returns name="action">Set Joint Angles Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Wait(System.Double)">
+            <summary>
+            Pause program execution for specified milliseconds.
+            </summary>
+            <param name="millis"></param>
+            <returns name="action">Wait Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.Message(System.String)">
+            <summary>
+            Displays a text message on the device. This will depend on the device's configuration. For example, for ABB robots it will display it on the FlexPendant's log window.
+            </summary>
+            <param name="message"></param>
+            <returns name="action">Message Action</returns>
+        </member>
+        <member name="M:BRobot.BRobot.DisplayProgram(System.Collections.Generic.List{BRobot.Action})">
+            <summary>
+            Returns a human-readable representation of a list of Actions.
+            </summary>
+            <param name="actions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.BRobot.ExportCode(BRobot.Robot,System.Collections.Generic.List{BRobot.Action})">
+            <summary>
+            Generates a program following the speficied Actions written on the device's native language.  
+            </summary>
+            <param name="bot"></param>
+            <param name="actions"></param>
+            <returns name="code">Device-specific program code</returns>
+        </member>
+        <member name="M:BRobot.BRobot.WriteToFile(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Writes a list of strings to a file.
+            </summary>
+            <param name="code"></param>
+            <param name="filepath"></param>
+            <returns name="resultMsg">Success?</returns>
+        </member>
+        <member name="M:BRobot.BRobot.#ctor">
+            <summary>
+            Internal constructor
+            </summary>
+        </member>
+    </members>
+</doc>
