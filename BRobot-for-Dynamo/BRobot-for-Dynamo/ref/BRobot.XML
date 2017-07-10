@@ -4,13 +4,23 @@
         <name>BRobot</name>
     </assembly>
     <members>
-        <!-- Badly formed XML comment ignored for member "T:BRobot.ActionType" -->
+        <member name="T:BRobot.ActionType">
+            <summary>
+            Defines an Action Type, like Translation, Rotation, Wait... 
+            Useful to flag base Actions into children classes.
+            </summary>
+        </member>
         <member name="T:BRobot.Action">
             <summary>
             Actions represent high-level abstract operations such as movements, rotations, 
             transformations or joint manipulations, both in absolute and relative terms. 
             They are independent from the device's properties, and their translation into
             actual robotic instructions depends on the robot's properties and state. 
+            </summary>
+        </member>
+        <member name="M:BRobot.Action.#ctor">
+            <summary>
+            A base constructor to take care of common setup for all actionss
             </summary>
         </member>
         <member name="T:BRobot.ActionSpeed">
@@ -77,6 +87,11 @@
         <member name="T:BRobot.ActionWait">
             <summary>
             An Action represening the device staying idle for a period of time.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionComment">
+            <summary>
+            Adds a line comment to the compiled code
             </summary>
         </member>
         <member name="T:BRobot.ActionBuffer">
@@ -178,6 +193,11 @@
         <member name="M:BRobot.ActionBuffer.LogBufferedActions">
             <summary>
             Writes a description of each pending Action to the Console.
+            </summary>
+        </member>
+        <member name="T:BRobot.SettingsBuffer">
+            <summary>
+            A buffer manager for Settings objects.
             </summary>
         </member>
         <member name="T:BRobot.Communication">
@@ -558,6 +578,11 @@
             Instances of the main robot Controller and Task
             </summary>
         </member>
+        <member name="F:BRobot.Control.robotBrand">
+            <summary>
+            What brand of robot is this?
+            </summary>
+        </member>
         <member name="F:BRobot.Control.virtualCursor">
             <summary>
             A virtual representation of the state of the device after application of issued actions.
@@ -588,7 +613,7 @@
             Are cursors ready to start working?
             </summary>
         </member>
-        <member name="M:BRobot.Control.#ctor(BRobot.Robot)">
+        <member name="M:BRobot.Control.#ctor(BRobot.Robot,BRobot.RobotType)">
             <summary>
             Main constructor.
             </summary>
@@ -697,18 +722,20 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Control.Export">
+        <member name="M:BRobot.Control.Export(System.Boolean)">
             <summary>
-            For Offline modes, it flushes all pending actions and returns a devide-specific program 
+             For Offline modes, it flushes all pending actions and returns a devide-specific program 
             as a stringList representation.
             </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Control.Export(System.String)">
+        <member name="M:BRobot.Control.Export(System.String,System.Boolean)">
             <summary>
             For Offline modes, it flushes all pending actions and exports them to a robot-specific program as a text file.
             </summary>
             <param name="filepath"></param>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
             <returns></returns>
         </member>
         <member name="M:BRobot.Control.Execute">
@@ -818,6 +845,13 @@
             <param name="millis"></param>
             <returns></returns>
         </member>
+        <member name="M:BRobot.Control.IssueCommentRequest(System.String)">
+            <summary>
+            Issue a request to add an internal comment in the compiled code. 
+            </summary>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
         <member name="M:BRobot.Control.InitializeCommunication">
             <summary>
             Initializes the Communication object.
@@ -858,7 +892,7 @@
             Triggers a thread to send instructions to the connected device if applicable. 
             </summary>
         </member>
-        <member name="M:BRobot.Control.RunActionsBlockInController">
+        <member name="M:BRobot.Control.RunActionsBlockInController(System.Boolean)">
             <summary>
             Cretes a program with the first block of Actions in the cursor, uploads it to the controller
             and runs it. 
@@ -879,7 +913,7 @@
             Amount of digits for floating-point comparisons precision.
             </summary>
         </member>
-        <member name="F:BRobot.Geometry.STRING_ROUND_DECIMALS">
+        <member name="F:BRobot.Geometry.STRING_ROUND_DECIMALS_MM">
             <summary>
             Amount of decimals for rounding on ToString() operations.
             </summary>
@@ -1419,10 +1453,19 @@
             <param name="r"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Rotation.GetRotationVector">
+        <member name="M:BRobot.Rotation.GetRotationVector(System.Boolean)">
+            <summary>
+            Returns the rotation vector in axis-angle representation, 
+            i.e. the unit vector defining the rotation axis multiplied by the 
+            angle rotation scalar in degrees.
+            https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.GetRotationAxis">
             <summary>
             Returns the rotation axis represented by this Quaternion. 
-            Note it will always return the vector corresponding to a positive rotation, 
+            Note it will always return the unit vector corresponding to a positive rotation, 
             even if the quaternion was created from a negative one (flipped vector).
             </summary>
             <returns></returns>
@@ -1580,7 +1623,7 @@
             platform-specific programs. 
             </summary>
         </member>
-        <member name="M:BRobot.Compiler.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean)">
+        <member name="M:BRobot.Compiler.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean,System.Boolean)">
             <summary>
             Creates a textual program representation of a set of Actions using a brand-specific RobotCursor.
             WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
@@ -1588,23 +1631,76 @@
             </summary>
             <param name="programName"></param>
             <param name="writePointer"></param>
-            
             <returns></returns>
+        </member>
+        <member name="T:BRobot.CompilerHuman">
+            <summary>
+            A quick compiler for human-readable instructions.
+            </summary>
         </member>
         <member name="F:BRobot.CompilerABB.PredefinedZones">
             <summary>
-            A Set of ABB's predefined zone values. 
+            A Set of RAPID's predefined zone values. 
             </summary>
         </member>
-        <member name="M:BRobot.CompilerABB.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean)">
+        <member name="M:BRobot.CompilerABB.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean,System.Boolean)">
             <summary>
-            Creates a textual program representation of a set of Actions using a brand-specific RobotCursor.
+            Creates a textual program representation of a set of Actions using native RAPID Laguage.
             WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
             robot configuration and assumes the robot controller will figure out the correct one.
             </summary>
             <param name="programName"></param>
             <param name="writePointer"></param>
             <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerABB.GetUNSAFERobTargetValue(BRobot.RobotCursor)">
+            <summary>
+            Returns an RAPID robtarget representation of the current state of the cursor.
+            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
+            robot configuration and assumes the robot controller will figure out the correct one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerABB.GetJointTargetValue(BRobot.RobotCursor)">
+            <summary>
+            Returns an RAPID jointtarget representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerABB.GetSpeedValue(BRobot.RobotCursor)">
+            <summary>
+            Returns a RAPID representation of cursor speed.
+            </summary>
+            <param name="speed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerABB.GetZoneValue(BRobot.RobotCursor)">
+            <summary>
+            Returns a RAPID representaiton of cursor zone.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerUR.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native UR Script.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerUR.GetPoseTargetValue(BRobot.RobotCursor)">
+            <summary>
+            Returns an UR pose representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerUR.GetJointTargetValue(BRobot.RobotCursor)">
+            <summary>
+            Returns a UR joint representation of the current state of the cursor.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:BRobot.ControlMode">
@@ -1646,7 +1742,12 @@
             Defines which type of motion to use for translation actions.;
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:BRobot.Robot" -->
+        <member name="T:BRobot.Robot">
+            <summary>
+            The core Class in BRobot. Represents a state and action-based virtual robot, 
+            and exposes the public API for robot manipulation and control.
+            </summary>
+        </member>
         <member name="F:BRobot.Robot.Build">
             <summary>
             Build number.
@@ -1663,10 +1764,11 @@
             manage robot control.
             </summary>
         </member>
-        <member name="M:BRobot.Robot.#ctor">
+        <member name="M:BRobot.Robot.#ctor(System.String)">
             <summary>
             Base constructor.
-            </summary>                                                       
+            </summary>
+            <param name="brand"></param>
         </member>
         <member name="M:BRobot.Robot.Mode(BRobot.ControlMode)">
             <summary>
@@ -1772,12 +1874,29 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:BRobot.Robot.Export(System.Boolean)">
+            <summary>
+            Create a program with all the buffered actions and return it as a string List.
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
+            <returns></returns>
+        </member>
         <member name="M:BRobot.Robot.Export(System.String)">
             <summary>
             Create a program with all the buffered actions and save it to a file. 
             Note all buffered actions will be removed from the queue.
             </summary>
             <param name="filepath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Export(System.String,System.Boolean)">
+            <summary>
+            Create a program with all the buffered actions and save it to a file. 
+            Note all buffered actions will be removed from the queue.
+            </summary>
+            <param name="filepath"></param>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
             <returns></returns>
         </member>
         <member name="M:BRobot.Robot.Execute">
@@ -2059,6 +2178,14 @@
             <param name="message"></param>
             <returns></returns>
         </member>
+        <member name="M:BRobot.Robot.Comment(System.String)">
+            <summary>
+            Display an internal comment in the compilation code. 
+            Useful for internal annotations, reminders, etc. 
+            </summary>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
         <member name="M:BRobot.Robot.DebugDump">
             <summary>
             Dumps a bunch of information to the console about the controller, the main task, etc.
@@ -2084,7 +2211,12 @@
             Represents an abstraction of the state of a robotic device. 
             Keeps track of things such as position, orientation, joint configuration,
             current speed, zone, etc.
-            Useful as virtual representation of a simulated or controller robot actuator. 
+            Useful as virtual representation of a simulated or controlled robot actuator. 
+            </summary>
+        </member>
+        <member name="F:BRobot.RobotCursor.parentControl">
+            <summary>
+            Who manages this Cursor?
             </summary>
         </member>
         <member name="F:BRobot.RobotCursor.child">
@@ -2115,18 +2247,12 @@
             A lock for buffer manipulation operations. 
             </summary>
         </member>
-        <member name="M:BRobot.RobotCursor.#ctor(System.String,System.Boolean)">
+        <member name="M:BRobot.RobotCursor.#ctor(BRobot.Control,System.String,System.Boolean)">
             <summary>
             Main constructor.
             </summary>
             <param name="name"></param>
             <param name="applyImmediately"></param>
-        </member>
-        <member name="F:BRobot.RobotCursor.ActionsMap">
-            <summary>
-            A dict that maps Action types to the cursor's applicable method.
-            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
-            </summary>
         </member>
         <member name="M:BRobot.RobotCursor.Initialize(BRobot.Point,BRobot.Rotation,BRobot.Joints,System.Int32,System.Int32,BRobot.MotionType,BRobot.ReferenceCS)">
             <summary>
@@ -2142,6 +2268,12 @@
             Set specified RobotCursor as child to this one.
             </summary>
             <param name="childCursor"></param>
+        </member>
+        <member name="F:BRobot.RobotCursor.ActionsMap">
+            <summary>
+            A dict that maps Action types to the cursor's applicable method.
+            https://chodounsky.net/2014/01/29/dynamic-dispatch-in-c-number/
+            </summary>
         </member>
         <member name="M:BRobot.RobotCursor.Issue(BRobot.Action)">
             <summary>
@@ -2179,115 +2311,108 @@
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursor.ProgramFromBuffer">
+        <member name="M:BRobot.RobotCursor.ProgramFromBuffer(System.Boolean)">
             <summary>
             Return a device-specific program with all the Actions pending in the buffer.
             </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursor.ProgramFromBlock">
+        <member name="M:BRobot.RobotCursor.ProgramFromBlock(System.Boolean)">
             <summary>
             Return a device-specific program with the next block of Actions pending in the buffer.
             </summary>
+            <param name="inlineTargets">Write inline targets on action statements, or declare them as independent variables?</param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.#ctor(System.String,System.Boolean)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="name"></param>
-            <param name="applyImmediately"></param>
-        </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionSpeed)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionSpeed)">
             <summary>
             Apply Speed Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionZone)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionZone)">
             <summary>
             Apply Zone Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionMotion)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionMotion)">
             <summary>
             Apply Motion Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionCoordinates)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionCoordinates)">
             <summary>
             Apply ReferenceCS Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionPushPop)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionPushPop)">
             <summary>
             Apply a Push or Pop Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionTranslation)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionTranslation)">
             <summary>
             Apply Translation Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionRotation)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionRotation)">
             <summary>
             Apply Rotation Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionTransformation)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionTransformation)">
             <summary>
             Apply Transformation Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionJoints)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionJoints)">
             <summary>
             Apply Joints Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionMessage)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionMessage)">
             <summary>
             Apply Message Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.ApplyAction(BRobot.ActionWait)">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionWait)">
             <summary>
             Apply Wait Action.
             </summary>
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.GetUNSAFERobTargetValue">
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionComment)">
             <summary>
-            Returns an ABB robtarget representation of the current state of the cursor.
-            WARNING: this method is EXTREMELY UNSAFE; it performs no IK calculations, assigns default [0,0,0,0] 
-            robot configuration and assumes the robot controller will figure out the correct one.
+            Apply Comment Action.
             </summary>
+            <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.RobotCursorABB.GetJointTargetValue">
+        <member name="T:BRobot.Settings">
             <summary>
-            Returns an ABB jointtarget representation of the current stat of the cursor.
+            A class representing a Setting state, to be un/buffered.
             </summary>
-            <returns></returns>
         </member>
         <member name="T:BRobot.Solver">
             <summary>

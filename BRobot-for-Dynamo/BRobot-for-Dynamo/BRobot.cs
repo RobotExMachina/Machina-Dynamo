@@ -29,14 +29,15 @@ namespace BRobot
         /// <summary>
         /// Create a new BRobot object.
         /// </summary>
+        /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this BRobot...)</param>
         /// <returns name="BRobot">Your brand new BRobot</returns>
-        public static Robot Create()
+        public static Robot Create(string brand = "HUMAN")
         {
-            return new Robot();
+            return new Robot(brand);
         }
 
         /// <summary>
-        /// Checks version and build numbers for this BRobot
+        /// Checks version and build numbers for this BRobot.
         /// </summary>
         /// <returns></returns>
         [MultiReturn(new[] { "version", "build" })]
@@ -103,21 +104,21 @@ namespace BRobot
         }
 
         /// <summary>
-        /// Increases the speed in mm/s at which future transformation actions will run. Default value is 20.
+        /// Increases the speed in mm/s at which future transformation actions will run. Default value is 20 mm.
         /// </summary>
         /// <param name="speedInc"></param>
         /// <returns name="action">Increase Speed Action</returns>
-        public static BAction Speed(double speedInc)
+        public static BAction Speed(double speedInc = 0)
         {
             return new ActionSpeed((int)Math.Round(speedInc), true);
         }
 
         /// <summary>
-        /// Sets the speed in mm/s at which future transformation actions will run. Default value is 20.
+        /// Sets the speed in mm/s at which future transformation actions will run. Default value is 20 mm.
         /// </summary>
         /// <param name="speed"></param>
         /// <returns name="action">Set Speed Action</returns>
-        public static BAction SpeedTo(double speed)
+        public static BAction SpeedTo(double speed = 20)
         {
             return new ActionSpeed((int)Math.Round(speed), false);
         }
@@ -127,7 +128,7 @@ namespace BRobot
         /// </summary>
         /// <param name="zoneInc"></param>
         /// <returns name="action">Increase Zone Action</returns>
-        public static BAction Zone(double zoneInc)
+        public static BAction Zone(double zoneInc = 0)
         {
             return new ActionZone((int)Math.Round(zoneInc), true);
         }
@@ -137,7 +138,7 @@ namespace BRobot
         /// </summary>
         /// <param name="zone"></param>
         /// <returns name="action">Set Zone Action</returns>
-        public static BAction ZoneTo(double zone)
+        public static BAction ZoneTo(double zone = 5)
         {
             return new ActionZone((int)Math.Round(zone), false);
         }
@@ -276,7 +277,7 @@ namespace BRobot
         /// </summary>
         /// <param name="millis"></param>
         /// <returns name="action">Wait Action</returns>
-        public static BAction Wait(double millis)
+        public static BAction Wait(double millis = 0)
         {
             return new ActionWait((long)Math.Round(millis));
         }
@@ -286,7 +287,7 @@ namespace BRobot
         /// </summary>
         /// <param name="message"></param>
         /// <returns name="action">Message Action</returns>
-        public static BAction Message(string message)
+        public static BAction Message(string message = "Hello World!")
         {
             return new ActionMessage(message);
         }
@@ -326,10 +327,11 @@ namespace BRobot
         /// <summary>
         /// Generates a program following the speficied Actions written on the device's native language.  
         /// </summary>
-        /// <param name="bot"></param>
-        /// <param name="actions"></param>
+        /// <param name="bot">The BRobot instance that will export this program.</param>
+        /// <param name="actions">A program in the form of a list of Actions.</param>
+        /// <param name="inlineTargets">If false, targets will be declared as independent variables, and then used on action declarations.</param>
         /// <returns name="code">Device-specific program code</returns>
-        public static List<string> ExportCode(Robot bot, List<BAction> actions)
+        public static List<string> ExportCode(Robot bot, List<BAction> actions, bool inlineTargets = true)
         {
             bot.Mode("offline");
 
@@ -338,7 +340,7 @@ namespace BRobot
                 bot.Do(a);
             }
 
-            return bot.Export();
+            return bot.Export(inlineTargets);
         }
 
         /// <summary>

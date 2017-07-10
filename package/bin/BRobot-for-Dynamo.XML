@@ -4,10 +4,11 @@
         <name>BRobot-for-Dynamo</name>
     </assembly>
     <members>
-        <member name="M:BRobot.BRobot.Create">
+        <member name="M:BRobot.BRobot.Create(System.String)">
             <summary>
             Create a new BRobot object.
             </summary>
+            <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this BRobot...)</param>
             <returns name="BRobot">Your brand new BRobot</returns>
         </member>
         <member name="M:BRobot.BRobot.Version">
@@ -30,14 +31,14 @@
         </member>
         <member name="M:BRobot.BRobot.Speed(System.Double)">
             <summary>
-            Increases the speed in mm/s at which future transformation actions will run. Default value is 20.
+            Increases the speed in mm/s at which future transformation actions will run. Default value is 20 mm.
             </summary>
             <param name="speedInc"></param>
             <returns name="action">Increase Speed Action</returns>
         </member>
         <member name="M:BRobot.BRobot.SpeedTo(System.Double)">
             <summary>
-            Sets the speed in mm/s at which future transformation actions will run. Default value is 20.
+            Sets the speed in mm/s at which future transformation actions will run. Default value is 20 mm.
             </summary>
             <param name="speed"></param>
             <returns name="action">Set Speed Action</returns>
@@ -159,12 +160,13 @@
             <param name="actions"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.BRobot.ExportCode(BRobot.Robot,System.Collections.Generic.List{BRobot.Action})">
+        <member name="M:BRobot.BRobot.ExportCode(BRobot.Robot,System.Collections.Generic.List{BRobot.Action},System.Boolean)">
             <summary>
             Generates a program following the speficied Actions written on the device's native language.  
             </summary>
-            <param name="bot"></param>
-            <param name="actions"></param>
+            <param name="bot">The BRobot instance that will export this program.</param>
+            <param name="actions">A program in the form of a list of Actions.</param>
+            <param name="inlineTargets">If false, targets will be declared as independent variables, and then used on action declarations.</param>
             <returns name="code">Device-specific program code</returns>
         </member>
         <member name="M:BRobot.BRobot.WriteToFile(System.Collections.Generic.List{System.String},System.String)">
