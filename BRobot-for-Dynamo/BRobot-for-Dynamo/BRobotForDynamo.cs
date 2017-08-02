@@ -13,9 +13,9 @@ using BAction = BRobot.Action;
 using BPoint = BRobot.Point;
 using BVector = BRobot.Vector;
 using BOrientation = BRobot.Orientation;
+using System.IO;
 
-
-namespace BRobotForDynamo
+namespace Machina
 {
     //  ██████╗  ██████╗ ██████╗  ██████╗ ████████╗███████╗
     //  ██╔══██╗██╔═══██╗██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝
@@ -38,15 +38,15 @@ namespace BRobotForDynamo
         /// Create a new Robot object.
         /// </summary>
         /// <param name="name">A name for this Robot.</param>
-        /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this BRobot...)</param>
-        /// <returns name="BRobot">Your brand new Robot object</returns>
-        public static Robot Create(string name = "Machina", string brand = "HUMAN")
+        /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
+        /// <returns name="Robot">Your brand new Robot object</returns>
+        public static Robot Create(string name = "Robot01", string brand = "HUMAN")
         {
             return new Robot(name, brand);
         }
 
         /// <summary>
-        /// Checks version and build numbers for this BRobot.
+        /// Checks version and build numbers for the Machina library.
         /// </summary>
         /// <returns></returns>
         [MultiReturn(new[] { "version", "build" })]
@@ -159,7 +159,8 @@ namespace BRobotForDynamo
 
             if (t == MotionType.Undefined)
             {
-                Console.WriteLine("Invalid motion type");
+                //throw new Exception("Invalid motion type");
+                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Invalid motion type");  // this is better messagewise, and specially if I want to return something other than null
                 return null;
             }
 
@@ -185,8 +186,7 @@ namespace BRobotForDynamo
             }
             else
             {
-                Console.WriteLine("Invalid reference coordinate system");
-
+                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Invalid reference coordinate system");
                 return null;
             }
 
@@ -455,7 +455,7 @@ namespace BRobotForDynamo
         /// <param name="actions">A program in the form of a list of Actions.</param>
         /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables.</param>
         /// <returns name="code">Device-specific program code</returns>
-        public static List<string> ExportCode(Robot bot, List<BAction> actions, bool inlineTargets = true)
+        public static string ExportCode(Robot bot, List<BAction> actions, bool inlineTargets = true)
         {
             bot.Mode("offline");
 
@@ -464,7 +464,15 @@ namespace BRobotForDynamo
                 bot.Do(a);
             }
 
-            return bot.Export(inlineTargets);
+            List<string> codeLines = bot.Export(inlineTargets);
+            StringWriter writer = new StringWriter();
+            for (var i = 0; i < codeLines.Count; i++)
+            {
+                writer.WriteLine(codeLines[i]);
+            }
+            string code = writer.ToString();
+            writer.Dispose();
+            return code;
         }
 
         /// <summary>
@@ -473,7 +481,7 @@ namespace BRobotForDynamo
         /// <param name="code">A List of Strings</param>
         /// <param name="filepath">The path where the file will be saved</param>
         /// <returns name="resultMsg">Success?</returns>
-        public static string WriteToFile(List<string> code, string filepath)
+        internal static string WriteToFile(List<string> code, string filepath)
         {
             string result;
             try
