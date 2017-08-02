@@ -2736,17 +2736,23 @@
             Version number.
             </summary>
         </member>
+        <member name="P:BRobot.Robot.Name">
+            <summary>
+            A nickname for this Robot.
+            </summary>
+        </member>
         <member name="F:BRobot.Robot.c">
             <summary>
             The main Control object, acts as an interface to all classes that
             manage robot control.
             </summary>
         </member>
-        <member name="M:BRobot.Robot.#ctor(System.String)">
+        <member name="M:BRobot.Robot.#ctor(System.String,System.String)">
             <summary>
             Base constructor.
             </summary>
-            <param name="brand"></param>
+            <param name="name">A name for this Robot</param>
+            <param name="make"></param>
         </member>
         <member name="M:BRobot.Robot.Mode(BRobot.ControlMode)">
             <summary>

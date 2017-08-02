@@ -9,10 +9,16 @@
             Robot creation and manipulation tools.
             </summary>
         </member>
-        <member name="M:BRobotForDynamo.Robots.Create(System.String)">
+        <member name="M:BRobotForDynamo.Robots.#ctor">
+            <summary>
+            Make the constructor internal to hide it from the menu.
+            </summary>
+        </member>
+        <member name="M:BRobotForDynamo.Robots.Create(System.String,System.String)">
             <summary>
             Create a new Robot object.
             </summary>
+            <param name="name">A name for this Robot.</param>
             <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this BRobot...)</param>
             <returns name="BRobot">Your brand new Robot object</returns>
         </member>
@@ -22,15 +28,20 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:BRobotForDynamo.Robots.#ctor">
-            <summary>
-            Internal constructor. WHY WAS THIS HERE??
-            </summary>
-        </member>
         <member name="T:BRobotForDynamo.Tools">
             <summary>
             Tool creation and manipulation tools.
             </summary>
+        </member>
+        <member name="M:BRobotForDynamo.Tools.Create(System.String,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Plane,System.Double)">
+            <summary>
+            Creates a Tool object.
+            </summary>
+            <param name="name">Tool name</param>
+            <param name="basePlane">The base Plane where the Tool will be attached to the Robot</param>
+            <param name="toolTipPlane">The Plane of the Tool Tip Center (TCP)</param>
+            <param name="weight">Tool weight in Kg</param>
+            <returns></returns>
         </member>
         <member name="T:BRobotForDynamo.Actions">
             <summary>
@@ -175,6 +186,31 @@
             <param name="message">String message to display</param>
             <returns name="action">Message Action</returns>
         </member>
+        <member name="M:BRobotForDynamo.Actions.Comment(System.String)">
+            <summary>
+            Displays an internal comment in a program compilation. This is useful for internal annotations or reminders, but has no effect on the Robot's behavior. 
+            </summary>
+            <param name="comment">The comment to be displayed on code compilation</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobotForDynamo.Actions.Attach(BRobot.Tool)">
+            <summary>
+            Attach a Tool to the flange of the object, replacing whichever tool was on it before. Note that the Tool Center Point (TCP) will be translated/rotated according to the difference between tools.
+            </summary>
+            <param name="tool">A Tool object to attach to the Robot flange</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobotForDynamo.Actions.Detach">
+            <summary>
+            Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be transformed to the Robot's flange.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobotForDynamo.Programs">
+            <summary>
+            Program creation and visualization options.
+            </summary>
+        </member>
         <member name="M:BRobotForDynamo.Programs.DisplayProgram(System.Collections.Generic.List{BRobot.Action})">
             <summary>
             Returns a human-readable representation of a list of Actions.
@@ -188,7 +224,7 @@
             </summary>
             <param name="bot">The Robot instance that will export this program.</param>
             <param name="actions">A program in the form of a list of Actions.</param>
-            <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and usedas independent variables.</param>
+            <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables.</param>
             <returns name="code">Device-specific program code</returns>
         </member>
         <member name="M:BRobotForDynamo.Programs.WriteToFile(System.Collections.Generic.List{System.String},System.String)">
@@ -198,6 +234,11 @@
             <param name="code">A List of Strings</param>
             <param name="filepath">The path where the file will be saved</param>
             <returns name="resultMsg">Success?</returns>
+        </member>
+        <member name="T:BRobotForDynamo.Utils">
+            <summary>
+            Internal utilities, mainly data type conversion.
+            </summary>
         </member>
     </members>
 </doc>

@@ -11,9 +11,12 @@ using Autodesk.DesignScript.Geometry;
 using BRobot;
 using BAction = BRobot.Action;
 using BPoint = BRobot.Point;
+using BVector = BRobot.Vector;
+using BOrientation = BRobot.Orientation;
+
 
 namespace BRobotForDynamo
-{ 
+{
     //  ██████╗  ██████╗ ██████╗  ██████╗ ████████╗███████╗
     //  ██╔══██╗██╔═══██╗██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝
     //  ██████╔╝██║   ██║██████╔╝██║   ██║   ██║   ███████╗
@@ -34,11 +37,12 @@ namespace BRobotForDynamo
         /// <summary>
         /// Create a new Robot object.
         /// </summary>
+        /// <param name="name">A name for this Robot.</param>
         /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this BRobot...)</param>
         /// <returns name="BRobot">Your brand new Robot object</returns>
-        public static Robot Create(string brand = "HUMAN")
+        public static Robot Create(string name = "Machina", string brand = "HUMAN")
         {
-            return new Robot(brand);
+            return new Robot(name, brand);
         }
 
         /// <summary>
@@ -58,8 +62,6 @@ namespace BRobotForDynamo
             };
         }
 
-        
-
     }
 
 
@@ -78,8 +80,45 @@ namespace BRobotForDynamo
     /// </summary>
     public class Tools
     {
+        internal Tools() { }
+
+        /// <summary>
+        /// Creates a Tool object.
+        /// </summary>
+        /// <param name="name">Tool name</param>
+        /// <param name="basePlane">The base Plane where the Tool will be attached to the Robot</param>
+        /// <param name="toolTipPlane">The Plane of the Tool Tip Center (TCP)</param>
+        /// <param name="weight">Tool weight in Kg</param>
+        /// <returns></returns>
+        public static Tool Create(string name,
+            Autodesk.DesignScript.Geometry.Plane basePlane,
+            Autodesk.DesignScript.Geometry.Plane toolTipPlane,
+            double weight = 1)
+        {
+
+            CoordinateSystem basePlaneCS = basePlane.ToCoordinateSystem();
+            CoordinateSystem toolTipPlaneCS = toolTipPlane.ToCoordinateSystem();
+
+            CoordinateSystem relativeCS = toolTipPlaneCS.PreMultiplyBy(basePlaneCS.Inverse());
+            //CoordinateSystem relativeCS = toolTipPlaneCS.Transform(basePlaneCS.Inverse());  // this is the same thing
+
+            BVector TCPPosition = new BVector(relativeCS.Origin.X, relativeCS.Origin.Y, relativeCS.Origin.Z);
+            BVector centerOfGravity = new BVector(TCPPosition);
+            centerOfGravity.Scale(0.5);
+            BOrientation TCPOrientation = new BOrientation(relativeCS.XAxis.X, relativeCS.XAxis.Y, relativeCS.XAxis.Z,
+                relativeCS.YAxis.X, relativeCS.YAxis.Y, relativeCS.YAxis.Z);
+
+            // https://github.com/DynamoDS/Dynamo/wiki/Zero-Touch-Plugin-Development#dispose--using-statement
+            basePlane.Dispose();
+            toolTipPlaneCS.Dispose();
+            relativeCS.Dispose();
+
+            return new Tool(name, TCPPosition, TCPOrientation, weight, centerOfGravity);
+        }
 
     }
+
+
 
 
 
@@ -97,6 +136,7 @@ namespace BRobotForDynamo
     /// </summary>
     public class Actions
     {
+        internal Actions() { }
 
         /// <summary>
         /// Sets the current type of motion to be applied to future translation actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between joint angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions. Use with caution!
@@ -126,23 +166,6 @@ namespace BRobotForDynamo
             return new ActionMotion(t);
         }
 
-        ///// <summary>
-        ///// Sets the coordinate system that will be used for future relative actions. This can be "global" or "world" (default) to refer to the system's global reference coordinates, or "local" to refer to the device's local reference frame. For example, for a robotic arm, the "global" coordinate system will be the robot's base, and the "local" one will be the coordinates of the end effector, after all translation and rotation transformations.
-        ///// </summary>
-        ///// <returns></returns>
-        //[MultiReturn(new[] { "global", "local" })]
-        //public static Dictionary<string, BAction> Coordinates()
-        //{
-        //    ActionCoordinates global = new ActionCoordinates(ReferenceCS.World);
-        //    ActionCoordinates local = new ActionCoordinates(ReferenceCS.Local);
-
-        //    return new Dictionary<string, BAction>
-        //    {
-        //        { "global", global },
-        //        { "local", local }
-        //    };
-        //}
-
         /// <summary>
         /// Sets the coordinate system that will be used for future relative actions. This can be "global" or "world" (default) to refer to the system's global reference coordinates, or "local" to refer to the device's local reference frame. For example, for a robotic arm, the "global" coordinate system will be the robot's base, and the "local" one will be the coordinates of the tool tip.
         /// </summary>
@@ -163,6 +186,7 @@ namespace BRobotForDynamo
             else
             {
                 Console.WriteLine("Invalid reference coordinate system");
+
                 return null;
             }
 
@@ -227,7 +251,7 @@ namespace BRobotForDynamo
             return new ActionPushPop(false);
         }
 
-       
+
 
 
 
@@ -269,10 +293,9 @@ namespace BRobotForDynamo
         /// <returns name="action">Absolute Rotation Action</returns>
         public static BAction RotateTo(Plane refPlane)
         {
-            BPoint vecX = Utils.Vec2BPoint(refPlane.XAxis);
-            BPoint vecY = Utils.Vec2BPoint(refPlane.YAxis);
-
-            return new ActionRotation(new Orientation(vecX, vecY), false);
+            return new ActionRotation(
+                new BOrientation(refPlane.XAxis.X, refPlane.XAxis.Y, refPlane.XAxis.Z, refPlane.YAxis.X, refPlane.YAxis.Y, refPlane.YAxis.Z),
+                false);
         }
 
         /// <summary>
@@ -285,7 +308,11 @@ namespace BRobotForDynamo
         /// <returns name="action">Relative Transform Action</returns>
         public static BAction Transform(Autodesk.DesignScript.Geometry.Vector direction, Autodesk.DesignScript.Geometry.Vector axis, double angDegs, bool moveFirst = true)
         {
-            return new ActionTransformation(Utils.Vec2BPoint(direction), new Rotation(Utils.Vec2BPoint(axis), angDegs), true, moveFirst);
+            return new ActionTransformation(
+                Utils.Vec2BPoint(direction),
+                new Rotation(Utils.Vec2BPoint(axis), angDegs),
+                true,
+                moveFirst);
         }
 
         /// <summary>
@@ -295,11 +322,11 @@ namespace BRobotForDynamo
         /// <returns name="action">Absolute Transform Action</returns>
         public static BAction TransformTo(Plane plane)
         {
-            BPoint origin = Utils.Vec2BPoint(plane.Origin);
-            BPoint vecX = Utils.Vec2BPoint(plane.XAxis);
-            BPoint vecY = Utils.Vec2BPoint(plane.YAxis);
-
-            return new ActionTransformation(origin, new Orientation(vecX, vecY), false, true);
+            return new ActionTransformation(
+                new BPoint(plane.Origin.X, plane.Origin.Y, plane.Origin.Z),
+                new BOrientation(plane.XAxis.X, plane.XAxis.Y, plane.XAxis.Z, plane.YAxis.X, plane.YAxis.Y, plane.YAxis.Z),
+                false,
+                true);
         }
 
         /// <summary>
@@ -353,6 +380,36 @@ namespace BRobotForDynamo
         {
             return new ActionMessage(message);
         }
+
+        /// <summary>
+        /// Displays an internal comment in a program compilation. This is useful for internal annotations or reminders, but has no effect on the Robot's behavior. 
+        /// </summary>
+        /// <param name="comment">The comment to be displayed on code compilation</param>
+        /// <returns></returns>
+        public static BAction Comment(string comment = "This is a comment")
+        {
+            return new ActionComment(comment);
+        }
+
+        /// <summary>
+        /// Attach a Tool to the flange of the object, replacing whichever tool was on it before. Note that the Tool Center Point (TCP) will be translated/rotated according to the difference between tools.
+        /// </summary>
+        /// <param name="tool">A Tool object to attach to the Robot flange</param>
+        /// <returns></returns>
+        public static BAction Attach(Tool tool)
+        {
+            return new ActionAttach(tool);
+        }
+
+        /// <summary>
+        /// Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be transformed to the Robot's flange.
+        /// </summary>
+        /// <returns></returns>
+        public static BAction Detach()
+        {
+            return new ActionDetach();
+        }
+
     }
 
 
@@ -367,9 +424,13 @@ namespace BRobotForDynamo
     //  ██║     ██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██║ ╚═╝ ██║███████║
     //  ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
     //                                                                       
-
+    /// <summary>
+    /// Program creation and visualization options.
+    /// </summary>
     public class Programs
     {
+        internal Programs() { }
+
         /// <summary>
         /// Returns a human-readable representation of a list of Actions.
         /// </summary>
@@ -392,7 +453,7 @@ namespace BRobotForDynamo
         /// </summary>
         /// <param name="bot">The Robot instance that will export this program.</param>
         /// <param name="actions">A program in the form of a list of Actions.</param>
-        /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and usedas independent variables.</param>
+        /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables.</param>
         /// <returns name="code">Device-specific program code</returns>
         public static List<string> ExportCode(Robot bot, List<BAction> actions, bool inlineTargets = true)
         {
@@ -440,6 +501,9 @@ namespace BRobotForDynamo
     //  ╚██████╔╝   ██║   ██║███████╗███████║
     //   ╚═════╝    ╚═╝   ╚═╝╚══════╝╚══════╝
     //                                       
+    /// <summary>
+    /// Internal utilities, mainly data type conversion.
+    /// </summary>
     internal class Utils
     {
         internal static BPoint Vec2BPoint(Autodesk.DesignScript.Geometry.Vector v)
