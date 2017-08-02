@@ -53,7 +53,7 @@
             An action representing a Translation transform in along a guiding vector.
             </summary>
         </member>
-        <member name="M:BRobot.ActionTranslation.#ctor(BRobot.Point,System.Boolean)">
+        <member name="M:BRobot.ActionTranslation.#ctor(BRobot.Vector,System.Boolean)">
             <summary>
             Full constructor.
             </summary>
@@ -92,6 +92,17 @@
         <member name="T:BRobot.ActionComment">
             <summary>
             Adds a line comment to the compiled code
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionAttach">
+            <summary>
+            Attaches a Tool to the robot flange. 
+            If the robot already had a tool, this will be substituted.
+            </summary>
+        </member>
+        <member name="T:BRobot.ActionDetach">
+            <summary>
+            Detaches any tool currently attached to the robot.
             </summary>
         </member>
         <member name="T:BRobot.ActionBuffer">
@@ -195,6 +206,1640 @@
             Writes a description of each pending Action to the Console.
             </summary>
         </member>
+        <member name="T:BRobot.AxisAngle">
+            <summary>
+            A class representing a spatial rotation as an Axis-Angle:
+            an unit axis vector and the rotation angle.
+            </summary>
+        </member>
+        <member name="P:BRobot.AxisAngle.Axis">
+            <summary>
+            The rotation axis.
+            </summary>
+        </member>
+        <member name="P:BRobot.AxisAngle.Angle">
+            <summary>
+            Rotation angle in degrees.
+            </summary>
+        </member>
+        <member name="P:BRobot.AxisAngle.X">
+            <summary>
+            X coordinate of the rotation vector.
+            </summary>
+        </member>
+        <member name="P:BRobot.AxisAngle.Y">
+            <summary>
+            Y coordinate of the rotation vector.
+            </summary>
+        </member>
+        <member name="P:BRobot.AxisAngle.Z">
+            <summary>
+            Z coordinate of the rotation vector.
+            </summary>
+        </member>
+        <member name="M:BRobot.AxisAngle.IsSimilar(BRobot.AxisAngle)">
+            <summary>
+            Test if this AxisAngle is approximately equal to another.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.AxisAngle.op_Implicit(BRobot.AxisAngle)~BRobot.Vector">
+            <summary>
+            Implicit conversion to Vector object.
+            </summary>
+            <param name="aa"></param>
+        </member>
+        <member name="M:BRobot.AxisAngle.#ctor">
+            <summary>
+            Creates an AxisAngle representing no rotation.
+            </summary>
+        </member>
+        <member name="M:BRobot.AxisAngle.#ctor(BRobot.AxisAngle)">
+            <summary>
+            Creates an AxisAngle as a shallow copy of another one.
+            The axis vector will be automatically normalized.
+            </summary>
+            <param name="axisAngle"></param>
+        </member>
+        <member name="M:BRobot.AxisAngle.#ctor(BRobot.AxisAngle,System.Boolean)">
+            <summary>
+            Creates an AxisAngle as a shallow copy of another one.
+            Internal constructor to bypass normalization.
+            </summary>
+            <param name="aa"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:BRobot.AxisAngle.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create an AxisAngle representation of a spatial rotation from the XYZ components of the rotation axis, 
+            and the rotation angle in degrees. 
+            The axis vector will be automatically normalized.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angleDegs"></param>
+        </member>
+        <member name="M:BRobot.AxisAngle.#ctor(BRobot.Vector,System.Double)">
+            <summary>
+            Create an AxisAngle representation of a spatial rotation from the XYZ components of the rotation axis, 
+            and the rotation angle in degrees. 
+            The axis vector will be automatically normalized.
+            </summary>
+            <param name="axis"></param>
+            <param name="angleDegs"></param>
+        </member>
+        <member name="M:BRobot.AxisAngle.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Private constructor, can bypass normalization if input axis is ensured to be normalized. 
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angleDegs"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:BRobot.AxisAngle.Normalize">
+            <summary>
+            Make the Axis a vector unit.
+            </summary>
+        </member>
+        <member name="M:BRobot.AxisAngle.IsZero">
+            <summary>
+            Returns true if this AxisAngle represents no rotation: zero rotation axis or zero (modulated) angle.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.AxisAngle.AxisLength">
+            <summary>
+            Returns the length of the rotation axis.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.AxisAngle.Modulate">
+            <summary>
+            Transforms this AxisAngle into a rotation around the same axis, but with an equivalent rotation angle
+            in the [0, 360]. Note the axis vector will be flipped if the original angle was negative. 
+            </summary>
+        </member>
+        <member name="M:BRobot.AxisAngle.Flip">
+            <summary>
+            Flip this AxisAngle to represent the same rotation with inverted vector and opposite angle.
+            </summary>
+        </member>
+        <member name="M:BRobot.AxisAngle.IsEquivalent(BRobot.AxisAngle)">
+            <summary>
+            Is this rotation equivalent to a given one? 
+            Equivalence is defined as rotations around vectors sharing the same axis (including opposite directions)
+            and an angle with the same modulated equivalence. This in turn means the same spatial orientation after transformation.
+            For example, the following rotations are equivalent:
+            [0, 0, 1, 315]
+            [0, 0, 1, 675] (one additional turn, same angle)
+            [0, 0, 1, -45] (negative rotation, same angle)
+            [0, 0, -1, 45] (flipped axis, same angle)
+            [0, 0, 10, 315] (same axis and angle, longer vector. note non-unit vectors are not allowed in this AA representation)
+            
+            Also, these are equivalent:
+            [0, 0, 0, 0]
+            [0, 0, 1, 720] 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.AxisAngle.ToQuaternion">
+            <summary>
+            Returns a unit Quaternion representing this AxisAngle rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.AxisAngle.ToRotationVector">
+            <summary>
+            Returns a RotationVector representing this AxisAngle rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.AxisAngle.ToRotationMatrix">
+            <summary>
+            Returns a Rotation Matrix representation of this Axis Angle. 
+            Please note that rotation matrices represent rotations in orthonormalized coordinates,  
+            so that additional Axis Angle information such as overturns (angles outside [0, 180])
+            will get lost, and rotation axis might be flipped. 
+            If this Axis Angle represents no effective rotation, the identity matrix will be returned. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.AxisAngle.ToYawPitchRoll">
+            <summary>
+            Returns a YawPitchRoll representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Orientation">
+            <summary>
+            Defines an Orientation in three-dimensional space represented by a triplet of orthogonal XYZ unit vectors
+            following right-hand rule orientations. Useful for spatial and rotational orientation operations. 
+            </summary>
+        </member>
+        <member name="F:BRobot.Orientation.Q">
+             NOTE: just as rotation, this class is just a wrapper around the underlying 
+             rotational elements that represent Orientation in space.
+             The main purpose of this class it to be an intuitive way of representing Orientation 
+             in three-dimensional space. AxisAngle is therefore not used here, since conceptually
+             there is no need to represent rotations or store overturns in an object that represents
+             pure orientation. 
+             Typical inputs will be vectors in space or conversions from other rotation representations, 
+             and typical visual outputs will be main Vectors, Rotation Matrices or Euler Angles 
+             (even though all internal computation is based on Quaternion algebra). 
+            
+        </member>
+        <member name="P:BRobot.Orientation.XAxis">
+            <summary>
+            The main X direction of this Orientation.
+            </summary>
+        </member>
+        <member name="P:BRobot.Orientation.YAxis">
+            <summary>
+            The main Y direction of this Orientation.
+            </summary>
+        </member>
+        <member name="P:BRobot.Orientation.ZAxis">
+            <summary>
+            The main Z direction of this Orientation.
+            </summary>
+        </member>
+        <member name="M:BRobot.Orientation.op_Implicit(BRobot.Rotation)~BRobot.Orientation">
+            <summary>
+            Implicit conversion from Rotation to Orientation via its Quaternion.
+            </summary>
+            <param name="or"></param>
+        </member>
+        <member name="M:BRobot.Orientation.#ctor">
+            <summary>
+            Create a  Rotation object representing no rotation.
+            </summary>
+        </member>
+        <member name="M:BRobot.Orientation.#ctor(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Create a new Orientation object from the main X and Y axes.
+            This constructor will create the best-fit orthogonal coordinate system
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="vectorX"></param>
+            <param name="vectorY"></param>
+        </member>
+        <member name="M:BRobot.Orientation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a new Orientation object from the main X and Y axes.
+            This constructor will create the best-fit orthogonal coordinate system
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+        </member>
+        <member name="M:BRobot.Orientation.#ctor(BRobot.Quaternion)">
+            <summary>
+            Create an Orientation object from a Quaternion representation.
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Orientation.#ctor(BRobot.Rotation)">
+            <summary>
+            Creates an Orientation object from a Rotation representation.
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="T:BRobot.Geometry">
+            <summary>
+            Base abstract class that all Geometry objects inherit from.
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.EPSILON">
+            <summary>
+            Precision for floating-point comparisons.
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.EPSILON2">
+            <summary>
+            A more permissive precision factor.
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.EPSILON3">
+            <summary>
+            A more restrictive precision factor.
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.EPSILON_DECIMALS">
+            <summary>
+            Amount of digits for floating-point comparisons precision.
+            </summary>
+        </member>
+        <member name="F:BRobot.Geometry.STRING_ROUND_DECIMALS_MM">
+            <summary>
+            Amount of decimals for rounding on ToString() operations.
+            </summary>
+        </member>
+        <member name="T:BRobot.Rotation">
+            <summary>
+            Represents a rotation in three-dimensional space.
+            This rotation is usually defined by its rotation axis and angles, although other
+            definition inputs are possible, such as Quaternions, Rotation Matrices or
+            Euler Angles (Yaw-Pitch-Roll).
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.GlobalXYZ">
+            <summary>
+            An empty Rotation representing the orientation of the global XYZ coordinate system.
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.FlippedAroundX">
+            <summary>
+            A Rotation of 180 degs around the X axis.
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.FlippedAroundY">
+            <summary>
+            A Rotation of 180 degs around the Y axis. 
+            This is the most common orientation of the coordiante system of the flange of a robot in 'home' position.
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.FlippedAroundZ">
+            <summary>
+            A Rotation of 180 degs around the Z axis. 
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.AA">
+            <summary>
+            Internal AxisAngle representation of this rotation. Used as high-level representation.
+            </summary>
+        </member>
+        <member name="F:BRobot.Rotation.Q">
+            <summary>
+            Internal Quaternion representation of this rotation. Used for computations.
+            </summary>
+        </member>
+        <member name="P:BRobot.Rotation.Axis">
+            <summary>
+            The axis vector around which this rotation revolves.
+            </summary>
+        </member>
+        <member name="P:BRobot.Rotation.Angle">
+            <summary>
+            The rotation angle in degrees. 
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.op_Implicit(BRobot.Orientation)~BRobot.Rotation">
+            <summary>
+            Implicit conversion from Orientation to Rotation via its Quaternion.
+            </summary>
+            <param name="or"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor">
+            <summary>
+            Create an empty rotation object with no initialized fields.
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(BRobot.Rotation)">
+            <summary>
+            Create a Rotation as a shallow copy of another one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(BRobot.Vector,System.Double)">
+            <summary>
+            Create a rotation of 'angle' degrees around the 'axis' vector.
+            </summary>
+            <param name="axis"></param>
+            <param name="angleDegrees"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a rotation around a vector axis with XYZ components with the angle
+            defined in degrees and right-hand rule. The axis will be automatically
+            normalized. 
+            </summary>
+            <param name="axisX"></param>
+            <param name="axisY"></param>
+            <param name="axisZ"></param>
+            <param name="angleDegrees"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Main internal constructor.
+            </summary>
+            <param name="axisX"></param>
+            <param name="axisY"></param>
+            <param name="axisZ"></param>
+            <param name="angleDegrees"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:BRobot.Rotation.#ctor(BRobot.Quaternion)">
+            <summary>
+            Internal constructor from a normalized Quaternion object.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Rotation.FromQuaternion(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Rotation from its Quaternion values. 
+            This is a static method because it 
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.RotateGlobal(BRobot.Rotation)">
+            <summary>
+            Rotate this rotation using Global (extrinsic) coordinate system. 
+            Internally, this rotation is pre-multiplied by the given one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.RotateLocal(BRobot.Rotation)">
+            <summary>
+            Rotate this rotation using Local (intrinsic) coordinate system. 
+            Internally, this rotation is post-multiplied by the given one. 
+            </summary>
+            <param name="r"></param>
+        </member>
+        <member name="M:BRobot.Rotation.Invert">
+            <summary>
+            Invert this rotation to negative angle around the same axis.
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.Combine(BRobot.Rotation,BRobot.Rotation)">
+            <summary>
+            Combine the effect of two Rotations. 
+            Please note that rotations will be applied in the order specified by the arguments
+            in intrinsic coordinates, i.e. r1, then r2 over the new LOCAL transformed coordinate system.
+            This means that, if you want to rotate a Rotation A with another Rotation B in GLOBAL coordinates, 
+            you will need to pre-multiply the rotations as in: Combine(B, A).
+            </summary>
+            <param name="r1"></param>
+            <param name="r2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.Inverse(BRobot.Rotation)">
+            <summary>
+            Return a rotation around the same axis but negative angle.
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.UpdateQuaternion">
+            <summary>
+            Update the Quaternion from the AxisAngle value.
+            </summary>
+        </member>
+        <member name="M:BRobot.Rotation.GetRotationVector">
+            <summary>
+            Return a RotationVector representation of this Rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Rotation.GetRotationVector(System.Boolean)">
+            <summary>
+            Return a RotationVector representation of this Rotation.
+            </summary>
+            <param name="radians"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Joints">
+            <summary>
+            Represents the 6 angular rotations of the axes in a 6-axis manipulator, in degrees.
+            </summary>
+        </member>
+        <member name="M:BRobot.Joints.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Joints configuration from values.
+            </summary>
+            <param name="j1"></param>
+            <param name="j2"></param>
+            <param name="j3"></param>
+            <param name="j4"></param>
+            <param name="j5"></param>
+            <param name="j6"></param>
+        </member>
+        <member name="M:BRobot.Joints.Norm">
+            <summary>
+            Returns the norm (euclidean length) of this joints as a vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Joints.NormSq">
+            <summary>
+            Returns the square norm of this joints as a vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Point">
+            <summary>
+            Represents a three dimensional point. 
+            This is just a cosmetic alias for Vectors in the Public API... Users may have a better
+            time at first understanding position as Points and direction as Vectors...?
+            </summary>
+        </member>
+        <member name="P:BRobot.Point.X">
+            <summary>
+            X property of the Point.
+            </summary>
+        </member>
+        <member name="P:BRobot.Point.Y">
+            <summary>
+            Y property of the Point.
+            </summary>
+        </member>
+        <member name="P:BRobot.Point.Z">
+            <summary>
+            Z property of the Point.
+            </summary>
+        </member>
+        <member name="M:BRobot.Point.op_Implicit(BRobot.Point)~BRobot.Vector">
+            <summary>
+            Implicit conversion to Vector object.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:BRobot.Point.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Point from its XYZ coordinates.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="T:BRobot.Vector">
+            <summary>
+            Represents a three dimensional vector.
+            </summary>
+        </member>
+        <member name="P:BRobot.Vector.X">
+            <summary>
+            X property of the Vector.
+            </summary>
+        </member>
+        <member name="P:BRobot.Vector.Y">
+            <summary>
+            Y property of the Vector.
+            </summary>
+        </member>
+        <member name="P:BRobot.Vector.Z">
+            <summary>
+            Z property of the Vector.
+            </summary>
+        </member>
+        <member name="M:BRobot.Vector.IsSimilar(BRobot.Vector)">
+            <summary>
+            Test if this Vector is approximately equal to another.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.op_Implicit(BRobot.Vector)~BRobot.Point">
+            <summary>
+            Implicit conversion to Point object.
+            </summary>
+            <param name="vec"></param>
+        </member>
+        <member name="M:BRobot.Vector.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Vector from its XYZ coordinates.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:BRobot.Vector.#ctor(BRobot.Vector)">
+            <summary>
+            Creates a shallow copy of the specified Vector.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:BRobot.Vector.Set(BRobot.Vector)">
+            <summary>
+            Shallow-copies the values of specified Vector.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:BRobot.Vector.Add(System.Double,System.Double,System.Double)">
+            <summary>
+            Add specified values to this Vector.
+            </summary>
+            <param name="incX"></param>
+            <param name="incY"></param>
+            <param name="incZ"></param>
+        </member>
+        <member name="M:BRobot.Vector.Add(BRobot.Vector)">
+            <summary>
+            Add the coordinates of specified Vector to this one.
+            </summary>
+            <param name="p"></param>
+        </member>
+        <member name="M:BRobot.Vector.Length">
+            <summary>
+            Returns the length of this Vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.SqLength">
+            <summary>
+            Returns the squared length of this Vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.Normalize">
+            <summary>
+            Unitizes this Vector. Will return false if Vector is not unitizable
+            (zero length Vector).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.IsUnit">
+            <summary>
+            Is this a unit Vector?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.Invert">
+            <summary>
+            Reverses the direction of this Vector.
+            </summary>
+        </member>
+        <member name="M:BRobot.Vector.Flip">
+            <summary>
+            An alias for Invert().
+            </summary>
+        </member>
+        <member name="M:BRobot.Vector.Reverse">
+            <summary>
+            An alias for Invert().
+            </summary>
+        </member>
+        <member name="M:BRobot.Vector.Scale(System.Double)">
+            <summary>
+            Multiplies this Vector by a scalar. 
+            </summary>
+            <param name="factor"></param>
+        </member>
+        <member name="M:BRobot.Vector.Rotate(BRobot.Quaternion)">
+            <summary>
+            Rotates this Vector by speficied Quaterion.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Vector.Rotate(BRobot.Vector,System.Double)">
+            <summary>
+            Rotates this Vector specified degrees around specified vector. 
+            </summary>
+            <param name="vec"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.Rotate(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Rotates this Vector specified degrees around specified vector. 
+            </summary>
+            <param name="vec"></param>
+            <param name="angDegs"></param>
+            <returns></returns>
+        </member>
+        <member name="F:BRobot.Vector.XAxis">
+            <summary>
+            Unit X Vector.
+            </summary>
+        </member>
+        <member name="F:BRobot.Vector.YAxis">
+            <summary>
+            Unit Y Vector.
+            </summary>
+        </member>
+        <member name="F:BRobot.Vector.ZAxis">
+            <summary>
+            Unit Z Vector.
+            </summary>
+        </member>
+        <member name="M:BRobot.Vector.op_Multiply(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Returns the dot product of specified Vectors. 
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.DotProduct(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Dot_product">Dot product</a> 
+            of specified Points (Vectors).
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.AngleBetween(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Returns the angle between two vectors in radians.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.CrossProduct(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Cross_product">Cross Product</a>
+            of specified Vectors (Points).
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.Distance(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Returns the distance between two Points.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.SqDistance(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Returns the squarde distance between two Points.
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.AreParallel(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Are specified vectors parallel? This includes vectors with opposite directions, 
+            even with different magnitudes.
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.AreOrthogonal(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Are specified vectors orthogonal?
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.AreOpposite(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Are these vectors parallel but in opposite directions? They can have different magnitudes.
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.CompareDirections(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Compares the directions of two vectors, regardless of their magnitude.
+            </summary>
+            <param name="vec1"></param>
+            <param name="vec2"></param>
+            <returns>1 if parallel (same direction), 2 if orthogonal (perpendicularr
+            directions), 3 if opposite (parallel in opposite directions), 
+            0 otherwise</returns>
+        </member>
+        <member name="M:BRobot.Vector.RandomFromDoubles(System.Double,System.Double)">
+            <summary>
+            Returns a random Vector with coordinates between specified double ranges. 
+            Useful for testing and debugging.
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.Rotation(BRobot.Vector,BRobot.Rotation)">
+            <summary>
+            Returns a new Vector as the rotation of Vector 'p' by Rotation 'r'
+            </summary>
+            <param name="p"></param>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.SqSegmentDistance(BRobot.Vector,BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Returns the squared distance from 'p' to the segment 'p1-p2'.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="p"></param>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.SimplifyPointList(System.Collections.Generic.List{BRobot.Vector},System.Double,System.Boolean)">
+            <summary>
+            Simplifies the path using a combination of radial distance and 
+            Ramer–Douglas–Peucker algorithm. 
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="tolerance"></param>
+            <param name="highQuality"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.SimplifyDouglasPeucker(System.Collections.Generic.List{BRobot.Vector},System.Double)">
+            <summary>
+            The Ramer-Douglas-Peucker algorithm.
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="sqTolerance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.SimplifyRadialDistance(System.Collections.Generic.List{BRobot.Vector},System.Double)">
+            <summary>
+            Simple distance-based simplification. Consecutive points under 
+            threshold distance are removed. 
+            </summary>
+            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
+            <param name="points"></param>
+            <param name="sqTolerance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.Equals(System.Object)">
+            <summary>
+            Equality checks.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Vector.Equals(BRobot.Vector)">
+            <summary>
+            Equality checks.
+            </summary>
+            <ref>https://github.com/imshz/simplify-net</ref>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.YawPitchRoll">
+            <summary>
+            A class representing a Yaw-Pitch-Roll rotation, e.g. Euler Angles over intrinsic
+            ZY'X'' axes (Tait-Bryan angles). See <see cref="!:http://en.wikipedia.org/wiki/Euler_angles"/>
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.XAngle">
+            <summary>
+            Rotation around the X axis in degrees.
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.YAngle">
+            <summary>
+            Rotation around the Y axis in degrees.
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.ZAngle">
+            <summary>
+            Rotation around the Z axis in degrees. 
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.Roll">
+            <summary>
+            Alias for rotation around X axis.
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.Pitch">
+            <summary>
+            Alias for rotation around Y axis.
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.Yaw">
+            <summary>
+            Alias for rotation around Z axis.
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.Bank">
+            <summary>
+            Alias for rotation around X axis.
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.Attitude">
+            <summary>
+            Alias for rotation around Y axis.
+            </summary>
+        </member>
+        <member name="P:BRobot.YawPitchRoll.Heading">
+            <summary>
+            Alias for rotation around Z axis.
+            </summary>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.IsSimilar(BRobot.YawPitchRoll)">
+            <summary>
+            Test if this YawPitchRoll is approximately equal to another. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.#ctor">
+            <summary>
+            Create a zero rotation.
+            </summary>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Create an Euler Angles ZY'X'' intrinsic rotation from its constituent components in degrees.
+            </summary>
+            <param name="xAngle"></param>
+            <param name="yAngle"></param>
+            <param name="zAngle"></param>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.IsEquivalent(BRobot.YawPitchRoll)">
+            <summary>
+            Is this rotation equivalent to another? I.e. is the resulting orientation the same?
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.ToQuaternion">
+            <summary>
+            Returns the Quaternion representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.ToRotationMatrix">
+            <summary>
+            Returns the Rotation Matrix representation os this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.ToAxisAngle">
+            <summary>
+            Returns the Axis-Angle representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.YawPitchRoll.ToRotationVector">
+            <summary>
+            Returns a Rotation Vector representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.RotationMatrix">
+            <summary>
+            A class representing a 3x3 rotation matrix
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.R">
+            <summary>
+            Elements of the rotation matrix, ordered in row to column way, 
+            i.e. r[2] is r13 (row 1 col 3), r[6] is r31, etc. 
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m00">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m01">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m02">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m10">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m11">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m12">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m20">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m21">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationMatrix.m22">
+            <summary>
+            Alias
+            </summary>
+        </member>
+        <member name="M:BRobot.RotationMatrix.IsSimilar(BRobot.RotationMatrix)">
+            <summary>
+            Test if this RotationMatrix is approximately equal to another.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.#ctor">
+            <summary>
+            Create a 3x3 identity matrix representing no rotation.
+            </summary>
+        </member>
+        <member name="M:BRobot.RotationMatrix.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a 3x3 Rotation Matrix from it's constituent components. 
+            Elements of the rotation matrix, ordered in row to column way, 
+            i.e. r[2] is r13 (row 1 col 3), r[6] is r31, etc. 
+            This Matrix will be reorthogonalized if necessary.
+            </summary>
+            <param name="r00"></param>
+            <param name="r01"></param>
+            <param name="r02"></param>
+            <param name="r10"></param>
+            <param name="r11"></param>
+            <param name="r12"></param>
+            <param name="r20"></param>
+            <param name="r21"></param>
+            <param name="r22"></param>
+        </member>
+        <member name="M:BRobot.RotationMatrix.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            A private constructor to bypass orthogonalization when input parameters are
+            guaranteed to be orthogonal.
+            </summary>
+            <param name="r00"></param>
+            <param name="r01"></param>
+            <param name="r02"></param>
+            <param name="r10"></param>
+            <param name="r11"></param>
+            <param name="r12"></param>
+            <param name="r20"></param>
+            <param name="r21"></param>
+            <param name="r22"></param>
+            <param name="orthogonalize"></param>
+        </member>
+        <member name="M:BRobot.RotationMatrix.#ctor(System.Double[])">
+            <summary>
+            Create a 3x3 Rotation Matrix from it's constituent components. 
+            Elements of the rotation matrix, ordered in row to column way, 
+            i.e. r[2] is r13 (row 1 col 3), r[6] is r31, etc. 
+            </summary>
+            <param name="rotationValues"></param>
+        </member>
+        <member name="M:BRobot.RotationMatrix.#ctor(BRobot.RotationMatrix)">
+            <summary>
+            Create a 3x3 Rotation Matrix as a shallow copy of another.
+            </summary>
+            <param name="rotationMatrix"></param>
+        </member>
+        <member name="M:BRobot.RotationMatrix.#ctor(BRobot.Vector,BRobot.Vector)">
+            <summary>
+            Create a RotationMatrix from two Vectors. 
+            This constructor will create the best-fit orthogonal 3x3 matrix 
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="vecX"></param>
+            <param name="vecY"></param>
+        </member>
+        <member name="M:BRobot.RotationMatrix.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a RotationMatrix from the components of two Vectors. 
+            This constructor will create the best-fit orthogonal 3x3 matrix 
+            respecting the direction of the X vector and the plane formed with the Y vector. 
+            The Z vector will be normal to this planes, and all vectors will be unitized. 
+            </summary>
+            <param name="x0"></param>
+            <param name="x1"></param>
+            <param name="x2"></param>
+            <param name="y0"></param>
+            <param name="y1"></param>
+            <param name="y2"></param>
+        </member>
+        <member name="M:BRobot.RotationMatrix.Initialize(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            An internal initializator to start this matrix from its components. 
+            The method allows for optional re-orthogonalization of this Matrix.
+            </summary>
+            <param name="r00"></param>
+            <param name="r01"></param>
+            <param name="r02"></param>
+            <param name="r10"></param>
+            <param name="r11"></param>
+            <param name="r12"></param>
+            <param name="r20"></param>
+            <param name="r21"></param>
+            <param name="r22"></param>
+        </member>
+        <member name="M:BRobot.RotationMatrix.IsIdentity">
+            <summary>
+            Is this an identity matrix?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.IsOrthogonal">
+            <summary>
+            Is this 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.Orthogonalize">
+            <summary>
+            Force the orthogonalization of this matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.Determinant">
+            <summary>
+            Returns the determinant of this Matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.Transpose">
+            <summary>
+            Transposes this Matrix.
+            </summary>
+        </member>
+        <member name="M:BRobot.RotationMatrix.Invert">
+            <summary>
+            Inverts this Matrix.
+            Returns false if the Matrix could not be inverted (singular matrix). 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.Identity">
+            <summary>
+            Turn this into an indentity matrix, representing no transformation. 
+            </summary>
+        </member>
+        <member name="M:BRobot.RotationMatrix.Multiply(BRobot.RotationMatrix,BRobot.RotationMatrix)">
+            <summary>
+            Multiplies two rotation matrices.
+            </summary>
+            <param name="m1"></param>
+            <param name="m2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.ToQuaternion">
+            <summary>
+            Returns a Quaternion representing the same rotation as this Matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.ToAxisAngle">
+            <summary>
+            Returns an Axis Angle representation of this Rotation Matrix. 
+            Note that the returned Axis Angle will always represent a positive rotation between [0, 180]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.ToRotationVector">
+            <summary>
+            Returns a Rotation Vector representation of this Matrix.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationMatrix.ToYawPitchRoll">
+            <summary>
+            Return the YawPitchRoll representation of this matrix.s
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.Quaternion">
+            <summary>
+            A class to represent a spatial rotation as a Quaternion.
+            </summary>
+        </member>
+        <member name="P:BRobot.Quaternion.W">
+            <summary>
+            W property of the Quaternion (scalar)
+            </summary>
+        </member>
+        <member name="P:BRobot.Quaternion.X">
+            <summary>
+            X property of the Quaternion (i part)
+            </summary>
+        </member>
+        <member name="P:BRobot.Quaternion.Y">
+            <summary>
+            Y property of the Quaternion (j part)
+            </summary>
+        </member>
+        <member name="P:BRobot.Quaternion.Z">
+            <summary>
+            Z property of the Quaternion (k part)
+            </summary>
+        </member>
+        <member name="M:BRobot.Quaternion.IsSimilar(BRobot.Quaternion)">
+            <summary>
+            Test if this Quaternion approximately equals another. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.op_Addition(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Quaternion addition
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.op_Subtraction(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Quaternion subtraction
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.op_Multiply(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
+            of the first quaternion by the second.
+            Remember quaternion multiplication is non-commutative.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.op_Multiply(BRobot.Quaternion,System.Double)">
+            <summary>
+            Returns the Quaternion reulting of scaling Q by a scalar.
+            </summary>
+            <param name="q"></param>
+            <param name="factor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.op_Division(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Division operator.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.#ctor">
+            <summary>
+            Create an identity Quaternion representing no rotation.
+            </summary>
+        </member>
+        <member name="M:BRobot.Quaternion.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Create a Quaternion from its components: w + x * i + y * j + z * k
+            For quaternions to be used as valid representations of spatial rotations, 
+            they need to be versors (unit quaternions). This constructor will automatically
+            Vector-Normalize the resulting Quaternion.
+            While this may restrict more general complex algebra, it will be useful
+            in the context of robotics to keep quaternions tight this way ;)
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.#ctor(BRobot.Quaternion)">
+            <summary>
+            Create a Quaternion as a shallow copy of another. 
+            This Quaternion will be vector-normalized. 
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.#ctor(BRobot.Vector,System.Double)">
+            <summary>
+            Creates a Quaternion from a Vector and a scalar. 
+            </summary>
+            <param name="vec"></param>
+            <param name="scalar"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            A private constructor with the option to bypass automatic quaternion normalization.
+            This saves computation when using conversion algorithms that already yield normalized results.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Set(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Sets the values of this Quaternion's components. 
+            The result is Vector-Normalized.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Set(BRobot.Quaternion)">
+            <summary>
+            Shallow-copies the values of specified Quaternion.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Set(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Sets the values of this Quaternion's components with the option to bypass normalization.
+            For internal use, when wxyz come from a normalized source.
+            </summary>
+            <param name="w"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Identity">
+            <summary>
+            Turns into a positive identity Quaternion (1, 0, 0, 0).
+            </summary>
+        </member>
+        <member name="M:BRobot.Quaternion.Identity(System.Boolean)">
+            <summary>
+            Turns into an identity Quaternion.
+            </summary>
+        </member>
+        <member name="M:BRobot.Quaternion.Length">
+            <summary>
+            Returns the length (norm) of this Quaternion.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.SqLength">
+            <summary>
+            Returns the square length of this Quaternion.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Normalize">
+            <summary>
+            Turns this Quaternion into a <a href="https://en.wikipedia.org/wiki/Versor">Versor</a> (unit length quaternion).
+            If quaternion couldn't be normalized (zero-length), turns it into identity and return false.
+            </summary>
+        </member>
+        <member name="M:BRobot.Quaternion.NormalizeVector">
+            <summary>
+            Normalizes the complex portion of this Quaternion (the rotation vector)
+            maintaining the scalar portion (the rotation angle) the same. This is useful when
+            coming from a rotation specified by non-unit vectors, to maintain angular spin.
+            If the scalar is outside the [-1, 1] range, the entire quaternion will be normalized instead.
+            </summary>
+            <remarks>Homebrew algorithm, TO REVIEW</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Conjugate">
+            <summary>
+            Turns this Rotation into its conjugate.
+            </summary>
+            <seealso cref="!:http://mathworld.wolfram.com/QuaternionConjugate.html"/>
+        </member>
+        <member name="M:BRobot.Quaternion.Conjugate(BRobot.Quaternion)">
+            <summary>
+            Returns the conjugate of given quaternion.
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Invert">
+            <summary>
+            Inverts this quaternion.
+            </summary>
+        </member>
+        <member name="M:BRobot.Quaternion.Inverse(BRobot.Quaternion)">
+            <summary>
+            Returns the inverse of given quaternion.
+            </summary>
+            <param name="q"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.IsUnit">
+            <summary>
+            Is this a unit length quaternion?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.IsZero">
+            <summary>
+            Is this a zero length quaternion?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.IsIdentity">
+            <summary>
+            Is this an identity Quaternion? 
+            The identity Quaternion (1, 0, 0, 0) or (-1, 0, 0, 0) produces no rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.IsEquivalent(BRobot.Quaternion)">
+            <summary>
+            Is the rotation represented by this Quaternion equivalent to another? 
+            Equivalence is defined as the rotation operation resulting in the same
+            orientation in three-dimensional space. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Sum">
+            <summary>
+            Return the simple sum of the scalar and vector components.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Add(BRobot.Quaternion)">
+            <summary>
+            Add a Quaternion to this one. 
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Addition(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Returns the addition of two quaternions.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Subtract(BRobot.Quaternion)">
+            <summary>
+            Subtract a quaternion from this one. 
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Subtraction(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Returns the subtraction of two quaternions.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Multiply(BRobot.Quaternion)">
+            <summary>
+            Post-Multiply this Quaternion by the specified one, a.k.a. this = this * q. 
+            Conceptually, this means that a Rotation 'q' in Local (intrinsic) coordinates is applied 
+            to this Rotation.
+            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.PreMultiply(BRobot.Quaternion)">
+            <summary>
+            Premultiplies this Quaternion by the specified one, a.k.a. this = q * this. 
+            Conceptually, this means that a Rotation 'q' in Global (extrinsic) coordinates is applied 
+            to this Rotation.
+            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Multiplication(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
+            of the first quaternion by the second.
+            Remember quaternion multiplication is non-commutative.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Scale(System.Double)">
+            <summary>
+            Multiply this Quaternion by a scalar.
+            </summary>
+            <param name="factor"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Scale(BRobot.Quaternion,System.Double)">
+            <summary>
+            Returns a new Quaternion equal to the original multiplied by a factor.
+            </summary>
+            <param name="q"></param>
+            <param name="factor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.Divide(BRobot.Quaternion)">
+            <summary>
+            Divide this Quaternion by another one. 
+            In reality, this quaternion is post-multiplied by the inverse of the provided one.
+            </summary>
+            <param name="q"></param>
+        </member>
+        <member name="M:BRobot.Quaternion.Division(BRobot.Quaternion,BRobot.Quaternion)">
+            <summary>
+            Returns the division of q1 by q2.
+            Under the hood, q1 is post-multiplied by the inverse of q2.
+            </summary>
+            <param name="q1"></param>
+            <param name="q2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.RotateGlobal(BRobot.Quaternion)">
+            <summary>
+            Rotate this Quaternion by specified Rotation around GLOBAL (extrinsic) reference system.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.RotateLocal(BRobot.Quaternion)">
+            <summary>
+            Rotate this Quaternion by specified Rotation around LOCAL (intrinsic) reference system.
+            </summary>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.ToAxisAngle">
+            <summary>
+            Returns the AxisAngle rotation represented by this Quaternion. 
+            Note it will always return the unit vector corresponding to a positive rotation, 
+            even if the quaternion was created from a negative one (flipped vector).
+            </summary>
+            <seealso cref="!:http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm"/>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.ToRotationVector">
+            <summary>
+            Returns the Rotationvector rotation represented by this Quaternion. 
+            Note it will always return the unit vector corresponding to a positive rotation, 
+            even if the quaternion was created from a negative one (flipped vector).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.ToRotationMatrix">
+            <summary>
+            Returns a 3x3 Rotation Matrix representing this Quaternion's rotation. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Quaternion.ToYawPitchRoll">
+            <summary>
+            Returns the Euler Angle representation of this rotation in Tait-Bryan representation
+            (intrinsic ZY'X'' rotations, or Yaw-Pitch-Roll).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BRobot.RotationVector">
+            <summary>
+            A class to represent a spatial rotation as a Rotation Vector: an unit rotation
+            axis multiplied by the rotation angle.
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationVector.X">
+            <summary>
+            X coordinate of the Rotation Vector
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationVector.Y">
+            <summary>
+            Y coordinate of the Rotation Vector
+            </summary>
+        </member>
+        <member name="P:BRobot.RotationVector.Z">
+            <summary>
+            Z coordinate of the Rotation Vector
+            </summary>
+        </member>
+        <member name="M:BRobot.RotationVector.IsSimilar(BRobot.RotationVector)">
+            <summary>
+            Test if this RotationVector is approximately equal to another. 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a rotation represented by a RotationVector: an unit rotation
+            axis multiplied by the rotation angle.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angle"></param>
+        </member>
+        <member name="M:BRobot.RotationVector.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Protected constructor to bypass normalization of input vector.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="angle"></param>
+            <param name="normalize"></param>
+        </member>
+        <member name="M:BRobot.RotationVector.Length">
+            <summary>
+            Returns the length of this vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.SqLength">
+            <summary>
+            Returns the squared length of this vector.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.IsZero">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.GetVector">
+            <summary>
+            Returns the unit vector representing the axis of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.GetAngle">
+            <summary>
+            Returns the rotation angle of this rotation (the length of the vector).
+            Note the rotation angle will always be positive.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.IsEquivalent(BRobot.RotationVector)">
+            <summary>
+            Is this rotation equivalent to a given one? 
+            Equivalence is defined as rotations around vectors sharing the same axis (including opposite directions)
+            and an angle with the same modulated equivalence. This in turn means the same spatial orientation after transformation.
+            See <see cref="M:BRobot.AxisAngle.IsEquivalent(BRobot.AxisAngle)"/>
+            </summary>
+            <param name="rv"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.ToAxisAngle">
+            <summary>
+            Returns an Axis-Angle representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.ToQuaternion">
+            <summary>
+            Returns a Quaternion representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.ToRotationMatrix">
+            <summary>
+            Returns a Rotation Matrix representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RotationVector.ToYawPitchRoll">
+            <summary>
+            Return a YawPitchRoll representation of this rotation.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:BRobot.SettingsBuffer">
             <summary>
             A buffer manager for Settings objects.
@@ -275,7 +1920,7 @@
         </member>
         <member name="M:BRobot.Communication.GetCurrentPosition">
             <summary>
-            Returns a Point object representing the current robot's TCP position.
+            Returns a Vector object representing the current robot's TCP position.
             </summary>
             <returns></returns>
         </member>
@@ -369,7 +2014,7 @@
         </member>
         <member name="M:BRobot.CommunicationABB.GetCurrentPosition">
             <summary>
-            Returns a Point object representing the current robot's TCP position.
+            Returns a Vector object representing the current robot's TCP position.
             </summary>
             <returns></returns>
         </member>
@@ -706,7 +2351,7 @@
         </member>
         <member name="M:BRobot.Control.GetCurrentPosition">
             <summary>
-            Returns a Point object representing the current robot's TCP position.
+            Returns a Vector object representing the current robot's TCP position.
             </summary>
             <returns></returns>
         </member>
@@ -719,6 +2364,12 @@
         <member name="M:BRobot.Control.GetCurrentJoints">
             <summary>
             Returns a Joints object representing the rotations of the 6 axes of this robot.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.GetCurrentTool">
+            <summary>
+            Returns a Tool object representing the currently attached tool, null if none.
             </summary>
             <returns></returns>
         </member>
@@ -782,7 +2433,7 @@
             </summary>
             <param name="speed">In mm/s</param>
         </member>
-        <member name="M:BRobot.Control.IssueTranslationRequest(BRobot.Point,System.Boolean)">
+        <member name="M:BRobot.Control.IssueTranslationRequest(BRobot.Vector,System.Boolean)">
             <summary>
             Issue a Translation action request that falls back on the state of current settings.
             </summary>
@@ -806,7 +2457,7 @@
             <param name="mType"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Control.IssueTransformationRequest(BRobot.Point,BRobot.Rotation,System.Boolean,System.Boolean)">
+        <member name="M:BRobot.Control.IssueTransformationRequest(BRobot.Vector,BRobot.Rotation,System.Boolean,System.Boolean)">
             <summary>
             Issue a Translation + Rotation action request with fully customized parameters.
             </summary>
@@ -850,6 +2501,13 @@
             Issue a request to add an internal comment in the compiled code. 
             </summary>
             <param name="comment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Control.IssueAttachRequest(BRobot.Tool)">
+            <summary>
+            Issue a request to attach a Tool to the flange of the robot
+            </summary>
+            <param name="tool"></param>
             <returns></returns>
         </member>
         <member name="M:BRobot.Control.InitializeCommunication">
@@ -902,715 +2560,6 @@
             <summary>
             Printlines a "DEBUG" ASCII banner... ;)
             </summary>
-        </member>
-        <member name="F:BRobot.Geometry.EPSILON">
-            <summary>
-            Precision for floating-point comparisons.
-            </summary>
-        </member>
-        <member name="F:BRobot.Geometry.EPSILON_DECIMALS">
-            <summary>
-            Amount of digits for floating-point comparisons precision.
-            </summary>
-        </member>
-        <member name="F:BRobot.Geometry.STRING_ROUND_DECIMALS_MM">
-            <summary>
-            Amount of decimals for rounding on ToString() operations.
-            </summary>
-        </member>
-        <member name="T:BRobot.Point">
-            <summary>
-            Represents three coordinates in space.
-            </summary>
-        </member>
-        <member name="M:BRobot.Point.#ctor(System.Double,System.Double,System.Double)">
-            <summary>
-            Create a Point from its XYZ coordinates.
-            </summary>
-            <param name="x"></param>
-            <param name="y"></param>
-            <param name="z"></param>
-        </member>
-        <member name="M:BRobot.Point.#ctor(BRobot.Point)">
-            <summary>
-            Creates a shallow copy of the specified Point.
-            </summary>
-            <param name="p"></param>
-        </member>
-        <member name="M:BRobot.Point.Set(BRobot.Point)">
-            <summary>
-            Shallow-copies the values of specified Point.
-            </summary>
-            <param name="p"></param>
-        </member>
-        <member name="M:BRobot.Point.Add(System.Double,System.Double,System.Double)">
-            <summary>
-            Add specified values to this Point.
-            </summary>
-            <param name="incX"></param>
-            <param name="incY"></param>
-            <param name="incZ"></param>
-        </member>
-        <member name="M:BRobot.Point.Add(BRobot.Point)">
-            <summary>
-            Add the coordinates of specified Point to this one.
-            </summary>
-            <param name="p"></param>
-        </member>
-        <member name="M:BRobot.Point.Length">
-            <summary>
-            Returns the length of this Vector.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.LengthSq">
-            <summary>
-            Returns the squared length of this Vector.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.Normalize">
-            <summary>
-            Unitizes this Vector. Will return false if Vector is not unitizable
-            (zero length Vector).
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.IsUnit">
-            <summary>
-            Is this a unit Vector?
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.Invert">
-            <summary>
-            Reverses the direction of this Vector.
-            </summary>
-        </member>
-        <member name="M:BRobot.Point.Flip">
-            <summary>
-            An alias for Invert().
-            </summary>
-        </member>
-        <member name="M:BRobot.Point.Reverse">
-            <summary>
-            An alias for Invert().
-            </summary>
-        </member>
-        <member name="M:BRobot.Point.Scale(System.Double)">
-            <summary>
-            Multiplies this Vector by a scalar. 
-            </summary>
-            <param name="factor"></param>
-        </member>
-        <member name="M:BRobot.Point.Rotate(BRobot.Rotation)">
-            <summary>
-            Rotates this Point by speficied Quaterion.
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Point.Rotate(BRobot.Point,System.Double)">
-            <summary>
-            Rotates this Point specified degrees around specified vector. 
-            </summary>
-            <param name="vec"></param>
-            <param name="angDegs"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.Rotate(System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            Rotates this Point specified degrees around specified vector. 
-            </summary>
-            <param name="vec"></param>
-            <param name="angDegs"></param>
-            <returns></returns>
-        </member>
-        <member name="F:BRobot.Point.XAxis">
-            <summary>
-            Unit X Vector.
-            </summary>
-        </member>
-        <member name="F:BRobot.Point.YAxis">
-            <summary>
-            Unit Y Vector.
-            </summary>
-        </member>
-        <member name="F:BRobot.Point.ZAxis">
-            <summary>
-            Unit Z Vector.
-            </summary>
-        </member>
-        <member name="M:BRobot.Point.op_Multiply(BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns the dot product of specified Vectors. 
-            </summary>
-            <param name="p1"></param>
-            <param name="p2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.DotProduct(BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns the <a href="https://en.wikipedia.org/wiki/Dot_product">Dot product</a> 
-            of specified Points (Vectors).
-            </summary>
-            <param name="p1"></param>
-            <param name="p2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.AngleBetween(BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns the angle between two vectors in radians.
-            </summary>
-            <param name="p1"></param>
-            <param name="p2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.CrossProduct(BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns the <a href="https://en.wikipedia.org/wiki/Cross_product">Cross Product</a>
-            of specified Vectors (Points).
-            </summary>
-            <param name="p1"></param>
-            <param name="p2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.OrthogonalTo(BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns a unit Vector orthogonal to specified guiding Vector, contained
-            in the plane defined by guiding Vector and Point. The direction of the 
-            resulting Vector will be on the side of the guiding Point.
-            </summary>
-            <param name="vec"></param>
-            <param name="p"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.Distance(BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns the distance between two Points.
-            </summary>
-            <param name="p1"></param>
-            <param name="p2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.SqDistance(BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns the squarde distance between two Points.
-            </summary>
-            <param name="p1"></param>
-            <param name="p2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.AreParallel(BRobot.Point,BRobot.Point)">
-            <summary>
-            Are specified vectors parallel?
-            </summary>
-            <param name="vec1"></param>
-            <param name="vec2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.AreOrthogonal(BRobot.Point,BRobot.Point)">
-            <summary>
-            Are specified vectors orthogonal?
-            </summary>
-            <param name="vec1"></param>
-            <param name="vec2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.Rotation(BRobot.Point,BRobot.Rotation)">
-            <summary>
-            Returns a new Point as the rotation of Point 'p' by Rotation 'r'
-            </summary>
-            <param name="p"></param>
-            <param name="r"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.SqSegmentDistance(BRobot.Point,BRobot.Point,BRobot.Point)">
-            <summary>
-            Returns the squared distance from 'p' to the segment 'p1-p2'.
-            </summary>
-            <ref>https://github.com/imshz/simplify-net</ref>
-            <param name="p"></param>
-            <param name="p1"></param>
-            <param name="p2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.SimplifyPointList(System.Collections.Generic.List{BRobot.Point},System.Double,System.Boolean)">
-            <summary>
-            Simplifies the path using a combination of radial distance and 
-            Ramer–Douglas–Peucker algorithm. 
-            </summary>
-            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
-            <param name="points"></param>
-            <param name="tolerance"></param>
-            <param name="highQuality"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.SimplifyDouglasPeucker(System.Collections.Generic.List{BRobot.Point},System.Double)">
-            <summary>
-            The Ramer-Douglas-Peucker algorithm.
-            </summary>
-            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
-            <param name="points"></param>
-            <param name="sqTolerance"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.SimplifyRadialDistance(System.Collections.Generic.List{BRobot.Point},System.Double)">
-            <summary>
-            Simple distance-based simplification. Consecutive points under 
-            threshold distance are removed. 
-            </summary>
-            <ref>Adapted from https://github.com/imshz/simplify-net </ref>
-            <param name="points"></param>
-            <param name="sqTolerance"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.Equals(System.Object)">
-            <summary>
-            Equality checks.
-            </summary>
-            <ref>https://github.com/imshz/simplify-net</ref>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Point.Equals(BRobot.Point)">
-            <summary>
-            Equality checks.
-            </summary>
-            <ref>https://github.com/imshz/simplify-net</ref>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="T:BRobot.Rotation">
-            <summary>
-            Represents a rotation using quaternions.
-            </summary>
-        </member>
-        <member name="F:BRobot.Rotation.GlobalXY">
-            <summary>
-            The orientation of a global XYZ coordinate system (aka an identity rotation).
-            </summary>
-        </member>
-        <member name="F:BRobot.Rotation.FlippedAroundX">
-            <summary>
-            A global XYZ coordinate system rotated 180 degs around its X axis.
-            </summary>
-        </member>
-        <member name="F:BRobot.Rotation.FlippedAroundY">
-            <summary>
-            A global XYZ coordinate system rotated 180 degs around its Y axis. 
-            Recommended as the easiest orientation for the standard robot end effector to reach in positive XY octants.
-            </summary>
-        </member>
-        <member name="F:BRobot.Rotation.FlippedAroundZ">
-            <summary>
-            A global XYZ coordinate system rotated 180 degs around its Z axis.
-            </summary>
-        </member>
-        <member name="M:BRobot.Rotation.op_Multiply(BRobot.Rotation,BRobot.Rotation)">
-            <summary>
-            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
-            of the first quaternion by the second.
-            Remember quaternion multiplication is non-commutative.
-            </summary>
-            <param name="r1"></param>
-            <param name="r2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Boolean)">
-            <summary>
-            Create a Rotation object from its Quaternion parameters: 
-            w + x * i + y * j + z * k. 
-            NOTE: it is very unlikely that any public user will input 
-            direct quaternion values when specifying rotations, and this
-            signature could be better used for vector + angle value.
-            Changed this to internal, and adding a public vectorXYZ + ang signature.
-            A public static Rotation.FromQuaterion() is added for 
-            advanced users.
-            </summary>
-            <param name="w"></param>
-            <param name="x"></param>
-            <param name="y"></param>
-            <param name="z"></param>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            Creates a unit Quaternion representing a rotation of n degrees around a
-            vector, with right-hand positive convention.
-            </summary>
-            <param name="vecX"></param>
-            <param name="vecY"></param>
-            <param name="vecZ"></param>
-            <param name="angDegs"></param>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor(BRobot.Point,System.Double)">
-            <summary>
-            Creates a unit Quaternion representing a rotation of n degrees around a 
-            vector, with right-hand positive convention.
-            </summary>
-            <param name="vec"></param>
-            <param name="angDegs"></param>
-        </member>
-        <member name="M:BRobot.Rotation.FromQuaternion(System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            A static constructor for Rotation objects from their Quaternion representation.
-            </summary>
-            <param name="w"></param>
-            <param name="x"></param>
-            <param name="y"></param>
-            <param name="z"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            Create a Rotation object from a CoordinateSystem defined by
-            the coordinates of its main X vector and the coordiantes of 
-            a guiding Y vector.
-            Vectors don't need to be normalized or orthogonal, the constructor 
-            will generate the best-fitting CoordinateSystem with this information. 
-            </summary>
-            <param name="x0"></param>
-            <param name="x1"></param>
-            <param name="x2"></param>
-            <param name="y0"></param>
-            <param name="y1"></param>
-            <param name="y2"></param>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor(BRobot.Point,BRobot.Point)">
-            <summary>
-            Create a Rotation object from a CoordinateSystem defined by
-            the main Vector X and the guiding Vector Y.
-            Vectors don't need to be normalized or orthogonal, the constructor 
-            will generate the best-fitting CoordinateSystem with this information.
-            </summary>
-            <param name="vecX"></param>
-            <param name="vecY"></param>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor(BRobot.CoordinateSystem)">
-            <summary>
-            Create a Rotation object from a CoordinateSystem defined by
-            the coordinates of its main X vector and the coordiantes of 
-            a guiding Y vector.
-            Vectors don't need to be normalized or orthogonal, the constructor 
-            will generate the best-fitting CoordinateSystem with this information.
-            </summary>
-            <param name="cs"></param>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor(BRobot.Rotation)">
-            <summary>
-            Creates a new Rotation as a shallow copy of the passed one.
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Rotation.#ctor">
-            <summary>
-            Creates an identity Quaternion (no rotation).
-            </summary>
-        </member>
-        <member name="M:BRobot.Rotation.Set(System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            Sets the values of this Quaternion's components.
-            </summary>
-            <param name="w"></param>
-            <param name="x"></param>
-            <param name="y"></param>
-            <param name="z"></param>
-        </member>
-        <member name="M:BRobot.Rotation.Set(BRobot.Rotation)">
-            <summary>
-            Shallow-copies the values of specified Quaternion.
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Rotation.Length">
-            <summary>
-            Returns the length (norm) of this Quaternion.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.SqLength">
-            <summary>
-            Returns the square length of this Quaternion.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Normalize">
-            <summary>
-            Turns this Quaternion into a <a href="https://en.wikipedia.org/wiki/Versor">Versor</a> (unit length quaternion).
-            </summary>
-        </member>
-        <member name="M:BRobot.Rotation.IsUnit">
-            <summary>
-            Is this a unit length quaternion?
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.IsZero">
-            <summary>
-            Is this a zero length quaternion?
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Add(BRobot.Rotation)">
-            <summary>
-            Add a Quaternion to this one. 
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Rotation.Addition(BRobot.Rotation,BRobot.Rotation)">
-            <summary>
-            Returns the addition of two quaternions.
-            </summary>
-            <param name="r1"></param>
-            <param name="r2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Subtract(BRobot.Rotation)">
-            <summary>
-            Subtract a quaternion from this one. 
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Rotation.Subtraction(BRobot.Rotation,BRobot.Rotation)">
-            <summary>
-            Returns the subtraction of two quaternions.
-            </summary>
-            <param name="r1"></param>
-            <param name="r2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Multiply(BRobot.Rotation)">
-            <summary>
-            Multiply this Quaternion by the specified one, a.k.a. this = this * r. 
-            Conceptually, this means that a Rotation 'r' in Local coordinates is applied 
-            to this Rotation.
-            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Rotation.PreMultiply(BRobot.Rotation)">
-            <summary>
-            Premultiplies this Quaternion by the specified one, a.k.a. this = r * this. 
-            Conceptually, this means that a Rotation 'r' in Global coordinates is applied 
-            to this Rotation.
-            See https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Rotation.Multiply(BRobot.Rotation,BRobot.Rotation)">
-            <summary>
-            Returns the <a href="https://en.wikipedia.org/wiki/Quaternion#Hamilton_product">Hamilton product</a> 
-            of the first quaternion by the second.
-            Remember quaternion multiplication is non-commutative.
-            </summary>
-            <param name="r1"></param>
-            <param name="r2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Divide(BRobot.Rotation)">
-            <summary>
-            Divide this Quaternion by another one. 
-            In reality, this quaternion is post-multiplied by the inverse of the provided one.
-            </summary>
-            <param name="r"></param>
-        </member>
-        <member name="M:BRobot.Rotation.Division(BRobot.Rotation,BRobot.Rotation)">
-            <summary>
-            Returns the division of r1 by r2.
-            Under the hood, r1 is post-multiplied by the inverse of r2.
-            </summary>
-            <param name="r1"></param>
-            <param name="r2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Conjugate">
-            <summary>
-            Turns this Rotation into its conjugate.
-            </summary>
-        </member>
-        <member name="M:BRobot.Rotation.Conjugate(BRobot.Rotation)">
-            <summary>
-            Returns the conjugate of given quaternion.
-            </summary>
-            <param name="r"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Invert">
-            <summary>
-            Inverts this quaternion.
-            </summary>
-        </member>
-        <member name="M:BRobot.Rotation.GetCoordinateSystem">
-            <summary>
-            Returns a CoordinateSystem representation of current Quaternion
-            (a 3x3 rotation matrix).
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.Inverse(BRobot.Rotation)">
-            <summary>
-            Returns the inverse of given quaternion.
-            </summary>
-            <param name="r"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.GetRotationVector(System.Boolean)">
-            <summary>
-            Returns the rotation vector in axis-angle representation, 
-            i.e. the unit vector defining the rotation axis multiplied by the 
-            angle rotation scalar in degrees.
-            https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.GetRotationAxis">
-            <summary>
-            Returns the rotation axis represented by this Quaternion. 
-            Note it will always return the unit vector corresponding to a positive rotation, 
-            even if the quaternion was created from a negative one (flipped vector).
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.GetRotationAngle">
-            <summary>
-            Returns the rotation angle represented by this Quaternion in degrees.
-            Note it will always yield the positive rotation.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.RotateGlobal(BRobot.Rotation)">
-            <summary>
-            Rotate this Quaternion by specified Rotation around GLOBAL reference system.
-            </summary>
-            <param name="r"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Rotation.RotateLocal(BRobot.Rotation)">
-            <summary>
-            Rotate this Quaternion by specified Rotation around LOCAL reference system.
-            </summary>
-            <param name="r"></param>
-            <returns></returns>
-        </member>
-        <member name="T:BRobot.Joints">
-            <summary>
-            Represents the 6 angular rotations of the axes in a 6-axis manipulator, in degrees.
-            </summary>
-        </member>
-        <member name="M:BRobot.Joints.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            Create a Joints configuration from values.
-            </summary>
-            <param name="j1"></param>
-            <param name="j2"></param>
-            <param name="j3"></param>
-            <param name="j4"></param>
-            <param name="j5"></param>
-            <param name="j6"></param>
-        </member>
-        <member name="M:BRobot.Joints.Norm">
-            <summary>
-            Returns the norm (euclidean length) of this joints as a vector.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Joints.NormSq">
-            <summary>
-            Returns the square norm of this joints as a vector.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:BRobot.CoordinateSystem">
-            <summary>
-            Represents a Coordinate System composed of a triplet of orthogonal XYZ unit vectors
-            following right-hand rule orientations. Useful for spatial and rotational orientation
-            operations. 
-            </summary>
-        </member>
-        <member name="M:BRobot.CoordinateSystem.#ctor">
-            <summary>
-            Creates a global XYZ reference system.
-            </summary>
-        </member>
-        <member name="M:BRobot.CoordinateSystem.#ctor(BRobot.Point,BRobot.Point)">
-            <summary>
-            Createa a CoordinateSystem based on the specified guiding Vecots. 
-            Vectors don't need to be normalized or orthogonal, the constructor 
-            will generate the best-fitting CoordinateSystem with this information. 
-            </summary>
-            <param name="vecX"></param>
-            <param name="vecY"></param>
-        </member>
-        <member name="M:BRobot.CoordinateSystem.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            Create a CoordinateSystem based on the specified guiding Vecots. 
-            Vectors don't need to be normalized or orthogonal, the constructor 
-            will generate the best-fitting CoordinateSystem with this information. 
-            </summary>
-            <param name="x0"></param>
-            <param name="x1"></param>
-            <param name="x2"></param>
-            <param name="y0"></param>
-            <param name="y1"></param>
-            <param name="y2"></param>
-        </member>
-        <member name="M:BRobot.CoordinateSystem.FromComponents(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            A static constructor that returns a CoordinateSystem from specified vector components. 
-            It will return null if provided components do not form a valid 3x3 rotation matrix.
-            </summary>
-            <param name="x0"></param>
-            <param name="x1"></param>
-            <param name="x2"></param>
-            <param name="y0"></param>
-            <param name="y1"></param>
-            <param name="y2"></param>
-            <param name="z0"></param>
-            <param name="z1"></param>
-            <param name="z2"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.CoordinateSystem.GetQuaternion">
-            <summary>
-            Returns a Quaternion representation of the current CoordinateSystem. 
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.CoordinateSystem.IsValid">
-            <summary>
-            Are the three axes unit vectors and orthonormal?
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:BRobot.Frame">
-            <summary>
-            Represents a location and rotation in 3D space, with some additional
-            metadata representing speeds, zones, etc.
-            </summary>
-        </member>
-        <member name="F:BRobot.Frame.DefaultOrientation">
-            <summary>
-            This is the default rotation that will be assigned to Frames constructed only with location properties.
-            </summary>
-        </member>
-        <member name="M:BRobot.Frame.GetUNSAFEConfigurationDeclaration">
-            <summary>
-            WARNING: This library still doesn't perform IK calculation, and will always use
-            a default [0,0,0,0] axis configuration.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Frame.GetExternalAxesDeclaration">
-            <summary>
-            WARNING: no external axes are taken into account here... 
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Frame.GetUNSAFERobTargetDeclaration">
-            <summary>
-            WARNING: This library still doesn't perform IK calculation, and will always return
-            a default [0,0,0,0] axis configuration.
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:BRobot.Library">
             <summary>
@@ -1677,7 +2626,14 @@
         </member>
         <member name="M:BRobot.CompilerABB.GetZoneValue(BRobot.RobotCursor)">
             <summary>
-            Returns a RAPID representaiton of cursor zone.
+            Returns a RAPID representatiton of cursor zone.
+            </summary>
+            <param name="cursor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerABB.GetToolValue(BRobot.RobotCursor)">
+            <summary>
+            Returns a RAPID representation of a Tool object.
             </summary>
             <param name="cursor"></param>
             <returns></returns>
@@ -1700,6 +2656,28 @@
         <member name="M:BRobot.CompilerUR.GetJointTargetValue(BRobot.RobotCursor)">
             <summary>
             Returns a UR joint representation of the current state of the cursor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerKUKA.UNSAFEProgramFromBuffer(System.String,BRobot.RobotCursor,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a textual program representation of a set of Actions using native KUKA Robot Language.
+            </summary>
+            <param name="programName"></param>
+            <param name="writePointer"></param>
+            <param name="block">Use actions in waiting queue or buffer?</param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerKUKA.GetPositionTargetValue(BRobot.RobotCursor)">
+            <summary>
+            Returns a KRL FRAME representation of the current state of the cursor.
+            Note POS also accept T and S parameters for unambiguous arm configuration def. @TODO: implement?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.CompilerKUKA.GetAxisTargetValue(BRobot.RobotCursor)">
+            <summary>
+            Returns a KRL AXIS joint representation of the current state of the cursor.
             </summary>
             <returns></returns>
         </member>
@@ -1857,7 +2835,7 @@
         </member>
         <member name="M:BRobot.Robot.GetCurrentOrientation">
             <summary>
-            Returns a Rottaion representation of the Robot's TCP orientation in quaternions.
+            Returns a Rotation representation of the Robot's TCP orientation in quaternions.
             </summary>
             <returns></returns>
         </member>
@@ -1974,7 +2952,7 @@
         </member>
         <member name="M:BRobot.Robot.Coordinates(System.String)">
             <summary>
-            Sets the reference system used for relative transformations ('local', 'global'...)
+            Sets the reference system used for relative transformations ("local", "global", etc.)
             </summary>
             <param name="type"></param>
         </member>
@@ -1997,7 +2975,7 @@
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Robot.Move(BRobot.Point)">
+        <member name="M:BRobot.Robot.Move(BRobot.Vector)">
             <summary>
             Issue a relative movement action request on current coordinate system.
             </summary>
@@ -2031,14 +3009,14 @@
         </member>
         <member name="M:BRobot.Robot.Rotate(BRobot.Rotation)">
             <summary>
-            Issue a relative rotation action request around local/global axes.
+            Issue a RELATIVE rotation action request according to the current reference system.
             </summary>
             <param name="rotation"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Robot.Rotate(BRobot.Point,System.Double)">
+        <member name="M:BRobot.Robot.Rotate(BRobot.Vector,System.Double)">
             <summary>
-            Issue a relative rotation action request around local/global axes.
+            Issue a RELATIVE rotation action request according to the current reference system.
             </summary>
             <param name="vector"></param>
             <param name="angDegs"></param>
@@ -2046,7 +3024,7 @@
         </member>
         <member name="M:BRobot.Robot.Rotate(System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Issue a relative rotation action request around local/global axes.
+            Issue a RELATIVE rotation action request according to the current reference system.
             </summary>
             <param name="rotVecX"></param>
             <param name="rotVecY"></param>
@@ -2056,21 +3034,21 @@
         </member>
         <member name="M:BRobot.Robot.RotateTo(BRobot.Rotation)">
             <summary>
-            Issue an absolute global reorientation request.
+            Issue an ABSOLUTE reorientation request according to the current reference system.
             </summary>
             <param name="rotation"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Robot.RotateTo(BRobot.CoordinateSystem)">
+        <member name="M:BRobot.Robot.RotateTo(BRobot.Orientation)">
             <summary>
-            Issue an absolute global reorientation request.
+            Issue an ABSOLUTE reorientation request according to the current reference system.
             </summary>
             <param name="cs"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Robot.RotateTo(BRobot.Point,BRobot.Point)">
+        <member name="M:BRobot.Robot.RotateTo(BRobot.Vector,BRobot.Vector)">
             <summary>
-            Issue an absolute global reorientation request.
+            Issue an ABSOLUTE reorientation request according to the current reference system.
             </summary>
             <param name="vecX"></param>
             <param name="vecY"></param>
@@ -2078,7 +3056,7 @@
         </member>
         <member name="M:BRobot.Robot.RotateTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Issue an absolute global reorientation request.
+            Issue an ABSOLUTE reorientation request according to the current reference system.
             </summary>
             <param name="x0"></param>
             <param name="x1"></param>
@@ -2088,35 +3066,39 @@
             <param name="y2"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Robot.Transform(BRobot.Point,BRobot.Rotation)">
+        <member name="M:BRobot.Robot.Transform(BRobot.Vector,BRobot.Rotation)">
             <summary>
-            Issue a compound relative local Translation + Rotation request. 
-            Note that, if using local coordinates, order of actions will matter.
+            Issue a compound RELATIVE local Translation + Rotation request
+            according to the current reference system.
+            Note that, if using local coordinates, order of actions will matter.  // TODO: wouldn't they matter too if the are in global coordinates?
+            </summary>
+            <param name="direction"></param>
+            <param name="rotation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Transform(BRobot.Rotation,BRobot.Vector)">
+            <summary>
+            Issue a compound RELATIVE local Rotation + Translation request
+            according to the current reference system.
+            Note that, if using local coordinates, order of actions will matter. // TODO: wouldn't they matter too if the are in global coordinates?
+            </summary>
+            <param name="rotation"></param>
+            <param name="direction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.TransformTo(BRobot.Point,BRobot.Orientation)">
+            <summary>
+            Issue a compound ABSOLUTE global Translation + Rotation request
+            according to the current reference system.
             </summary>
             <param name="position"></param>
             <param name="rotation"></param>
             <returns></returns>
         </member>
-        <member name="M:BRobot.Robot.Transform(BRobot.Rotation,BRobot.Point)">
+        <member name="M:BRobot.Robot.TransformTo(BRobot.Orientation,BRobot.Point)">
             <summary>
-            Issue a compound relative local Rotation + Translation request.
-            Note that, if using local coordinates, order of actions will matter.
-            </summary>
-            <param name="rotation"></param>
-            <param name="position"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Robot.TransformTo(BRobot.Point,BRobot.Rotation)">
-            <summary>
-            Issue a compound absolute global Translation + Rotation request.
-            </summary>
-            <param name="position"></param>
-            <param name="rotation"></param>
-            <returns></returns>
-        </member>
-        <member name="M:BRobot.Robot.TransformTo(BRobot.Rotation,BRobot.Point)">
-            <summary>
-            Issue a compound absolute global Translation + Rotation request.
+            Issue a compound ABSOLUTE global Translation + Rotation request
+            according to the current reference system.
             </summary>
             <param name="rotation"></param>
             <param name="position"></param>
@@ -2186,6 +3168,56 @@
             <param name="comment"></param>
             <returns></returns>
         </member>
+        <member name="M:BRobot.Robot.Attach(BRobot.Tool)">
+            <summary>
+            Attach a Tool to the flange of this Robot.
+            From this moment, all Actions like Move or Rotate will refer
+            to the Tool Center Point (TCP).
+            </summary>
+            <param name="tool"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.Detach">
+            <summary>
+            Detach all Tools from the flange of this Robot.
+            From this moment, all Actions like Move or Rotate will refer
+            to the Flange Center Point (FCP).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.GetPosition">
+            <summary>
+            Returns a Point represnting the current location of the Tool Center Point
+            (if there is a Tool attached) or the Flange Center Point (if there isn't).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.GetRotation">
+            <summary>
+            Return a Rotation object representing the current rotation of the Tool Center Point
+            (if there is a Tool attached) or the Flange Center Point (if there isn't).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.GetOrientation">
+            <summary>
+            Return a Orientation object representing the current orientation of the Tool Center Point
+            (if there is a Tool attached) or the Flange Center Point (if there isn't).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.GetJoints">
+            <summary>
+            Returns a Joint object representing the rotations in the robot axes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.Robot.GetTool">
+            <summary>
+            Returns the Tool object currently attached to this Robot, null if none.
+            </summary>
+            <returns>The Tool object currently attached to this Robot, null if none.</returns>
+        </member>
         <member name="M:BRobot.Robot.DebugDump">
             <summary>
             Dumps a bunch of information to the console about the controller, the main task, etc.
@@ -2254,7 +3286,7 @@
             <param name="name"></param>
             <param name="applyImmediately"></param>
         </member>
-        <member name="M:BRobot.RobotCursor.Initialize(BRobot.Point,BRobot.Rotation,BRobot.Joints,System.Int32,System.Int32,BRobot.MotionType,BRobot.ReferenceCS)">
+        <member name="M:BRobot.RobotCursor.Initialize(BRobot.Vector,BRobot.Rotation,BRobot.Joints,System.Int32,System.Int32,BRobot.MotionType,BRobot.ReferenceCS)">
             <summary>
             Minimum information necessary to initialize a robot object.
             </summary>
@@ -2409,6 +3441,20 @@
             <param name="action"></param>
             <returns></returns>
         </member>
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionAttach)">
+            <summary>
+            Apply Attach Tool Action.
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BRobot.RobotCursor.ApplyAction(BRobot.ActionDetach)">
+            <summary>
+            Apply Detach Tool action
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
         <member name="T:BRobot.Settings">
             <summary>
             A class representing a Setting state, to be un/buffered.
@@ -2427,8 +3473,31 @@
         </member>
         <member name="T:BRobot.Tool">
             <summary>
-            Represents a tool object that can be attached to the end effector of the robot
+            Represents a tool object that can be attached to the end effector of the robot.
+            This class is public and will be used directly by the user, so careful design of the API
+            vs. internal methods will be relevant. 
             </summary>
+        </member>
+        <member name="M:BRobot.Tool.#ctor(System.String,BRobot.Point,BRobot.Orientation)">
+            <summary>
+            Create a new Tool object by defining the Position and Orientation of the 
+            Tool Center Point (TCP) relative to the Tool's base coordinate system. 
+            In other words, if the Tool gets attached to the robot flange in 
+            XYZ [0, 0, 0], where is the tooltip and how is it oriented?
+            </summary>
+            <param name="TCPPosition"></param>
+            <param name="TCPOrientation"></param>
+        </member>
+        <member name="M:BRobot.Tool.#ctor(System.String,BRobot.Point,BRobot.Orientation,System.Double,BRobot.Point)">
+            <summary>
+            Create a new Tool object by defining the Position and Orientation of the 
+            Tool Center Point (TCP), its weight in Kg and its center of gravity.
+            </summary>
+            <param name="name"></param>
+            <param name="TCPPosition"></param>
+            <param name="TCPOrientation"></param>
+            <param name="weightKg"></param>
+            <param name="centerOfGRavity"></param>
         </member>
         <member name="T:BRobot.Util">
             <summary>
