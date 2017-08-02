@@ -15,7 +15,7 @@ using BVector = BRobot.Vector;
 using BOrientation = BRobot.Orientation;
 using System.IO;
 
-namespace Machina
+namespace MachinaDynamo
 {
     //  ██████╗  ██████╗ ██████╗  ██████╗ ████████╗███████╗
     //  ██╔══██╗██╔═══██╗██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝

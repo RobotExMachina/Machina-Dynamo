@@ -1,0 +1,23 @@
+{
+    "license": "",
+    "file_hash": null,
+    "name": "Machina for Dynamo",
+    "version": "0.2.5",
+    "description": "A library for robot programming and control",
+    "group": "Machina",
+    "keywords": [
+        "robot", "control", "programming", "machina"
+    ],
+    "dependencies": [],
+    "contents": "",
+    "engine_version": "1.1.0.2093",
+    "engine": "dynamo",
+    "engine_metadata": "",
+    "site_url": "",
+    "repository_url": "",
+    "contains_binaries": true,
+    "node_libraries": [
+        "BRobot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "MachinaDynamo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    ]
+}
