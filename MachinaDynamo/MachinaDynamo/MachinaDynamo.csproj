@@ -33,11 +33,11 @@
     <DocumentationFile>bin\Release\MachinaDynamo.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BRobot">
-      <HintPath>ref\BRobot.dll</HintPath>
-    </Reference>
     <Reference Include="DynamoServices">
       <HintPath>ref\DynamoServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Machina">
+      <HintPath>ref\Machina.dll</HintPath>
     </Reference>
     <Reference Include="ProtoGeometry">
       <HintPath>ref\ProtoGeometry.dll</HintPath>

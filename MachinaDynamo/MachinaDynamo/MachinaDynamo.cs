@@ -8,11 +8,11 @@ using Autodesk.DesignScript.Runtime;
 using Autodesk.DesignScript.Interfaces;
 using Autodesk.DesignScript.Geometry;
 
-using BRobot;
-using BAction = BRobot.Action;
-using BPoint = BRobot.Point;
-using BVector = BRobot.Vector;
-using BOrientation = BRobot.Orientation;
+using Machina;
+using MAction = Machina.Action;
+using MPoint = Machina.Point;
+using MVector = Machina.Vector;
+using MOrientation = Machina.Orientation;
 using System.IO;
 
 namespace MachinaDynamo
@@ -40,7 +40,7 @@ namespace MachinaDynamo
         /// <param name="name">A name for this Robot.</param>
         /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
         /// <returns name="Robot">Your brand new Robot object</returns>
-        public static Robot Create(string name = "Robot01", string brand = "HUMAN")
+        public static Robot Create(string name = "MachinaRobot", string brand = "HUMAN")
         {
             return new Robot(name, brand);
         }
@@ -102,10 +102,10 @@ namespace MachinaDynamo
             CoordinateSystem relativeCS = toolTipPlaneCS.PreMultiplyBy(basePlaneCS.Inverse());
             //CoordinateSystem relativeCS = toolTipPlaneCS.Transform(basePlaneCS.Inverse());  // this is the same thing
 
-            BVector TCPPosition = new BVector(relativeCS.Origin.X, relativeCS.Origin.Y, relativeCS.Origin.Z);
-            BVector centerOfGravity = new BVector(TCPPosition);
+            MVector TCPPosition = new MVector(relativeCS.Origin.X, relativeCS.Origin.Y, relativeCS.Origin.Z);
+            MVector centerOfGravity = new MVector(TCPPosition);
             centerOfGravity.Scale(0.5);
-            BOrientation TCPOrientation = new BOrientation(relativeCS.XAxis.X, relativeCS.XAxis.Y, relativeCS.XAxis.Z,
+            MOrientation TCPOrientation = new MOrientation(relativeCS.XAxis.X, relativeCS.XAxis.Y, relativeCS.XAxis.Z,
                 relativeCS.YAxis.X, relativeCS.YAxis.Y, relativeCS.YAxis.Z);
 
             // https://github.com/DynamoDS/Dynamo/wiki/Zero-Touch-Plugin-Development#dispose--using-statement
@@ -143,7 +143,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="type">"linear" or "joint"</param>
         /// <returns>Set Motion Type Action</returns>
-        public static BAction Motion(string type = "linear")
+        public static MAction Motion(string type = "linear")
         {
             MotionType t = MotionType.Undefined;
 
@@ -172,7 +172,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="type">"global" or "local"</param>
         /// <returns>Set Reference Coordinate System Action</returns>
-        public static BAction Coordinates(string type = "global")
+        public static MAction Coordinates(string type = "global")
         {
             ReferenceCS refcs;
             type = type.ToLower();
@@ -198,7 +198,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="speedInc">Speed increment in mm/s</param>
         /// <returns name="action">Increase Speed Action</returns>
-        public static BAction Speed(double speedInc = 0)
+        public static MAction Speed(double speedInc = 0)
         {
             return new ActionSpeed((int)Math.Round(speedInc), true);
         }
@@ -208,7 +208,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="speed">Speed value in mm/s</param>
         /// <returns name="action">Set Speed Action</returns>
-        public static BAction SpeedTo(double speed = 20)
+        public static MAction SpeedTo(double speed = 20)
         {
             return new ActionSpeed((int)Math.Round(speed), false);
         }
@@ -218,7 +218,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="zoneInc">Increease in precision radius in mm</param>
         /// <returns name="action">Increase Zone Action</returns>
-        public static BAction Zone(double zoneInc = 0)
+        public static MAction Zone(double zoneInc = 0)
         {
             return new ActionZone((int)Math.Round(zoneInc), true);
         }
@@ -228,7 +228,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="zone">Precision radius in mm</param>
         /// <returns name="action">Set Zone Action</returns>
-        public static BAction ZoneTo(double zone = 5)
+        public static MAction ZoneTo(double zone = 5)
         {
             return new ActionZone((int)Math.Round(zone), false);
         }
@@ -237,7 +237,7 @@ namespace MachinaDynamo
         /// Stores current state settings to a buffer, so that temporary changes can be made, and settings can be reverted to the stored state later with PopSettings().
         /// </summary>
         /// <returns name="action">Push Settings Action</returns>
-        public static BAction PushSettings()
+        public static MAction PushSettings()
         {
             return new ActionPushPop(true);
         }
@@ -246,7 +246,7 @@ namespace MachinaDynamo
         /// Reverts current settings to the state store by the last call to PushSettings().
         /// </summary>
         /// <returns name="action">Pop Settings Action</returns>
-        public static BAction PopSettings()
+        public static MAction PopSettings()
         {
             return new ActionPushPop(false);
         }
@@ -260,7 +260,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="direction">Translation direction</param>
         /// <returns name="action">Relative Translation Action</returns>
-        public static BAction Move(Autodesk.DesignScript.Geometry.Vector direction)
+        public static MAction Move(Autodesk.DesignScript.Geometry.Vector direction)
         {
             return new ActionTranslation(Utils.Vec2BPoint(direction), true);
         }
@@ -270,9 +270,9 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="location">Target position</param>
         /// <returns name="action">Absolute Translation Action</returns>
-        public static BAction MoveTo(Autodesk.DesignScript.Geometry.Point location)
+        public static MAction MoveTo(Autodesk.DesignScript.Geometry.Point location)
         {
-            return new ActionTranslation(new BPoint(location.X, location.Y, location.Z), false);
+            return new ActionTranslation(new MPoint(location.X, location.Y, location.Z), false);
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace MachinaDynamo
         /// <param name="axis">Rotation axis. Positive rotation direction is defined by the right-hand rule.</param>
         /// <param name="angDegs">Rotation angle in degrees</param>
         /// <returns name="action">Relative Rotation Action</returns>
-        public static BAction Rotate(Autodesk.DesignScript.Geometry.Vector axis, double angDegs)
+        public static MAction Rotate(Autodesk.DesignScript.Geometry.Vector axis, double angDegs)
         {
             return new ActionRotation(new Rotation(Utils.Vec2BPoint(axis), angDegs), true);
         }
@@ -291,10 +291,10 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="refPlane">Target spatial orientation</param>
         /// <returns name="action">Absolute Rotation Action</returns>
-        public static BAction RotateTo(Plane refPlane)
+        public static MAction RotateTo(Plane refPlane)
         {
             return new ActionRotation(
-                new BOrientation(refPlane.XAxis.X, refPlane.XAxis.Y, refPlane.XAxis.Z, refPlane.YAxis.X, refPlane.YAxis.Y, refPlane.YAxis.Z),
+                new MOrientation(refPlane.XAxis.X, refPlane.XAxis.Y, refPlane.XAxis.Z, refPlane.YAxis.X, refPlane.YAxis.Y, refPlane.YAxis.Z),
                 false);
         }
 
@@ -306,7 +306,7 @@ namespace MachinaDynamo
         /// <param name="angDegs">Rotation angle in degrees</param>
         /// <param name="moveFirst">Apply translation first? Otherwise, apply rotation first.</param>
         /// <returns name="action">Relative Transform Action</returns>
-        public static BAction Transform(Autodesk.DesignScript.Geometry.Vector direction, Autodesk.DesignScript.Geometry.Vector axis, double angDegs, bool moveFirst = true)
+        public static MAction Transform(Autodesk.DesignScript.Geometry.Vector direction, Autodesk.DesignScript.Geometry.Vector axis, double angDegs, bool moveFirst = true)
         {
             return new ActionTransformation(
                 Utils.Vec2BPoint(direction),
@@ -320,11 +320,11 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="plane">Traget location + orientation</param>
         /// <returns name="action">Absolute Transform Action</returns>
-        public static BAction TransformTo(Plane plane)
+        public static MAction TransformTo(Plane plane)
         {
             return new ActionTransformation(
-                new BPoint(plane.Origin.X, plane.Origin.Y, plane.Origin.Z),
-                new BOrientation(plane.XAxis.X, plane.XAxis.Y, plane.XAxis.Z, plane.YAxis.X, plane.YAxis.Y, plane.YAxis.Z),
+                new MPoint(plane.Origin.X, plane.Origin.Y, plane.Origin.Z),
+                new MOrientation(plane.XAxis.X, plane.XAxis.Y, plane.XAxis.Z, plane.YAxis.X, plane.YAxis.Y, plane.YAxis.Z),
                 false,
                 true);
         }
@@ -339,7 +339,7 @@ namespace MachinaDynamo
         /// <param name="j5">Rotational increment in degrees for Joint 5</param>
         /// <param name="j6">Rotational increment in degrees for Joint 6</param>
         /// <returns name="action">Increase Joint Angles Action</returns>
-        public static BAction Joints(double j1 = 0, double j2 = 0, double j3 = 0,
+        public static MAction Joints(double j1 = 0, double j2 = 0, double j3 = 0,
             double j4 = 0, double j5 = 0, double j6 = 0)
         {
             return new ActionJoints(new Joints(j1, j2, j3, j4, j5, j6), true);
@@ -355,7 +355,7 @@ namespace MachinaDynamo
         /// <param name="j5">Angular value in degrees for Joint 5</param>
         /// <param name="j6">Angular value in degrees for Joint 6</param>
         /// <returns name="action">Set Joint Angles Action</returns>
-        public static BAction JointsTo(double j1 = 0, double j2 = 0, double j3 = 0,
+        public static MAction JointsTo(double j1 = 0, double j2 = 0, double j3 = 0,
             double j4 = 0, double j5 = 0, double j6 = 0)
         {
             return new ActionJoints(new Joints(j1, j2, j3, j4, j5, j6), false);
@@ -366,7 +366,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="millis">Pause time in milliseconds</param>
         /// <returns name="action">Wait Action</returns>
-        public static BAction Wait(double millis = 0)
+        public static MAction Wait(double millis = 0)
         {
             return new ActionWait((long)Math.Round(millis));
         }
@@ -376,7 +376,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="message">String message to display</param>
         /// <returns name="action">Message Action</returns>
-        public static BAction Message(string message = "Hello World!")
+        public static MAction Message(string message = "Hello World!")
         {
             return new ActionMessage(message);
         }
@@ -386,7 +386,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="comment">The comment to be displayed on code compilation</param>
         /// <returns></returns>
-        public static BAction Comment(string comment = "This is a comment")
+        public static MAction Comment(string comment = "This is a comment")
         {
             return new ActionComment(comment);
         }
@@ -396,7 +396,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="tool">A Tool object to attach to the Robot flange</param>
         /// <returns></returns>
-        public static BAction Attach(Tool tool)
+        public static MAction Attach(Tool tool)
         {
             return new ActionAttach(tool);
         }
@@ -405,7 +405,7 @@ namespace MachinaDynamo
         /// Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be transformed to the Robot's flange.
         /// </summary>
         /// <returns></returns>
-        public static BAction Detach()
+        public static MAction Detach()
         {
             return new ActionDetach();
         }
@@ -436,11 +436,11 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="actions">The list of Actions that conforms a program</param>
         /// <returns></returns>
-        public static List<string> DisplayProgram(List<BAction> actions)
+        public static List<string> DisplayProgram(List<MAction> actions)
         {
             List<string> program = new List<string>();
 
-            foreach (BAction a in actions)
+            foreach (MAction a in actions)
             {
                 program.Add(a.ToString());
             }
@@ -455,11 +455,11 @@ namespace MachinaDynamo
         /// <param name="actions">A program in the form of a list of Actions.</param>
         /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables.</param>
         /// <returns name="code">Device-specific program code</returns>
-        public static string ExportCode(Robot bot, List<BAction> actions, bool inlineTargets = true)
+        public static string ExportCode(Robot bot, List<MAction> actions, bool inlineTargets = true)
         {
             bot.Mode("offline");
 
-            foreach (BAction a in actions)
+            foreach (MAction a in actions)
             {
                 bot.Do(a);
             }
@@ -514,14 +514,14 @@ namespace MachinaDynamo
     /// </summary>
     internal class Utils
     {
-        internal static BPoint Vec2BPoint(Autodesk.DesignScript.Geometry.Vector v)
+        internal static MPoint Vec2BPoint(Autodesk.DesignScript.Geometry.Vector v)
         {
-            return new BPoint(v.X, v.Y, v.Z);
+            return new MPoint(v.X, v.Y, v.Z);
         }
 
-        internal static BPoint Vec2BPoint(Autodesk.DesignScript.Geometry.Point p)
+        internal static MPoint Vec2BPoint(Autodesk.DesignScript.Geometry.Point p)
         {
-            return new BPoint(p.X, p.Y, p.Z);
+            return new MPoint(p.X, p.Y, p.Z);
         }
 
     }
