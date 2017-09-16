@@ -93,7 +93,7 @@ namespace MachinaDynamo
         public static Tool Create(string name,
             Autodesk.DesignScript.Geometry.Plane basePlane,
             Autodesk.DesignScript.Geometry.Plane toolTipPlane,
-            double weight = 1)
+            double weight = 0)
         {
 
             CoordinateSystem basePlaneCS = basePlane.ToCoordinateSystem();
@@ -471,7 +471,7 @@ namespace MachinaDynamo
                 writer.WriteLine(codeLines[i]);
             }
             string code = writer.ToString();
-            writer.Dispose();
+            writer.Dispose();  // just in case ;)
             return code;
         }
 
