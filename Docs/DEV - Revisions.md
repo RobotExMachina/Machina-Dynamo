@@ -24,6 +24,7 @@
 
 ## TODO
 - [ ] Review problem with Tools getting lost on rewrite
+- [ ] Rename Zone to Precision
 
 ## v0.4.0
 - [x] Improve sample files

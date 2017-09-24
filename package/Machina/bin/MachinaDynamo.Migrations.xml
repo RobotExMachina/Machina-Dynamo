@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<migrations>
+  <!--
+  <priorNameHint>
+    <oldName>Autodesk.DesignScript.Geometry.Geometry.GetClosestPoint</oldName>
+    <newName>Autodesk.DesignScript.Geometry.Geometry.ClosestPointTo</newName>
+  </priorNameHint>
+  And as many of the above as necessary...
+  -->
+</migrations>

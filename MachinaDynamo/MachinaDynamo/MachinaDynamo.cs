@@ -512,6 +512,7 @@ namespace MachinaDynamo
         /// <param name="bot">The Robot instance that will export this program.</param>
         /// <param name="actions">A program in the form of a list of Actions.</param>
         /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables.</param>
+        /// <param name="machinaComments">If true, Machina comments with code information will be added to the code.</param>
         /// <returns name="code">Device-specific program code</returns>
         public static string ExportCode(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
         {
