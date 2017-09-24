@@ -13,6 +13,7 @@ using MAction = Machina.Action;
 using MPoint = Machina.Point;
 using MVector = Machina.Vector;
 using MOrientation = Machina.Orientation;
+using MTool = Machina.Tool;
 using System.IO;
 
 namespace MachinaDynamo
@@ -62,6 +63,20 @@ namespace MachinaDynamo
             };
         }
 
+        /// <summary>
+        /// Change the name of a robot's IO pin.
+        /// </summary>
+        /// <param name="bot"></param>
+        /// <param name="name"></param>
+        /// <param name="pin"></param>
+        /// <param name="digital"></param>
+        /// <returns></returns>
+        public static Robot SetIOName(Robot bot, string name = "Digital_IO_1", int pin = 1, bool digital = true)
+        {
+            bot.SetIOName(name, pin, digital);
+            return bot;
+        }
+
     }
 
 
@@ -90,7 +105,7 @@ namespace MachinaDynamo
         /// <param name="toolTipPlane">The Plane of the Tool Tip Center (TCP)</param>
         /// <param name="weight">Tool weight in Kg</param>
         /// <returns></returns>
-        public static Tool Create(string name,
+        public static MTool Create(string name,
             Autodesk.DesignScript.Geometry.Plane basePlane,
             Autodesk.DesignScript.Geometry.Plane toolTipPlane,
             double weight = 0)
@@ -113,7 +128,7 @@ namespace MachinaDynamo
             toolTipPlaneCS.Dispose();
             relativeCS.Dispose();
 
-            return new Tool(name, TCPPosition, TCPOrientation, weight, centerOfGravity);
+            return new MTool(name, TCPPosition, TCPOrientation, weight, centerOfGravity);
         }
 
     }
@@ -396,7 +411,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="tool">A Tool object to attach to the Robot flange</param>
         /// <returns></returns>
-        public static MAction Attach(Tool tool)
+        public static MAction Attach(MTool tool)
         {
             return new ActionAttach(tool);
         }
@@ -410,7 +425,50 @@ namespace MachinaDynamo
             return new ActionDetach();
         }
 
+        /// <summary>
+        /// Activate/deactivate digital output. 
+        /// </summary>
+        /// <param name="ioNum"></param>
+        /// <param name="isOn"></param>
+        /// <returns></returns>
+        public static MAction WriteDigital(int ioNum, bool isOn)
+        {
+            return new ActionIODigital(ioNum, isOn);
+        }
+
+        /// <summary>
+        /// Send a value to analog output.
+        /// </summary>
+        /// <param name="ioNum"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static MAction WriteAnalog(int ioNum, double value)
+        {
+            return new ActionIOAnalog(ioNum, value);
+        }
+
+        /// <summary>
+        /// Turn digital output on. Alias for `WriteDigital(ioNum, true)`
+        /// </summary>
+        /// <param name="ioNum"></param>
+        /// <returns></returns>
+        public static MAction TurnOn(int ioNum)
+        {
+            return new ActionIODigital(ioNum, true);
+        }
+
+        /// <summary>
+        /// Turn digital output off. Alias for `WriteDigital(ioNum, false)` 
+        /// </summary>
+        /// <param name="ioNum"></param>
+        /// <returns></returns>
+        public static MAction TurnOff(int ioNum)
+        {
+            return new ActionIODigital(ioNum, false);
+        }
+
     }
+
 
 
 
@@ -455,7 +513,7 @@ namespace MachinaDynamo
         /// <param name="actions">A program in the form of a list of Actions.</param>
         /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables.</param>
         /// <returns name="code">Device-specific program code</returns>
-        public static string ExportCode(Robot bot, List<MAction> actions, bool inlineTargets = true)
+        public static string ExportCode(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
         {
             bot.Mode("offline");
 
@@ -464,7 +522,7 @@ namespace MachinaDynamo
                 bot.Do(a);
             }
 
-            List<string> codeLines = bot.Export(inlineTargets);
+            List<string> codeLines = bot.Export(inlineTargets, machinaComments);
             StringWriter writer = new StringWriter();
             for (var i = 0; i < codeLines.Count; i++)
             {
