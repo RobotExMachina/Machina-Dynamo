@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <migrations>
-  <!--
   <priorNameHint>
-    <oldName>Autodesk.DesignScript.Geometry.Geometry.GetClosestPoint</oldName>
-    <newName>Autodesk.DesignScript.Geometry.Geometry.ClosestPointTo</newName>
+  	<oldName>MachinaDynamo.Actions.Zone</oldName>
+  	<newName>MachinaDynamo.Actions.Precision</newName>
   </priorNameHint>
-  And as many of the above as necessary...
-  -->
+  <priorNameHint>
+  	<oldName>MachinaDynamo.Actions.ZoneTo</oldName>
+  	<newName>MachinaDynamo.Actions.PrecisionTo</newName>
+  </priorNameHint>
 </migrations>

@@ -253,3 +253,11 @@ paket-files/
 .dropbox
 desktop.ini
 
+
+
+# Byproducts of debugging with the sample files... 
+package/Machina/extra/backup/
+package/Machina/extra/*.prg
+package/Machina/extra/*.mod
+package/Machina/extra/*.src
+package/Machina/extra/*.script

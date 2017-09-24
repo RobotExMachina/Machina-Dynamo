@@ -228,24 +228,44 @@ namespace MachinaDynamo
             return new ActionSpeed((int)Math.Round(speed), false);
         }
 
-        /// <summary>
-        /// Increases the zone radius in mm at which the device will start transitioning to its next target transformation. You can think of this as a 'proximity precision' parameter to blend movement along consecutive waypoints. Default value is 5 mm.
-        /// </summary>
-        /// <param name="zoneInc">Increease in precision radius in mm</param>
-        /// <returns name="action">Increase Zone Action</returns>
-        public static MAction Zone(double zoneInc = 0)
-        {
-            return new ActionZone((int)Math.Round(zoneInc), true);
-        }
+        ///// <summary>
+        ///// Increases the zone radius in mm at which the device will start transitioning to its next target transformation. You can think of this as a 'proximity precision' parameter to blend movement along consecutive waypoints. Default value is 5 mm.
+        ///// </summary>
+        ///// <param name="zoneInc">Increease in precision radius in mm</param>
+        ///// <returns name="action">Increase Zone Action</returns>
+        //public static MAction Zone(double zoneInc = 0)
+        //{
+        //    return new ActionZone((int)Math.Round(zoneInc), true);
+        //}
 
         /// <summary>
-        /// Sets the zone radius in mm at which the device will start transitioning to its next target transformation. You can think of this as a 'proximity precision' parameter to blend movement along consecutive waypoints. Default value is 5 mm.
+        /// Increase the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as "Zone", "Approximate Positioning" or "Blending Radius" in different platforms. 
         /// </summary>
-        /// <param name="zone">Precision radius in mm</param>
-        /// <returns name="action">Set Zone Action</returns>
-        public static MAction ZoneTo(double zone = 5)
+        /// <param name="radiusInc">Smoothing radius increment in mm</param>
+        /// <returns></returns>
+        public static MAction Precision(double radiusInc = 0)
         {
-            return new ActionZone((int)Math.Round(zone), false);
+            return new ActionZone((int)Math.Round(radiusInc), true);
+        }
+
+        ///// <summary>
+        ///// Sets the zone radius in mm at which the device will start transitioning to its next target transformation. You can think of this as a 'proximity precision' parameter to blend movement along consecutive waypoints. Default value is 5 mm.
+        ///// </summary>
+        ///// <param name="zone">Precision radius in mm</param>
+        ///// <returns name="action">Set Zone Action</returns>
+        //public static MAction ZoneTo(double zone = 5)
+        //{
+        //    return new ActionZone((int)Math.Round(zone), false);
+        //}
+
+        /// <summary>
+        /// Set the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as "Zone", "Approximate Positioning" or "Blending Radius" in different platforms. 
+        /// </summary>
+        /// <param name="radius">Smoothing radius in mm</param>
+        /// <returns></returns>
+        public static MAction PrecisionTo(double radius = 5)
+        {
+            return new ActionZone((int)Math.Round(radius), false);
         }
 
         /// <summary>
