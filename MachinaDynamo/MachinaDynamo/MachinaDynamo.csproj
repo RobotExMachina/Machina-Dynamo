@@ -7,7 +7,7 @@
     <ProjectGuid>{532069C2-67B0-4C30-A6A0-07273FD9A48A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BRobot_for-Dynamo</RootNamespace>
+    <RootNamespace>MachinaDynamo</RootNamespace>
     <AssemblyName>MachinaDynamo</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,12 +57,28 @@
     <Compile Include="MachinaDynamo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.Create.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.Create.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MachinaDynamoImages.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Motion.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Motion.Small.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF ($(ConfigurationName)) == (Debug) GOTO END
 cd $(ProjectDir)
-copy /y bin\Release\MachinaDynamo.dll "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
-copy /y bin\Release\MachinaDynamo.xml "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
+copy /y $(OutDir)MachinaDynamo.dll "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
+copy /y $(OutDir)MachinaDynamo.xml "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
+copy /y $(OutDir)MachinaDynamo.customization.dll "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
 :END</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -71,4 +88,34 @@ copy /y bin\Release\MachinaDynamo.xml "D:\Dropbox\Jose Luis\code\MachinaDynamo\p
   <Target Name="AfterBuild">
   </Target>
   -->
+  <!-- This runs conditionally after a build completes.  When it runs is very configurable but in general it will only run if a build successfully completes and produces new output. -->
+  <!--Target Name="PostBuildEvent">
+
+  </Target-->
+  <!-- This basically ends up as a taget looking like this: https://stackoverflow.com/a/6128761/1934487
+  <Target Name="PostBuildEvent">
+    <Exec Command="$(PostBuildEvent)" />
+  </Target>
+  -->
+  <!-- This runs as the last action in the Build target and does so irrespective of whether or not a build succeeds.  It runs after PostBuildEvent (if it runs at all) -->
+  <Target Name="AfterBuild">
+    <!-- Get System.Drawing.dll -->
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <!-- Get assembly -->
+    <GetAssemblyIdentity AssemblyFiles="$(OutDir)$(TargetName).dll">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
+    </GetAssemblyIdentity>
+    <!-- Generate customization dll -->
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)\Resources\MachinaDynamoImages.resx" OutputResources="$(ProjectDir)\Resources\MachinaDynamoImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)\Resources\MachinaDynamoImages.resources" OutputAssembly="$(OutDir)$(TargetName).customization.dll" />
+    <Exec Command="echo Generated resources file $(OutDir)$(TargetName).customization.dll" />
+    <Exec Command="echo $(ProjectDir)" />
+    <Exec Command="echo $(OutDir)" />
+    <Exec Command="echo $(TargetName)" />
+    <Exec Command="echo $(FrameworkAssembliesPath)" />
+    <Exec Command="echo %(AssemblyInfo.Version)" />
+    <!-- https://stackoverflow.com/a/6128761/1934487 -->
+  </Target>
 </Project>
