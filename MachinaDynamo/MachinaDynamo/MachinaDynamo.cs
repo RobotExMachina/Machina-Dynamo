@@ -38,9 +38,9 @@ namespace MachinaDynamo
         /// <summary>
         /// Create a new Robot object.
         /// </summary>
-        /// <param name="name">A name for this Robot.</param>
+        /// <param name="name">A name for this Robot</param>
         /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
-        /// <returns name="Robot">Your brand new Robot object</returns>
+        /// <returns name="Robot">Your brand new Machina Robot object</returns>
         public static Robot Create(string name = "MachinaRobot", string brand = "HUMAN")
         {
             return new Robot(name, brand);
@@ -209,7 +209,7 @@ namespace MachinaDynamo
         }
 
         /// <summary>
-        /// Increases the speed in mm/s at which future transformation actions will run. Default value is 20 mm.
+        /// Increases the speed in mm/s at which future transformation actions will run.
         /// </summary>
         /// <param name="speedInc">Speed increment in mm/s</param>
         /// <returns name="action">Increase Speed Action</returns>
@@ -219,12 +219,17 @@ namespace MachinaDynamo
         }
 
         /// <summary>
-        /// Sets the speed in mm/s at which future transformation actions will run. Default value is 20 mm.
+        /// Sets the speed in mm/s at which future transformation actions will run.
         /// </summary>
         /// <param name="speed">Speed value in mm/s</param>
         /// <returns name="action">Set Speed Action</returns>
         public static MAction SpeedTo(double speed = 20)
         {
+            if (speed < 0)
+            {
+                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("The value of the speed cannot be negative");
+                return null;
+            }
             return new ActionSpeed((int)Math.Round(speed), false);
         }
 
@@ -259,7 +264,7 @@ namespace MachinaDynamo
         //}
 
         /// <summary>
-        /// Set the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as "Zone", "Approximate Positioning" or "Blending Radius" in different platforms. 
+        /// Set the default precision value new actions will be given. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as "Zone", "Approximate Positioning" or "Blending Radius" in different platforms.
         /// </summary>
         /// <param name="radius">Smoothing radius in mm</param>
         /// <returns></returns>
@@ -271,7 +276,7 @@ namespace MachinaDynamo
         /// <summary>
         /// Stores current state settings to a buffer, so that temporary changes can be made, and settings can be reverted to the stored state later with PopSettings().
         /// </summary>
-        /// <returns name="action">Push Settings Action</returns>
+        /// <returns name="action">PushSettings Action</returns>
         public static MAction PushSettings()
         {
             return new ActionPushPop(true);
@@ -293,7 +298,7 @@ namespace MachinaDynamo
         /// <summary>
         /// Moves the device along a speficied vector relative to its current position.
         /// </summary>
-        /// <param name="direction">Translation direction</param>
+        /// <param name="direction">Translation vector</param>
         /// <returns name="action">Relative Translation Action</returns>
         public static MAction Move(Autodesk.DesignScript.Geometry.Vector direction)
         {
@@ -313,7 +318,7 @@ namespace MachinaDynamo
         /// <summary>
         /// Rotates the device a specified angle in degrees along the specified vector.
         /// </summary>
-        /// <param name="axis">Rotation axis. Positive rotation direction is defined by the right-hand rule.</param>
+        /// <param name="axis">Rotation axis (positive rotation direction is defined by the right-hand rule).</param>
         /// <param name="angDegs">Rotation angle in degrees</param>
         /// <returns name="action">Relative Rotation Action</returns>
         public static MAction Rotate(Autodesk.DesignScript.Geometry.Vector axis, double angDegs)
@@ -529,14 +534,14 @@ namespace MachinaDynamo
         /// <summary>
         /// Returns a representation of these Actions written on the device's native language. This is the code you would typically save as a file and manually load on the device's controller.
         /// </summary>
-        /// <param name="bot">The Robot instance that will export this program.</param>
-        /// <param name="actions">A program in the form of a list of Actions.</param>
-        /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables.</param>
-        /// <param name="machinaComments">If true, Machina comments with code information will be added to the code.</param>
+        /// <param name="bot">The Robot instance that will export this program</param>
+        /// <param name="actions">A program in the form of a list of Actions</param>
+        /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables</param>
+        /// <param name="machinaComments">If true, Machina-style comments with code information will be added to the end of the code instructions</param>
         /// <returns name="code">Device-specific program code</returns>
         public static string ExportCode(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
         {
-            bot.Mode("offline");
+            bot.Mode(Machina.ControlMode.Offline);
 
             foreach (MAction a in actions)
             {
