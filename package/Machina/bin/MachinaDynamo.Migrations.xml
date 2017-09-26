@@ -8,4 +8,12 @@
   	<oldName>MachinaDynamo.Actions.ZoneTo</oldName>
   	<newName>MachinaDynamo.Actions.PrecisionTo</newName>
   </priorNameHint>
+  <priorNameHint>
+  	<oldName>MachinaDynamo.Actions.Joints</oldName>
+  	<newName>MachinaDynamo.Actions.Axes</newName>
+  </priorNameHint>
+  <priorNameHint>
+  	<oldName>MachinaDynamo.Actions.JointsTo</oldName>
+  	<newName>MachinaDynamo.Actions.AxesTo</newName>
+  </priorNameHint>
 </migrations>

@@ -370,35 +370,35 @@ namespace MachinaDynamo
         }
 
         /// <summary>
-        /// Increase the rotation angle in degrees of the joints in mechanical devices, specially robotic arms.
+        /// Increase the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.
         /// </summary>
-        /// <param name="j1">Rotational increment in degrees for Joint 1</param>
-        /// <param name="j2">Rotational increment in degrees for Joint 2</param>
-        /// <param name="j3">Rotational increment in degrees for Joint 3</param>
-        /// <param name="j4">Rotational increment in degrees for Joint 4</param>
-        /// <param name="j5">Rotational increment in degrees for Joint 5</param>
-        /// <param name="j6">Rotational increment in degrees for Joint 6</param>
-        /// <returns name="action">Increase Joint Angles Action</returns>
-        public static MAction Joints(double j1 = 0, double j2 = 0, double j3 = 0,
-            double j4 = 0, double j5 = 0, double j6 = 0)
+        /// <param name="a1inc">Rotational increment in degrees for Axis 1</param>
+        /// <param name="a2inc">Rotational increment in degrees for Axis 2</param>
+        /// <param name="a3inc">Rotational increment in degrees for Axis 3</param>
+        /// <param name="a4inc">Rotational increment in degrees for Axis 4</param>
+        /// <param name="a5inc">Rotational increment in degrees for Axis 5</param>
+        /// <param name="a6inc">Rotational increment in degrees for Axis 6</param>
+        /// <returns name="action">Increase Axis Angles Action</returns>
+        public static MAction Axes(double a1inc = 0, double a2inc = 0, double a3inc = 0,
+            double a4inc = 0, double a5inc = 0, double a6inc = 0)
         {
-            return new ActionJoints(new Joints(j1, j2, j3, j4, j5, j6), true);
+            return new ActionJoints(new Joints(a1inc, a2inc, a3inc, a4inc, a5inc, a6inc), true);
         }
 
         /// <summary>
-        /// Sets the rotation angle in degrees of the joints in mechanical devices, specially robotic arms.
+        /// Sets the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.
         /// </summary>
-        /// <param name="j1">Angular value in degrees for Joint 1</param>
-        /// <param name="j2">Angular value in degrees for Joint 2</param>
-        /// <param name="j3">Angular value in degrees for Joint 3</param>
-        /// <param name="j4">Angular value in degrees for Joint 4</param>
-        /// <param name="j5">Angular value in degrees for Joint 5</param>
-        /// <param name="j6">Angular value in degrees for Joint 6</param>
-        /// <returns name="action">Set Joint Angles Action</returns>
-        public static MAction JointsTo(double j1 = 0, double j2 = 0, double j3 = 0,
-            double j4 = 0, double j5 = 0, double j6 = 0)
+        /// <param name="a1">Angular value in degrees for Axis 1</param>
+        /// <param name="a2">Angular value in degrees for Axis 2</param>
+        /// <param name="a3">Angular value in degrees for Axis 3</param>
+        /// <param name="a4">Angular value in degrees for Axis 4</param>
+        /// <param name="a5">Angular value in degrees for Axis 5</param>
+        /// <param name="a6">Angular value in degrees for Axis 6</param>
+        /// <returns name="action">Set Axis Angles Action</returns>
+        public static MAction AxesTo(double a1 = 0, double a2 = 0, double a3 = 0,
+            double a4 = 0, double a5 = 0, double a6 = 0)
         {
-            return new ActionJoints(new Joints(j1, j2, j3, j4, j5, j6), false);
+            return new ActionJoints(new Joints(a1, a2, a3, a4, a5, a6), false);
         }
 
         /// <summary>
