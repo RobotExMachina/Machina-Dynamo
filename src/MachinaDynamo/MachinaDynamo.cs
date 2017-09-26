@@ -41,36 +41,22 @@ namespace MachinaDynamo
         /// <param name="name">A name for this Robot</param>
         /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
         /// <returns name="Robot">Your brand new Machina Robot object</returns>
-        public static Robot Create(string name = "MachinaRobot", string brand = "HUMAN")
-        {
-            return new Robot(name, brand);
-        }
+        public static Robot Create(string name = "MachinaRobot", string brand = "HUMAN") => new Robot(name, brand);
 
         /// <summary>
-        /// Checks version and build numbers for the Machina library.
+        /// Checks version and build numbers for the core Machina library.
         /// </summary>
         /// <returns></returns>
-        [MultiReturn(new[] { "version", "build" })]
-        public static Dictionary<string, string> Version()
-        {
-            string v = Robot.Version;
-            string b = Robot.Build.ToString();
-
-            return new Dictionary<string, string>
-            {
-                { "version", v },
-                { "build", b }
-            };
-        }
+        public static string Version() => Robot.Version;
 
         /// <summary>
-        /// Change the name of a robot's IO pin.
+        /// Change the name of a Robot's IO pin.
         /// </summary>
-        /// <param name="bot"></param>
-        /// <param name="name"></param>
-        /// <param name="pin"></param>
-        /// <param name="digital"></param>
-        /// <returns></returns>
+        /// <param name="bot">Robot to change the io name to</param>
+        /// <param name="name">New IO name</param>
+        /// <param name="pin">IO number</param>
+        /// <param name="digital">Is this a digital pin?</param>
+        /// <returns name="Robot">Modified Robot</returns>
         public static Robot SetIOName(Robot bot, string name = "Digital_IO_1", int pin = 1, bool digital = true)
         {
             bot.SetIOName(name, pin, digital);
@@ -101,10 +87,10 @@ namespace MachinaDynamo
         /// Creates a Tool object.
         /// </summary>
         /// <param name="name">Tool name</param>
-        /// <param name="basePlane">The base Plane where the Tool will be attached to the Robot</param>
-        /// <param name="toolTipPlane">The Plane of the Tool Tip Center (TCP)</param>
+        /// <param name="basePlane">Base Plane where the Tool will be attached to the Robot</param>
+        /// <param name="toolTipPlane">Plane of the Tool Tip Center (TCP)</param>
         /// <param name="weight">Tool weight in Kg</param>
-        /// <returns></returns>
+        /// <returns name="Tool">New Tool object</returns>
         public static MTool Create(string name,
             Autodesk.DesignScript.Geometry.Plane basePlane,
             Autodesk.DesignScript.Geometry.Plane toolTipPlane,
@@ -158,21 +144,21 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="type">"linear" or "joint"</param>
         /// <returns>Set Motion Type Action</returns>
-        public static MAction Motion(string type = "linear")
+        public static MAction MotionType(string type = "linear")
         {
-            MotionType t = MotionType.Undefined;
+            MotionType t = Machina.MotionType.Undefined;
 
             type = type.ToLower();
             if (type.Equals("linear"))
             {
-                t = MotionType.Linear;
+                t = Machina.MotionType.Linear;
             }
             else if (type.Equals("joint"))
             {
-                t = MotionType.Joint;
+                t = Machina.MotionType.Joint;
             }
 
-            if (t == MotionType.Undefined)
+            if (t == Machina.MotionType.Undefined)
             {
                 //throw new Exception("Invalid motion type");
                 DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Invalid motion type");  // this is better messagewise, and specially if I want to return something other than null
@@ -414,7 +400,7 @@ namespace MachinaDynamo
         /// <summary>
         /// Displays a text message on the device. This will depend on the device's configuration. For example, for ABB robots it will display it on the FlexPendant's log window.
         /// </summary>
-        /// <param name="message">String message to display</param>
+        /// <param name="message">Text message to display</param>
         /// <returns name="action">Message Action</returns>
         public static MAction Message(string message = "Hello World!")
         {
@@ -422,7 +408,7 @@ namespace MachinaDynamo
         }
 
         /// <summary>
-        /// Displays an internal comment in a program compilation. This is useful for internal annotations or reminders, but has no effect on the Robot's behavior. 
+        /// Displays an internal comment in a program compilation. This is useful for internal annotations or reminders, but has no effect on the Robot's behavior.
         /// </summary>
         /// <param name="comment">The comment to be displayed on code compilation</param>
         /// <returns></returns>
@@ -432,7 +418,7 @@ namespace MachinaDynamo
         }
 
         /// <summary>
-        /// Attach a Tool to the flange of the object, replacing whichever tool was on it before. Note that the Tool Center Point (TCP) will be translated/rotated according to the difference between tools.
+        /// Attach a Tool to the flange of the object, replacing whichever tool was on it before. Note that the Tool Center Point (TCP) will be translated/rotated according to the tool change.
         /// </summary>
         /// <param name="tool">A Tool object to attach to the Robot flange</param>
         /// <returns></returns>
@@ -453,8 +439,8 @@ namespace MachinaDynamo
         /// <summary>
         /// Activate/deactivate digital output. 
         /// </summary>
-        /// <param name="ioNum"></param>
-        /// <param name="isOn"></param>
+        /// <param name="ioNum">Digital pin number</param>
+        /// <param name="isOn">Turn on?</param>
         /// <returns></returns>
         public static MAction WriteDigital(int ioNum, bool isOn)
         {
@@ -464,8 +450,8 @@ namespace MachinaDynamo
         /// <summary>
         /// Send a value to analog output.
         /// </summary>
-        /// <param name="ioNum"></param>
-        /// <param name="value"></param>
+        /// <param name="ioNum">Analog pin number</param>
+        /// <param name="value">Vaue to send to pin</param>
         /// <returns></returns>
         public static MAction WriteAnalog(int ioNum, double value)
         {
@@ -475,7 +461,7 @@ namespace MachinaDynamo
         /// <summary>
         /// Turn digital output on. Alias for `WriteDigital(ioNum, true)`
         /// </summary>
-        /// <param name="ioNum"></param>
+        /// <param name="ioNum">Digital pin number</param>
         /// <returns></returns>
         public static MAction TurnOn(int ioNum)
         {
@@ -518,7 +504,7 @@ namespace MachinaDynamo
         /// Returns a human-readable representation of a list of Actions.
         /// </summary>
         /// <param name="actions">The list of Actions that conforms a program</param>
-        /// <returns></returns>
+        /// <returns name="program"></returns>
         public static List<string> DisplayProgram(List<MAction> actions)
         {
             List<string> program = new List<string>();
@@ -532,14 +518,14 @@ namespace MachinaDynamo
         }
 
         /// <summary>
-        /// Returns a representation of these Actions written on the device's native language. This is the code you would typically save as a file and manually load on the device's controller.
+        /// Compiles a list of Actions into the device's native language. This is the code you would typically need to load into the device's controller to run the program.
         /// </summary>
         /// <param name="bot">The Robot instance that will export this program</param>
         /// <param name="actions">A program in the form of a list of Actions</param>
         /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables</param>
         /// <param name="machinaComments">If true, Machina-style comments with code information will be added to the end of the code instructions</param>
-        /// <returns name="code">Device-specific program code</returns>
-        public static string ExportCode(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
+        /// <returns name="code">Device-specific code</returns>
+        public static string CompileProgram(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
         {
             bot.Mode(Machina.ControlMode.Offline);
 
