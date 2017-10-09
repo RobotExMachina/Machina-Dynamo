@@ -1,5 +1,7 @@
 # Machina for Dynamo
 
+![](https://github.com/garciadelcastillo/Machina-Dynamo/blob/master/assets/banner.png)
+
 A [Machina](https://github.com/garciadelcastillo/Machina)-based [Dynamo](http://dynamobim.org/) package for robot control. 
 
 ## Setup
