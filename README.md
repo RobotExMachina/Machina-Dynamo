@@ -12,3 +12,8 @@ There are a bunch of Dynamo files in the `extra` folder that comes with this pac
 
 To understand the meaning of each Action node, please check the [Walkthrough](https://github.com/garciadelcastillo/Machina/blob/master/docs/Walkthrough.md) or [Reference](https://github.com/garciadelcastillo/Machina/blob/master/docs/Reference.md) sections of [Machina](https://github.com/garciadelcastillo/Machina).  
 
+## Related Projects
+
+Here are some videos of things you can do with Machina for Dynamo:
+- [Surface Milling](https://youtu.be/054s9XlslVs)
+- [Metal Forming](https://youtu.be/_6Bbm7Scs4w)
