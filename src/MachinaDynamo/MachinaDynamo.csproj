@@ -137,19 +137,83 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\MachinaDynamo.Robots.Create.Large.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Robots.Create.Small.png" />
+    <EmbeddedResource Include="Resources\MachinaDynamoImages.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\MachinaDynamoImages.resx" />
+    <None Include="Resources\MachinaDynamo.Actions.MoveTo.Large.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Motion.Large.png" />
+    <None Include="Resources\MachinaDynamo.Actions.MoveTo.Small.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Motion.Small.png" />
+    <None Include="Resources\MachinaDynamo.Actions.Precision.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Precision.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PrecisionTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PrecisionTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Rotate.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Rotate.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.RotateTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.RotateTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Speed.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Speed.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.SpeedTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.SpeedTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Attach.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Attach.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Axes.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Axes.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.AxesTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.AxesTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Detach.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Detach.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Move.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Move.Small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
