@@ -33,7 +33,7 @@ namespace MachinaDynamo
         /// <summary>
         /// This API's version
         /// </summary>
-        public static string MachinaDynamoAPIVersion() => "v.0.5.0";
+        internal static string MachinaDynamoAPIVersion() => "0.5.0";
 
         /// <summary>
         /// Make the constructor internal to hide it from the menu.

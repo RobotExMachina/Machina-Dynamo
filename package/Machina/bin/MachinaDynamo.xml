@@ -4,40 +4,6 @@
         <name>MachinaDynamo</name>
     </assembly>
     <members>
-        <member name="T:MachinaDynamo.Robots">
-            <summary>
-            Robot creation and manipulation tools.
-            </summary>
-        </member>
-        <member name="M:MachinaDynamo.Robots.#ctor">
-            <summary>
-            Make the constructor internal to hide it from the menu.
-            </summary>
-        </member>
-        <member name="M:MachinaDynamo.Robots.Create(System.String,System.String)">
-            <summary>
-            Create a new Robot object.
-            </summary>
-            <param name="name">A name for this Robot</param>
-            <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
-            <returns name="Robot">Your brand new Machina Robot object</returns>
-        </member>
-        <member name="M:MachinaDynamo.Robots.Version">
-            <summary>
-            Checks version and build numbers for the core Machina library.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MachinaDynamo.Robots.SetIOName(Machina.Robot,System.String,System.Int32,System.Boolean)">
-            <summary>
-            Change the name of a Robot's IO pin.
-            </summary>
-            <param name="bot">Robot to change the io name to</param>
-            <param name="name">New IO name</param>
-            <param name="pin">IO number</param>
-            <param name="digital">Is this a digital pin?</param>
-            <returns name="Robot">Modified Robot</returns>
-        </member>
         <member name="T:MachinaDynamo.Tools">
             <summary>
             Tool creation and manipulation tools.
@@ -58,10 +24,10 @@
             All possible Actions.
             </summary>
         </member>
-        <member name="M:MachinaDynamo.Actions.MotionType(System.String)">
+        <member name="M:MachinaDynamo.Actions.MotionMode(System.String)">
             <summary>
-            Sets the current type of motion to be applied to future translation actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between joint angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions. Use with caution!
-            </summary>
+            Sets the current motion mode to be applied to future actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between axes angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions; use with caution!
+            /// </summary>
             <param name="type">"linear" or "joint"</param>
             <returns>Set Motion Type Action</returns>
         </member>
@@ -280,6 +246,45 @@
             <summary>
             Internal utilities, mainly data type conversion.
             </summary>
+        </member>
+        <member name="T:MachinaDynamo.Robots">
+            <summary>
+            Robot creation and manipulation tools.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Robots.MachinaDynamoAPIVersion">
+            <summary>
+            This API's version
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Robots.#ctor">
+            <summary>
+            Make the constructor internal to hide it from the menu.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Robots.New(System.String,System.String)">
+            <summary>
+            Creates a new Robot instance.
+            </summary>
+            <param name="name">A name for this Robot</param>
+            <param name="brand">Input "ABB", "UR", "KUKA", "Zmoprh" or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
+            <returns name="Robot">Your brand new Machina Robot object</returns>
+        </member>
+        <member name="M:MachinaDynamo.Robots.Version">
+            <summary>
+            Returns version and build numbers of the Machina Core library and Dynamo API.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Robots.SetIOName(Machina.Robot,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Change the name of a Robot's IO pin.
+            </summary>
+            <param name="bot">Robot to change the io name to</param>
+            <param name="name">New IO name</param>
+            <param name="pin">Pin number</param>
+            <param name="digital">Is this a digital pin?</param>
+            <returns name="Robot">Robot with named IO</returns>
         </member>
     </members>
 </doc>

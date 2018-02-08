@@ -18,52 +18,7 @@ using System.IO;
 
 namespace MachinaDynamo
 {
-    //  ██████╗  ██████╗ ██████╗  ██████╗ ████████╗███████╗
-    //  ██╔══██╗██╔═══██╗██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝
-    //  ██████╔╝██║   ██║██████╔╝██║   ██║   ██║   ███████╗
-    //  ██╔══██╗██║   ██║██╔══██╗██║   ██║   ██║   ╚════██║
-    //  ██║  ██║╚██████╔╝██████╔╝╚██████╔╝   ██║   ███████║
-    //  ╚═╝  ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝    ╚═╝   ╚══════╝
-    //                                                     
-    /// <summary>
-    /// Robot creation and manipulation tools.
-    /// </summary>
-    public class Robots
-    {
-        /// <summary>
-        /// Make the constructor internal to hide it from the menu.
-        /// </summary>
-        internal Robots() { }
-
-        /// <summary>
-        /// Create a new Robot object.
-        /// </summary>
-        /// <param name="name">A name for this Robot</param>
-        /// <param name="brand">Input "ABB", "UR", "KUKA", or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
-        /// <returns name="Robot">Your brand new Machina Robot object</returns>
-        public static Robot Create(string name = "MachinaRobot", string brand = "HUMAN") => new Robot(name, brand);
-
-        /// <summary>
-        /// Checks version and build numbers for the core Machina library.
-        /// </summary>
-        /// <returns></returns>
-        public static string Version() => Robot.Version;
-
-        /// <summary>
-        /// Change the name of a Robot's IO pin.
-        /// </summary>
-        /// <param name="bot">Robot to change the io name to</param>
-        /// <param name="name">New IO name</param>
-        /// <param name="pin">IO number</param>
-        /// <param name="digital">Is this a digital pin?</param>
-        /// <returns name="Robot">Modified Robot</returns>
-        public static Robot SetIOName(Robot bot, string name = "Digital_IO_1", int pin = 1, bool digital = true)
-        {
-            bot.SetIOName(name, pin, digital);
-            return bot;
-        }
-
-    }
+    
 
 
 
@@ -140,32 +95,26 @@ namespace MachinaDynamo
         internal Actions() { }
 
         /// <summary>
-        /// Sets the current type of motion to be applied to future translation actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between joint angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions. Use with caution!
-        /// </summary>
+        /// Sets the current motion mode to be applied to future actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between axes angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions; use with caution!
+        /// /// </summary>
         /// <param name="type">"linear" or "joint"</param>
         /// <returns>Set Motion Type Action</returns>
-        public static MAction MotionType(string type = "linear")
+        public static MAction MotionMode(string type = "linear")
         {
-            MotionType t = Machina.MotionType.Undefined;
-
-            type = type.ToLower();
-            if (type.Equals("linear"))
+            MotionType mt;
+            try
             {
-                t = Machina.MotionType.Linear;
+                mt = (MotionType)Enum.Parse(typeof(MotionType), type, true);
+                if (Enum.IsDefined(typeof(MotionType), mt))
+                {
+                    return new ActionMotion(mt);
+                }
             }
-            else if (type.Equals("joint"))
-            {
-                t = Machina.MotionType.Joint;
-            }
+            catch { }
 
-            if (t == Machina.MotionType.Undefined)
-            {
-                //throw new Exception("Invalid motion type");
-                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Invalid motion type");  // this is better messagewise, and specially if I want to return something other than null
-                return null;
-            }
-
-            return new ActionMotion(t);
+            // this is better messagewise, and specially if I want to return something other than null
+            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage($"{type} is not a valid target part for motion type changes, please specify one of the following: {Utils.EnumerateList(Enum.GetNames(typeof(MotionType)), "or")}");
+            return null;
         }
 
         /// <summary>
@@ -173,7 +122,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="type">"global" or "local"</param>
         /// <returns>Set Reference Coordinate System Action</returns>
-        public static MAction Coordinates(string type = "global")
+        internal static MAction Coordinates(string type = "global")
         {
             ReferenceCS refcs;
             type = type.ToLower();
@@ -236,7 +185,7 @@ namespace MachinaDynamo
         /// <returns></returns>
         public static MAction Precision(double radiusInc = 0)
         {
-            return new ActionZone((int)Math.Round(radiusInc), true);
+            return new ActionPrecision((int)Math.Round(radiusInc), true);
         }
 
         ///// <summary>
@@ -256,7 +205,7 @@ namespace MachinaDynamo
         /// <returns></returns>
         public static MAction PrecisionTo(double radius = 5)
         {
-            return new ActionZone((int)Math.Round(radius), false);
+            return new ActionPrecision((int)Math.Round(radius), false);
         }
 
         /// <summary>
@@ -368,7 +317,7 @@ namespace MachinaDynamo
         public static MAction Axes(double a1inc = 0, double a2inc = 0, double a3inc = 0,
             double a4inc = 0, double a5inc = 0, double a6inc = 0)
         {
-            return new ActionJoints(new Joints(a1inc, a2inc, a3inc, a4inc, a5inc, a6inc), true);
+            return new ActionAxes(new Joints(a1inc, a2inc, a3inc, a4inc, a5inc, a6inc), true);
         }
 
         /// <summary>
@@ -384,7 +333,7 @@ namespace MachinaDynamo
         public static MAction AxesTo(double a1 = 0, double a2 = 0, double a3 = 0,
             double a4 = 0, double a5 = 0, double a6 = 0)
         {
-            return new ActionJoints(new Joints(a1, a2, a3, a4, a5, a6), false);
+            return new ActionAxes(new Joints(a1, a2, a3, a4, a5, a6), false);
         }
 
         /// <summary>
@@ -527,7 +476,7 @@ namespace MachinaDynamo
         /// <returns name="code">Device-specific code</returns>
         public static string CompileProgram(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
         {
-            bot.Mode(Machina.ControlMode.Offline);
+            bot.ControlMode(ControlType.Offline);
 
             foreach (MAction a in actions)
             {
@@ -592,6 +541,35 @@ namespace MachinaDynamo
         internal static MPoint Vec2BPoint(Autodesk.DesignScript.Geometry.Point p)
         {
             return new MPoint(p.X, p.Y, p.Z);
+        }
+
+        internal static string EnumerateList(string[] strings, string closing)
+        {
+
+            switch (strings.Length)
+            {
+                case 0:
+                    return "";
+
+                case 1:
+                    return strings[0];
+
+                default:
+                    string str = "";
+                    for (int i = 0; i < strings.Length; i++)
+                    {
+                        str += "\"" + strings[i] + "\"";
+                        if (i < strings.Length - 2)
+                        {
+                            str += ", ";
+                        }
+                        else if (i == strings.Length - 2)
+                        {
+                            str += " " + closing + " ";
+                        }
+                    }
+                    return str;
+            }
         }
 
     }
