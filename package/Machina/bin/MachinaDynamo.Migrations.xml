@@ -24,4 +24,10 @@
     <oldName>MachinaDynamo.Programs.ExportCode</oldName>
     <newName>MachinaDynamo.Programs.CompileProgram</newName>
   </priorNameHint>
+
+  <priorNameHint>
+    <oldName>MachinaDynamo.Robots.Create</oldName>
+    <newName>MachinaDynamo.Robots.New</newName>
+  </priorNameHint>
+
 </migrations>

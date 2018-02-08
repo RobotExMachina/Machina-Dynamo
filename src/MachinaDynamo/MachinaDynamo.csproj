@@ -156,12 +156,12 @@
     <Content Include="Resources\MachinaDynamo.Actions.Detach.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Extrude.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Extrude.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.FeedRate.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.FeedRate.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.ExtrusionRate.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.ExtrusionRate.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Message.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Message.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.MotionType.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.MotionType.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.MotionMode.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.MotionMode.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Move.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Move.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.PopSettings.Large.png" />
@@ -190,14 +190,14 @@
     <Content Include="Resources\MachinaDynamo.Programs.DisplayProgram.Small.png" />
     <Content Include="Resources\MachinaDynamo.Programs.WriteToFile.Large.png" />
     <Content Include="Resources\MachinaDynamo.Programs.WriteToFile.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.Create.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.Create.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Robots.New.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Robots.New.Small.png" />
     <Content Include="Resources\MachinaDynamo.Robots.SetIOName.Large.png" />
     <Content Include="Resources\MachinaDynamo.Robots.SetIOName.Small.png" />
     <Content Include="Resources\MachinaDynamo.Robots.Version.Large.png" />
     <Content Include="Resources\MachinaDynamo.Robots.Version.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Tools.Create.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Tools.Create.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Tools.New.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Tools.New.Small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
