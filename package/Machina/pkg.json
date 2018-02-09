@@ -1,1 +1,29 @@
-{"license":"","file_hash":null,"name":"Machina","version":"0.4.3","description":"A Dynamo plugin for Robot programming and control. https://github.com/garciadelcastillo/Machina","group":"","keywords":["robot","programming","control","machina","brobot"],"dependencies":[],"contents":"","engine_version":"1.3.0.862","engine":"dynamo","engine_metadata":"","site_url":"","repository_url":"https://github.com/garciadelcastillo/Machina","contains_binaries":true,"node_libraries":["MachinaDynamo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"]}
+{
+    "contains_binaries": true,
+    "contents": "",
+    "dependencies": [
+        
+    ],
+    "description": "A Dynamo plugin for Robot programming and control. https://github.com/garciadelcastillo/Machina",
+    "engine": "dynamo",
+    "engine_metadata": "",
+    "engine_version": "1.3.0.862",
+    "file_hash": null,
+    "group": "",
+    "keywords": [
+        "robot",
+        "programming",
+        "control",
+        "machina",
+        "brobot"
+    ],
+    "license": "",
+    "name": "Machina",
+    "node_libraries": [
+        "Machina, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "MachinaDynamo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    ],
+    "repository_url": "https://github.com/garciadelcastillo/Machina",
+    "site_url": "",
+    "version": "0.4.3"
+}
