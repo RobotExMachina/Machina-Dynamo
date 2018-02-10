@@ -148,60 +148,214 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\MachinaDynamo.Actions.ActionMode.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.ActionMode.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Attach.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Attach.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Axes.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Axes.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Comment.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Comment.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Detach.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Detach.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Extrude.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Extrude.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.ExtrusionRate.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.ExtrusionRate.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Message.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Message.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.MotionMode.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.MotionMode.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Move.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Move.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.PopSettings.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.PopSettings.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Precision.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Precision.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.PushSettings.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.PushSettings.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Rotate.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Rotate.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Speed.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Speed.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Temperature.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Temperature.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Transform.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Transform.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Wait.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.Wait.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.WriteAnalog.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.WriteAnalog.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.WriteDigital.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Actions.WriteDigital.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Programs.CompileProgram.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Programs.CompileProgram.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Programs.DisplayProgram.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Programs.DisplayProgram.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Programs.WriteToFile.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Programs.WriteToFile.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.New.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.New.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.SetIOName.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.SetIOName.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.Version.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Robots.Version.Small.png" />
-    <Content Include="Resources\MachinaDynamo.Tools.New.Large.png" />
-    <Content Include="Resources\MachinaDynamo.Tools.New.Small.png" />
+    <None Include="Resources\MachinaDynamo.Actions.ActionMode.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.ActionMode.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Attach.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Attach.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Axes.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Axes.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.AxesTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.AxesTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Comment.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Comment.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Detach.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Detach.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Extrude.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Extrude.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.ExtrusionRate.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.ExtrusionRate.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.ExtrusionRateTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.ExtrusionRateTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Message.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Message.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.MotionMode.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.MotionMode.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Move.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Move.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.MoveTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.MoveTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PopSettings.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PopSettings.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Precision.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Precision.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PrecisionTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PrecisionTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PushSettings.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.PushSettings.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Rotate.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Rotate.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.RotateTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.RotateTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Speed.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Speed.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.SpeedTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.SpeedTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Temperature.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Temperature.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.TemperatureTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.TemperatureTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Transform.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Transform.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.TransformTo.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.TransformTo.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Wait.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.Wait.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.WriteAnalog.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.WriteAnalog.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.WriteDigital.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Actions.WriteDigital.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Programs.CompileProgram.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Programs.CompileProgram.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Programs.DisplayProgram.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Programs.DisplayProgram.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Programs.WriteToFile.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Programs.WriteToFile.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.New.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.New.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.SetIOName.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.SetIOName.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.Version.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.Version.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Tools.New.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Tools.New.Small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
