@@ -27,13 +27,15 @@
 
 ---
 # REVISIONS
-## v.0.5.0
+## v0.5.0
 - [x] Update Machina core to 0.5.0
 - [x] ICONS!! :)
-- [~] Make API names and descriptions consistent with other APIs
-- [~] Split nodes into classes
+- [x] Split nodes into classes
 - [x] Core refactor updates
-
+- [x] Make API names and descriptions consistent with other APIs
+- [x] Update `migrations`
+- [x] Add 3D printing Actions
+- [x] Review sample files
 
 ## v.0.4.1
 - [x] Add 3D Printing sample

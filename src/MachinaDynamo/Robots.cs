@@ -31,11 +31,6 @@ namespace MachinaDynamo
     public class Robots
     {
         /// <summary>
-        /// This API's version
-        /// </summary>
-        internal static string MachinaDynamoAPIVersion() => "0.5.0";
-
-        /// <summary>
         /// Make the constructor internal to hide it from the menu.
         /// </summary>
         internal Robots() { }
@@ -44,24 +39,14 @@ namespace MachinaDynamo
         /// Creates a new Robot instance.
         /// </summary>
         /// <param name="name">A name for this Robot</param>
-        /// <param name="brand">Input "ABB", "UR", "KUKA", "Zmoprh" or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
+        /// <param name="brand">Input "ABB", "UR", "KUKA", "ZMorph" or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
         /// <returns name="Robot">Your brand new Machina Robot object</returns>
-        public static Robot New(string name = "MachinaRobot", string brand = "HUMAN") => new Robot(name, brand);
-
-        /// <summary>
-        /// Returns version and build numbers of the Machina Core library and Dynamo API.
-        /// </summary>
-        /// <returns></returns>
-        [MultiReturn(new[] { "Core", "Dynamo API" })]
-        public static Dictionary<string, string> Version() => new Dictionary<string, string> {
-            { "Core", Robot.Version },
-            { "Dynamo API", Robots.MachinaDynamoAPIVersion()}
-        };
+        public static Robot New(string name = "RobotExMachina", string brand = "HUMAN") => new Robot(name, brand);
 
         /// <summary>
         /// Change the name of a Robot's IO pin.
         /// </summary>
-        /// <param name="bot">Robot to change the io name to</param>
+        /// <param name="bot">Robot to change the IO name to</param>
         /// <param name="name">New IO name</param>
         /// <param name="pin">Pin number</param>
         /// <param name="digital">Is this a digital pin?</param>
@@ -71,6 +56,21 @@ namespace MachinaDynamo
             bot.SetIOName(name, pin, digital);
             return bot;
         }
+
+        /// <summary>
+        /// This API's version
+        /// </summary>
+        internal static string MachinaDynamoAPIVersion() => "0.5.0";
+        
+        /// <summary>
+        /// Returns version and build numbers of the Machina Core library and Dynamo API.
+        /// </summary>
+        /// <returns></returns>
+        [MultiReturn(new[] { "Core", "Dynamo API" })]
+        public static Dictionary<string, string> Version() => new Dictionary<string, string> {
+            { "Core", Robot.Version },
+            { "Dynamo API", Robots.MachinaDynamoAPIVersion()}
+        };
 
     }
 }
