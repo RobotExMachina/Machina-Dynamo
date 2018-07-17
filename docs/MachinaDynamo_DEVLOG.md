@@ -35,9 +35,9 @@
 - [x] Remove `Robot.SetIOName()`
 - [x] `Speed/To` can now be a `double`
 - [x] `Precision/To` can now be a `double`
-- [ ] Add `Acceleration` and `AccelerationTo` actions
-- [ ] Add `RotationSpeed/To()` option
-- [ ] Add `JointSpeed/To()` and `JointAcceleration/To()` for UR robots
+- [x] Add `Acceleration` and `AccelerationTo` actions
+- [x] Add `RotationSpeed/To()` option
+- [x] Add `JointSpeed/To()` and `JointAcceleration/To()` for UR robots
 - [ ] Add `SendToBridge()`
 - [ ] Rename `Tool.Create` and `Robot.Create`
 
