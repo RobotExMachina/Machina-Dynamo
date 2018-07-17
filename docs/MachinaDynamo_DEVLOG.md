@@ -33,8 +33,8 @@
 - [x] IOs can now be named with `string`
 - [x] Add `toolPin` option for IOs (UR robots)
 - [x] Remove `Robot.SetIOName()`
-- [ ] `Speed/To` can now be a `double`
-- [ ] `Precision/To` can now be a `double`
+- [x] `Speed/To` can now be a `double`
+- [x] `Precision/To` can now be a `double`
 - [ ] Add `Acceleration` and `AccelerationTo` actions
 - [ ] Add `RotationSpeed/To()` option
 - [ ] Add `JointSpeed/To()` and `JointAcceleration/To()` for UR robots

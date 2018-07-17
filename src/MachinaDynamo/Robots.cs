@@ -81,11 +81,12 @@ namespace MachinaDynamo
         /// <param name="digital">Is this a digital pin?</param>
         /// <returns name="Robot">Robot with named IO</returns>
         [IsVisibleInDynamoLibrary(false)]
-        public static string SetIOName(Robot bot, string name = "Digital_IO_1", int pin = 1, bool digital = true)
+        public static Robot SetIOName(Robot bot, string name = "Digital_IO_1", int pin = 1, bool digital = true)
         {
             //bot.SetIOName(name, pin, digital);
             //return bot;
-            return "Deprecated component: you can now use named IOs in `WriteDigital` and `WriteAnalog`";
+            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Deprecated component: you can now use named IOs in `WriteDigital` and `WriteAnalog`");
+            return null;
         }
 
     }

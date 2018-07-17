@@ -175,7 +175,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="radiusInc">Radius increment in mm</param>
         /// <returns name="Action">Precision Action</returns>
-        public static MAction Precision(double radiusInc = 0) => new ActionPrecision((int)Math.Round(radiusInc), true);
+        public static MAction Precision(double radiusInc = 0) => new ActionPrecision(radiusInc, true);
 
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="radius">Radius value in mm</param>
         /// <returns name="Action">Precision Action</returns>
-        public static MAction PrecisionTo(double radius = 5) => new ActionPrecision((int)Math.Round(radius), false);
+        public static MAction PrecisionTo(double radius = 5) => new ActionPrecision(radius, false);
 
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace MachinaDynamo
         /// </summary>
         /// <param name="speedInc">Speed increment in mm/s or deg/sec</param>
         /// <returns name="Action">Speed Action</returns>
-        public static MAction Speed(double speedInc = 0) => new ActionSpeed((int)Math.Round(speedInc), true);
+        public static MAction Speed(double speedInc = 0) => new ActionSpeed(speedInc, true);
 
 
         /// <summary>
@@ -233,9 +233,18 @@ namespace MachinaDynamo
                 DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("The speed value cannot be negative");
                 return null;
             }
-            return new ActionSpeed((int)Math.Round(speed), false);
+            return new ActionSpeed(speed, false);
         }
 
+        /// <summary>
+        /// Increase the TCP acceleration value new Actions will be ran at.
+        /// </summary>
+        /// <param name="accInc">TCP acceleration increment in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.</param>
+        /// <returns></returns>
+        public static MAction Acceleration(double accInc = 0) => new ActionAcceleration(accInc, true);
+
+
+        public static MAction AccelerationTo(double acceleration) => new ActionAcceleration(acceleration, false);
 
         /// <summary>
         /// Increment the working temperature of one of the device's parts. Useful for 3D printing operations.
@@ -426,10 +435,11 @@ namespace MachinaDynamo
         /// <param name="ioNum"></param>
         /// <returns></returns>
         [IsVisibleInDynamoLibrary(false)]
-        public static string TurnOff(int ioNum)
+        public static MAction TurnOff(int ioNum)
         {
             //return new ActionIODigital(ioNum, false);
-            return "Deprecated component: use WriteDigital(ioNum, false) instead";
+            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Deprecated component: use WriteDigital(ioNum, false) instead");
+            return null;
         }
 
         /// <summary>
@@ -438,10 +448,11 @@ namespace MachinaDynamo
         /// <param name="ioNum">Digital pin number</param>
         /// <returns></returns>
         [IsVisibleInDynamoLibrary(false)]
-        public static string TurnOn(int ioNum)
+        public static MAction TurnOn(int ioNum)
         {
             //return new ActionIODigital(ioNum, true);
-            return "Deprecated component: use WriteDigital(ioNum, true) instead";
+            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Deprecated component: use WriteDigital(ioNum, true) instead");
+            return null;
         }
 
         
