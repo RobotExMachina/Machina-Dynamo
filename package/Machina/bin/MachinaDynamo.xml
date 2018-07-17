@@ -162,6 +162,62 @@
             <param name="speed">Speed value in mm/s or deg/sec</param>
             <returns name="Action">Speed Action</returns>
         </member>
+        <member name="M:MachinaDynamo.Actions.Acceleration(System.Double)">
+            <summary>
+            Increase the TCP acceleration value new Actions will be ran at.
+            </summary>
+            <param name="accInc">TCP acceleration increment in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.AccelerationTo(System.Double)">
+            <summary>
+            Set the TCP acceleration value new Actions will be ran at.
+            </summary>
+            <param name="acceleration">TCP acceleration value in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.RotationSpeed(System.Double)">
+            <summary>
+            Increase the TCP angular rotation speed value new Actions will be ran at.
+            </summary>
+            <param name="rotationSpeedInc">TCP angular rotation speed increment in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.RotationSpeedTo(System.Double)">
+            <summary>
+            Set the TCP angular rotation speed value new Actions will be ran at.
+            </summary>
+            <param name="rotationSpeed">TCP angular rotation speed value in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.JointSpeed(System.Double)">
+            <summary>
+            Increase the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold. 
+            </summary>
+            <param name="jointSpeedInc">Maximum joint angular rotation speed increment in deg/s. Decreasing the total to zero or less will reset it back to the robot's default.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.JointSpeedTo(System.Double)">
+            <summary>
+            Set the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold. 
+            </summary>
+            <param name="jointSpeed">Maximum joint angular rotation speed value in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.JointAcceleration(System.Double)">
+            <summary>
+            Increase the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold.
+            </summary>
+            <param name="jointAccelerationInc">Maximum joint angular rotation acceleration increment in deg/s^2. Decreasing the total to zero or less will reset it back to the robot's default.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.JointAccelerationTo(System.Double)">
+            <summary>
+            Set the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold. 
+            </summary>
+            <param name="jointAcceleration">Maximum joint angular rotation acceleration value in deg/s^2. Setting this value to zero or less will reset it back to the robot's default.</param>
+            <returns></returns>
+        </member>
         <member name="M:MachinaDynamo.Actions.Temperature(System.Double,System.String,System.Boolean)">
             <summary>
             Increment the working temperature of one of the device's parts. Useful for 3D printing operations.
@@ -204,20 +260,40 @@
             <param name="millis">Pause time in milliseconds</param>
             <returns name="Action">Wait Action</returns>
         </member>
-        <member name="M:MachinaDynamo.Actions.WriteAnalog(System.Int32,System.Double)">
+        <member name="M:MachinaDynamo.Actions.WriteAnalog(System.String,System.Double,System.Boolean)">
             <summary>
             Send a value to analog output.
             </summary>
-            <param name="ioNum">Analog pin number</param>
-            <param name="value">Vaue to send to pin</param>
+            <param name="analogPin">Analog pin name or number</param>
+            <param name="value">Value to send to pin</param>
+            <param name="toolPin">Is this pin on the robot's tool?</param>
             <returns name="Action"></returns>
         </member>
-        <member name="M:MachinaDynamo.Actions.WriteDigital(System.Int32,System.Boolean)">
+        <member name="M:MachinaDynamo.Actions.WriteAnalog(System.Int32,System.Double,System.Boolean)">
+            <summary>
+            Send a value to analog output.
+            </summary>
+            <param name="analogPin">Analog pin name or number</param>
+            <param name="value">Value to send to pin</param>
+            <param name="toolPin">Is this pin on the robot's tool?</param>
+            <returns name="Action"></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.WriteDigital(System.String,System.Boolean,System.Boolean)">
             <summary>
             Activate/deactivate digital output. 
             </summary>
-            <param name="ioNum">Digital pin number</param>
+            <param name="digitalPin">Digital pin name or number</param>
             <param name="isOn">Turn on?</param>
+            <param name="toolPin">Is this pin on the robot's tool?</param>
+            <returns name="Action"></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.WriteDigital(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Activate/deactivate digital output. 
+            </summary>
+            <param name="digitalPin">Digital pin name or number</param>
+            <param name="isOn">Turn on?</param>
+            <param name="toolPin">Is this pin on the robot's tool?</param>
             <returns name="Action"></returns>
         </member>
         <member name="M:MachinaDynamo.Actions.Coordinates(System.String)">
@@ -267,6 +343,16 @@
             <param name="actions">The list of Actions that conforms a program</param>
             <returns name="program">Human-readable representation of the program</returns>
         </member>
+        <member name="M:MachinaDynamo.Programs.SendToBridge(System.Collections.Generic.List{Machina.Action},System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Send a list of Actions to the Machina Bridge App to be streamed to a robot.
+            /// </summary>
+            <param name="actions">A program in the form of a list of Actions.</param>
+            <param name="url">The URL of the Machina Bridge App.</param>
+            <param name="connect">Connect to Machina Bridge App?</param>
+            <param name="send">Send Actions?</param>
+            <returns></returns>
+        </member>
         <member name="M:MachinaDynamo.Programs.WriteToFile(System.Collections.Generic.List{System.String},System.String)">
             <summary>
             Writes a list of strings to a file. Make sure Dynamo has the adequate Admin rights to write files to your system. 
@@ -285,23 +371,13 @@
             Make the constructor internal to hide it from the menu.
             </summary>
         </member>
-        <member name="M:MachinaDynamo.Robots.New(System.String,System.String)">
+        <member name="M:MachinaDynamo.Robots.RobotCreate(System.String,System.String)">
             <summary>
             Creates a new Robot instance.
             </summary>
             <param name="name">A name for this Robot</param>
             <param name="brand">Input "ABB", "UR", "KUKA", "ZMorph" or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
             <returns name="Robot">Your brand new Machina Robot object</returns>
-        </member>
-        <member name="M:MachinaDynamo.Robots.SetIOName(Machina.Robot,System.String,System.Int32,System.Boolean)">
-            <summary>
-            Change the name of a Robot's IO pin.
-            </summary>
-            <param name="bot">Robot to change the IO name to</param>
-            <param name="name">New IO name</param>
-            <param name="pin">Pin number</param>
-            <param name="digital">Is this a digital pin?</param>
-            <returns name="Robot">Robot with named IO</returns>
         </member>
         <member name="M:MachinaDynamo.Robots.MachinaDynamoAPIVersion">
             <summary>
@@ -314,12 +390,22 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:MachinaDynamo.Robots.SetIOName(Machina.Robot,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Change the name of a Robot's IO pin.
+            </summary>
+            <param name="bot">Robot to change the IO name to</param>
+            <param name="name">New IO name</param>
+            <param name="pin">Pin number</param>
+            <param name="digital">Is this a digital pin?</param>
+            <returns name="Robot">Robot with named IO</returns>
+        </member>
         <member name="T:MachinaDynamo.Tools">
             <summary>
             Tool creation and manipulation tools.
             </summary>
         </member>
-        <member name="M:MachinaDynamo.Tools.New(System.String,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Plane,System.Double)">
+        <member name="M:MachinaDynamo.Tools.ToolCreate(System.String,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Plane,System.Double)">
             <summary>
             Create a Tool object.
             </summary>

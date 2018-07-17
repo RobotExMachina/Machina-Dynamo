@@ -41,13 +41,13 @@ namespace MachinaDynamo
         /// <param name="name">A name for this Robot</param>
         /// <param name="brand">Input "ABB", "UR", "KUKA", "ZMorph" or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
         /// <returns name="Robot">Your brand new Machina Robot object</returns>
-        public static Robot New(string name = "RobotExMachina", string brand = "HUMAN") => new Robot(name, brand);
+        public static Robot RobotCreate(string name = "RobotExMachina", string brand = "HUMAN") => Robot.Create(name, brand);
 
         
         /// <summary>
         /// This API's version
         /// </summary>
-        internal static string MachinaDynamoAPIVersion() => "0.5.0";
+        internal static string MachinaDynamoAPIVersion() => "0.6.4";
         
         /// <summary>
         /// Returns version and build numbers of the Machina Core library and Dynamo API.

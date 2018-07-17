@@ -390,6 +390,14 @@ namespace MachinaDynamo
         /// <returns name="Action"></returns>
         public static MAction WriteAnalog(string analogPin = "1", double value = 0, bool toolPin = false) => new ActionIOAnalog(analogPin, value, toolPin);
 
+        /// <summary>
+        /// Send a value to analog output.
+        /// </summary>
+        /// <param name="analogPin">Analog pin name or number</param>
+        /// <param name="value">Value to send to pin</param>
+        /// <param name="toolPin">Is this pin on the robot's tool?</param>
+        /// <returns name="Action"></returns>
+        public static MAction WriteAnalog(int analogPin = 1, double value = 0, bool toolPin = false) => new ActionIOAnalog(analogPin.ToString(), value, toolPin);
 
         /// <summary>
         /// Activate/deactivate digital output. 
@@ -399,6 +407,15 @@ namespace MachinaDynamo
         /// <param name="toolPin">Is this pin on the robot's tool?</param>
         /// <returns name="Action"></returns>
         public static MAction WriteDigital(string digitalPin = "1", bool isOn = false, bool toolPin = false) => new ActionIODigital(digitalPin, isOn, toolPin);
+
+        /// <summary>
+        /// Activate/deactivate digital output. 
+        /// </summary>
+        /// <param name="digitalPin">Digital pin name or number</param>
+        /// <param name="isOn">Turn on?</param>
+        /// <param name="toolPin">Is this pin on the robot's tool?</param>
+        /// <returns name="Action"></returns>
+        public static MAction WriteDigital(int digitalPin = 1, bool isOn = false, bool toolPin = false) => new ActionIODigital(digitalPin.ToString(), isOn, toolPin);
 
 
 
@@ -444,7 +461,7 @@ namespace MachinaDynamo
         //   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
         //                                                                             
         // Legacy components, deprecated or on their way to change. 
-        
+
 
         /// <summary>
         /// LET'S PUT A PIN ON THIS ONE... SOME DEEP CHANGES NEED TO HAPPEN AT CORE, SO THIS IS STAYING HERE

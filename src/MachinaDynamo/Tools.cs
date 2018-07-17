@@ -40,30 +40,52 @@ namespace MachinaDynamo
         /// <param name="toolTipPlane">Plane of the Tool Tip Center (TCP)</param>
         /// <param name="weight">Tool weight in Kg</param>
         /// <returns name="Tool">New Tool object</returns>
-        public static MTool New(string name, 
+        public static MTool ToolCreate(string name, 
             Autodesk.DesignScript.Geometry.Plane basePlane, 
             Autodesk.DesignScript.Geometry.Plane toolTipPlane,
             double weight = 1)
         {
 
-            CoordinateSystem basePlaneCS = basePlane.ToCoordinateSystem();
-            CoordinateSystem toolTipPlaneCS = toolTipPlane.ToCoordinateSystem();
-
-            CoordinateSystem relativeCS = toolTipPlaneCS.PreMultiplyBy(basePlaneCS.Inverse());
-            //CoordinateSystem relativeCS = toolTipPlaneCS.Transform(basePlaneCS.Inverse());  // this is the same thing
-
-            MVector TCPPosition = new MVector(relativeCS.Origin.X, relativeCS.Origin.Y, relativeCS.Origin.Z);
-            MVector centerOfGravity = new MVector(TCPPosition);
-            centerOfGravity.Scale(0.5);
-            MOrientation TCPOrientation = new MOrientation(relativeCS.XAxis.X, relativeCS.XAxis.Y, relativeCS.XAxis.Z,
-                relativeCS.YAxis.X, relativeCS.YAxis.Y, relativeCS.YAxis.Z);
-
             // https://github.com/DynamoDS/Dynamo/wiki/Zero-Touch-Plugin-Development#dispose--using-statement
-            basePlane.Dispose();
-            toolTipPlaneCS.Dispose();
-            relativeCS.Dispose();
+            using (CoordinateSystem basePlaneCS = basePlane.ToCoordinateSystem())
+            {
+                using (CoordinateSystem toolTipPlaneCS = toolTipPlane.ToCoordinateSystem())
+                {
+                    using (CoordinateSystem relativeCS = toolTipPlaneCS.PreMultiplyBy(basePlaneCS.Inverse()))
+                    {
+                        MVector TCPPosition = new MVector(relativeCS.Origin.X, relativeCS.Origin.Y, relativeCS.Origin.Z);
+                        MVector centerOfGravity = new MVector(TCPPosition);
+                        centerOfGravity.Scale(0.5);
+                        MOrientation TCPOrientation = new MOrientation(relativeCS.XAxis.X, relativeCS.XAxis.Y, relativeCS.XAxis.Z,
+                            relativeCS.YAxis.X, relativeCS.YAxis.Y, relativeCS.YAxis.Z);
 
-            return new MTool(name, TCPPosition, TCPOrientation, weight, centerOfGravity);
+                        return MTool.Create(name, TCPPosition, TCPOrientation, weight, centerOfGravity);
+                    }
+                }
+            }
+
+            // FOR SOME REASON, DOING IT LIKE BELOW CAUSED A WEIRD BUG:
+            // - If creating a new Tool, the component will always yield error. But if saving the file with the error component and opening it again, it would work. 
+            // - Using the 'using' statements fixes this issue and allows to create a new Tool without having to restart the definition...
+
+            //CoordinateSystem basePlaneCS = basePlane.ToCoordinateSystem();
+            //CoordinateSystem toolTipPlaneCS = toolTipPlane.ToCoordinateSystem();
+
+            //CoordinateSystem relativeCS = toolTipPlaneCS.PreMultiplyBy(basePlaneCS.Inverse());
+            ////CoordinateSystem relativeCS = toolTipPlaneCS.Transform(basePlaneCS.Inverse());  // this is the same thing
+
+            //MVector TCPPosition = new MVector(relativeCS.Origin.X, relativeCS.Origin.Y, relativeCS.Origin.Z);
+            //MVector centerOfGravity = new MVector(TCPPosition);
+            //centerOfGravity.Scale(0.5);
+            //MOrientation TCPOrientation = new MOrientation(relativeCS.XAxis.X, relativeCS.XAxis.Y, relativeCS.XAxis.Z,
+            //    relativeCS.YAxis.X, relativeCS.YAxis.Y, relativeCS.YAxis.Z);
+
+            //// https://github.com/DynamoDS/Dynamo/wiki/Zero-Touch-Plugin-Development#dispose--using-statement
+            //basePlane.Dispose();
+            //toolTipPlaneCS.Dispose();
+            //relativeCS.Dispose();
+
+            //return MTool.Create(name, TCPPosition, TCPOrientation, weight, centerOfGravity);
         }
 
     }

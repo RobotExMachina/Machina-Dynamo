@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\MachinaDynamo.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DSIronPython, Version=1.3.0.961, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamoVisualProgramming.Core.1.3.0\lib\net45\DSIronPython.dll</HintPath>
@@ -124,6 +127,9 @@
     <Reference Include="VMDataBridge, Version=1.3.0.961, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamoVisualProgramming.Core.1.3.0\lib\net45\VMDataBridge.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>assemblies\websocket-sharp.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -330,28 +336,10 @@
     <None Include="Resources\MachinaDynamo.Programs.WriteToFile.Small.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Robots.New.Large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Robots.New.Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Robots.SetIOName.Large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Robots.SetIOName.Small.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\MachinaDynamo.Robots.Version.Large.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MachinaDynamo.Robots.Version.Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Tools.New.Large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Tools.New.Small.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Machina\Machina\Machina.csproj">
@@ -359,13 +347,30 @@
       <Name>Machina</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Tools.ToolCreate.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Tools.ToolCreate.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.RobotCreate.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MachinaDynamo.Robots.RobotCreate.Small.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF ($(ConfigurationName)) == (Debug) GOTO END
 cd $(ProjectDir)
-copy /y $(OutDir)MachinaDynamo.dll "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
-copy /y $(OutDir)MachinaDynamo.xml "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
-copy /y $(OutDir)MachinaDynamo.customization.dll "D:\Dropbox\Jose Luis\code\MachinaDynamo\package\Machina\bin"
+cd..
+cd..
+cd package/Machina/bin
+copy /y "$(ProjectDir)$(OutDir)Machina.dll" Machina.dll
+copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.dll" MachinaDynamo.dll
+copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.xml" MachinaDynamo.xml
+copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.customization.dll" MachinaDynamo.customization.dll
+echo "IF CHANGES WERE MADE TO THE RESOURCE FILE, BUILD AGAIN"
 :END</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
