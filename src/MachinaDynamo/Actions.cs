@@ -327,19 +327,21 @@ namespace MachinaDynamo
         /// <summary>
         /// Send a value to analog output.
         /// </summary>
-        /// <param name="ioNum">Analog pin number</param>
-        /// <param name="value">Vaue to send to pin</param>
+        /// <param name="analogPin">Analog pin name or number</param>
+        /// <param name="value">Value to send to pin</param>
+        /// <param name="toolPin">Is this pin on the robot's tool?</param>
         /// <returns name="Action"></returns>
-        public static MAction WriteAnalog(int ioNum, double value) => new ActionIOAnalog(ioNum, value);
+        public static MAction WriteAnalog(string analogPin = "1", double value = 0, bool toolPin = false) => new ActionIOAnalog(analogPin, value, toolPin);
 
 
         /// <summary>
         /// Activate/deactivate digital output. 
         /// </summary>
-        /// <param name="ioNum">Digital pin number</param>
+        /// <param name="digitalPin">Digital pin name or number</param>
         /// <param name="isOn">Turn on?</param>
+        /// <param name="toolPin">Is this pin on the robot's tool?</param>
         /// <returns name="Action"></returns>
-        public static MAction WriteDigital(int ioNum, bool isOn) => new ActionIODigital(ioNum, isOn);
+        public static MAction WriteDigital(string digitalPin = "1", bool isOn = false, bool toolPin = false) => new ActionIODigital(digitalPin, isOn, toolPin);
 
 
 
@@ -424,9 +426,10 @@ namespace MachinaDynamo
         /// <param name="ioNum"></param>
         /// <returns></returns>
         [IsVisibleInDynamoLibrary(false)]
-        public static MAction TurnOff(int ioNum)
+        public static string TurnOff(int ioNum)
         {
-            return new ActionIODigital(ioNum, false);
+            //return new ActionIODigital(ioNum, false);
+            return "Deprecated component: use WriteDigital(ioNum, false) instead";
         }
 
         /// <summary>
@@ -435,9 +438,10 @@ namespace MachinaDynamo
         /// <param name="ioNum">Digital pin number</param>
         /// <returns></returns>
         [IsVisibleInDynamoLibrary(false)]
-        public static MAction TurnOn(int ioNum)
+        public static string TurnOn(int ioNum)
         {
-            return new ActionIODigital(ioNum, true);
+            //return new ActionIODigital(ioNum, true);
+            return "Deprecated component: use WriteDigital(ioNum, true) instead";
         }
 
         

@@ -43,20 +43,7 @@ namespace MachinaDynamo
         /// <returns name="Robot">Your brand new Machina Robot object</returns>
         public static Robot New(string name = "RobotExMachina", string brand = "HUMAN") => new Robot(name, brand);
 
-        /// <summary>
-        /// Change the name of a Robot's IO pin.
-        /// </summary>
-        /// <param name="bot">Robot to change the IO name to</param>
-        /// <param name="name">New IO name</param>
-        /// <param name="pin">Pin number</param>
-        /// <param name="digital">Is this a digital pin?</param>
-        /// <returns name="Robot">Robot with named IO</returns>
-        public static Robot SetIOName(Robot bot, string name = "Digital_IO_1", int pin = 1, bool digital = true)
-        {
-            bot.SetIOName(name, pin, digital);
-            return bot;
-        }
-
+        
         /// <summary>
         /// This API's version
         /// </summary>
@@ -71,6 +58,35 @@ namespace MachinaDynamo
             { "Core", Robot.Version },
             { "Dynamo API", Robots.MachinaDynamoAPIVersion()}
         };
+
+
+
+
+
+
+        //   ██████╗ ██████╗  █████╗ ██╗   ██╗███████╗██╗   ██╗ █████╗ ██████╗ ██████╗ 
+        //  ██╔════╝ ██╔══██╗██╔══██╗██║   ██║██╔════╝╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+        //  ██║  ███╗██████╔╝███████║██║   ██║█████╗   ╚████╔╝ ███████║██████╔╝██║  ██║
+        //  ██║   ██║██╔══██╗██╔══██║╚██╗ ██╔╝██╔══╝    ╚██╔╝  ██╔══██║██╔══██╗██║  ██║
+        //  ╚██████╔╝██║  ██║██║  ██║ ╚████╔╝ ███████╗   ██║   ██║  ██║██║  ██║██████╔╝
+        //   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
+        //                                                                             
+        // Legacy components, deprecated or on their way to change. 
+        /// <summary>
+        /// Change the name of a Robot's IO pin.
+        /// </summary>
+        /// <param name="bot">Robot to change the IO name to</param>
+        /// <param name="name">New IO name</param>
+        /// <param name="pin">Pin number</param>
+        /// <param name="digital">Is this a digital pin?</param>
+        /// <returns name="Robot">Robot with named IO</returns>
+        [IsVisibleInDynamoLibrary(false)]
+        public static string SetIOName(Robot bot, string name = "Digital_IO_1", int pin = 1, bool digital = true)
+        {
+            //bot.SetIOName(name, pin, digital);
+            //return bot;
+            return "Deprecated component: you can now use named IOs in `WriteDigital` and `WriteAnalog`";
+        }
 
     }
 }
