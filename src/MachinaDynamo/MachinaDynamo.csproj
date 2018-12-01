@@ -167,12 +167,6 @@
     <None Include="Resources\MachinaDynamo.Actions.Comment.Small.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Detach.Large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Detach.Small.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\MachinaDynamo.Actions.Extrude.Large.png" />
   </ItemGroup>
   <ItemGroup>
@@ -359,6 +353,8 @@
     <Content Include="Resources\MachinaDynamo.Actions.Axes.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.AxesTo.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.AxesTo.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.DetachTool.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.DetachTool.Small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
