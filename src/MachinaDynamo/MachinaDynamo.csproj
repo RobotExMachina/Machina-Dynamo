@@ -135,6 +135,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions.cs" />
+    <Compile Include="Actions\ArmAngle.cs" />
+    <Compile Include="Actions\Acceleration.cs" />
+    <Compile Include="Actions\_graveyard.cs" />
+    <Compile Include="Actions\_base.cs" />
     <Compile Include="Programs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robots.cs" />
@@ -160,18 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MachinaDynamo.Actions.Attach.Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Axes.Large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Axes.Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.AxesTo.Large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.AxesTo.Small.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MachinaDynamo.Actions.Comment.Large.png" />
@@ -359,19 +351,33 @@
       <Name>Machina</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\MachinaDynamo.Actions.Acceleration.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.Acceleration.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.AccelerationTo.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.AccelerationTo.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.ArmAngleTo.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.ArmAngleTo.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.Axes.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.Axes.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.AxesTo.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.AxesTo.Small.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF ($(ConfigurationName)) == (Debug) GOTO END
+    <PostBuildEvent>
+      <!--IF ($(ConfigurationName)) == (Debug) GOTO END-->
 cd $(ProjectDir)
 cd..
 cd..
-cd package/Machina/bin
+cd dist/nightly/Machina/bin
 copy /y "$(ProjectDir)$(OutDir)Machina.dll" Machina.dll
 copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.dll" MachinaDynamo.dll
 copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.xml" MachinaDynamo.xml
 copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.customization.dll" MachinaDynamo.customization.dll
-echo "IF CHANGES WERE MADE TO THE RESOURCE FILE, BUILD AGAIN"
-:END</PostBuildEvent>
+echo "IF CHANGES WERE MADE TO THE RESOURCE FILE, PLEASE BUILD AGAIN"
+      <!-- :END --> 
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
