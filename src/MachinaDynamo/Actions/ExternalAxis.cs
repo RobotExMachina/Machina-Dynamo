@@ -53,16 +53,11 @@ namespace MachinaDynamo
                     return new ActionExternalAxis(axisNumber, increment, eat, true);
                 }
             }
-            catch
-            {
-                string targets = "";
-                foreach (string str in Enum.GetNames(typeof(ExternalAxesTarget)))
-                {
-                    targets += "\"" + str + "\" ";
-                }
-                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage($"{target} is not a valid ExternalAxesTarget type, please specify one of the following: {targets}");
-            }
+            catch { }
 
+
+            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage(
+                $"{target} is not a valid ExternalAxesTarget type, please specify one of the following: {Utils.EnumerateList(Enum.GetNames(typeof(ExternalAxesTarget)), "or")}");
             return null;
         }
 
@@ -91,16 +86,11 @@ namespace MachinaDynamo
                     return new ActionExternalAxis(axisNumber, value, eat, false);
                 }
             }
-            catch
-            {
-                string targets = "";
-                foreach (string str in Enum.GetNames(typeof(ExternalAxesTarget)))
-                {
-                    targets += "\"" + str + "\" ";
-                }
-                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage($"{target} is not a valid ExternalAxesTarget type, please specify one of the following: {targets}");
-            }
+            catch { }
 
+
+            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage(
+                $"{target} is not a valid ExternalAxesTarget type, please specify one of the following: {Utils.EnumerateList(Enum.GetNames(typeof(ExternalAxesTarget)), "or")}");
             return null;
         }
 
