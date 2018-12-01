@@ -30,20 +30,8 @@ namespace MachinaDynamo
     /// <summary>
     /// All possible Actions.
     /// </summary>
-    public class Actions
+    public partial class Actions
     {
-        /// <summary>
-        /// Internal constructor
-        /// </summary>
-        internal Actions() { }
-
-
-        /// <summary>
-        /// Attach a Tool to the flange of the Robot, replacing whichever tool was on it before. Note that the Tool Center Point (TCP) will be translated/rotated according to the tool change.
-        /// </summary>
-        /// <param name="tool">A Tool object to attach to the Robot flange</param>
-        /// <returns name="Action">Attach Action</returns>
-        public static MAction Attach(MTool tool) => new ActionAttach(tool);
 
 
         /// <summary>
@@ -84,11 +72,11 @@ namespace MachinaDynamo
         public static MAction Comment(string comment = "Comment goes here") => new ActionComment(comment);
 
 
-        /// <summary>
-        /// Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be transformed to the Robot's flange.
-        /// </summary>
-        /// <returns name="Action">Detach Action</returns>
-        public static MAction Detach() => new ActionDetach();
+        ///// <summary>
+        ///// Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be transformed to the Robot's flange.
+        ///// </summary>
+        ///// <returns name="Action">Detach Action</returns>
+        //public static MAction Detach() => new ActionDetach();
 
 
         /// <summary>
@@ -123,28 +111,28 @@ namespace MachinaDynamo
         public static MAction Message(string message = "Hello Machina!") => new ActionMessage(message);
 
 
-        /// <summary>
-        /// Sets the current motion mode to be applied to future actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between axes angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions; use with caution!
-        /// </summary>
-        /// <param name="mode">"linear" or "joint"</param>
-        /// <returns name="Action">MotionMode Action</returns>
-        public static MAction MotionMode(string mode = "linear")
-        {
-            MotionType mt;
-            try
-            {
-                mt = (MotionType)Enum.Parse(typeof(MotionType), mode, true);
-                if (Enum.IsDefined(typeof(MotionType), mt))
-                {
-                    return new ActionMotion(mt);
-                }
-            }
-            catch { }
+        ///// <summary>
+        ///// Sets the current motion mode to be applied to future actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between axes angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions; use with caution!
+        ///// </summary>
+        ///// <param name="mode">"linear" or "joint"</param>
+        ///// <returns name="Action">MotionMode Action</returns>
+        //public static MAction MotionMode(string mode = "linear")
+        //{
+        //    MotionType mt;
+        //    try
+        //    {
+        //        mt = (MotionType)Enum.Parse(typeof(MotionType), mode, true);
+        //        if (Enum.IsDefined(typeof(MotionType), mt))
+        //        {
+        //            return new ActionMotion(mt);
+        //        }
+        //    }
+        //    catch { }
 
-            // this is better messagewise, and specially if I want to return something other than null
-            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage($"{mode} is not a valid option for MotionMode changes, please specify one of the following: {Utils.EnumerateList(Enum.GetNames(typeof(MotionType)), "or")}");
-            return null;
-        }
+        //    // this is better messagewise, and specially if I want to return something other than null
+        //    DynamoServices.LogWarningMessageEvents.OnLogWarningMessage($"{mode} is not a valid option for MotionMode changes, please specify one of the following: {Utils.EnumerateList(Enum.GetNames(typeof(MotionType)), "or")}");
+        //    return null;
+        //}
 
 
         /// <summary>
@@ -236,61 +224,49 @@ namespace MachinaDynamo
             return new ActionSpeed(speed, false);
         }
 
-        /// <summary>
-        /// Increase the TCP acceleration value new Actions will be ran at.
-        /// </summary>
-        /// <param name="accInc">TCP acceleration increment in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.</param>
-        /// <returns></returns>
-        public static MAction Acceleration(double accInc = 0) => new ActionAcceleration(accInc, true);
+        
 
-        /// <summary>
-        /// Set the TCP acceleration value new Actions will be ran at.
-        /// </summary>
-        /// <param name="acceleration">TCP acceleration value in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.</param>
-        /// <returns></returns>
-        public static MAction AccelerationTo(double acceleration) => new ActionAcceleration(acceleration, false);
+        ///// <summary>
+        ///// Increase the TCP angular rotation speed value new Actions will be ran at.
+        ///// </summary>
+        ///// <param name="rotationSpeedInc">TCP angular rotation speed increment in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
+        ///// <returns></returns>
+        //public static MAction RotationSpeed(double rotationSpeedInc) => new ActionRotationSpeed(rotationSpeedInc, true);
 
-        /// <summary>
-        /// Increase the TCP angular rotation speed value new Actions will be ran at.
-        /// </summary>
-        /// <param name="rotationSpeedInc">TCP angular rotation speed increment in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
-        /// <returns></returns>
-        public static MAction RotationSpeed(double rotationSpeedInc) => new ActionRotationSpeed(rotationSpeedInc, true);
+        ///// <summary>
+        ///// Set the TCP angular rotation speed value new Actions will be ran at.
+        ///// </summary>
+        ///// <param name="rotationSpeed">TCP angular rotation speed value in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
+        ///// <returns></returns>
+        //public static MAction RotationSpeedTo(double rotationSpeed) => new ActionRotationSpeed(rotationSpeed, false);
 
-        /// <summary>
-        /// Set the TCP angular rotation speed value new Actions will be ran at.
-        /// </summary>
-        /// <param name="rotationSpeed">TCP angular rotation speed value in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
-        /// <returns></returns>
-        public static MAction RotationSpeedTo(double rotationSpeed) => new ActionRotationSpeed(rotationSpeed, false);
+        ///// <summary>
+        ///// Increase the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold. 
+        ///// </summary>
+        ///// <param name="jointSpeedInc">Maximum joint angular rotation speed increment in deg/s. Decreasing the total to zero or less will reset it back to the robot's default.</param>
+        ///// <returns></returns>
+        //public static MAction JointSpeed(double jointSpeedInc) => new ActionJointSpeed(jointSpeedInc, true);
 
-        /// <summary>
-        /// Increase the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold. 
-        /// </summary>
-        /// <param name="jointSpeedInc">Maximum joint angular rotation speed increment in deg/s. Decreasing the total to zero or less will reset it back to the robot's default.</param>
-        /// <returns></returns>
-        public static MAction JointSpeed(double jointSpeedInc) => new ActionJointSpeed(jointSpeedInc, true);
+        ///// <summary>
+        ///// Set the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold. 
+        ///// </summary>
+        ///// <param name="jointSpeed">Maximum joint angular rotation speed value in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
+        ///// <returns></returns>
+        //public static MAction JointSpeedTo(double jointSpeed) => new ActionJointSpeed(jointSpeed, false);
 
-        /// <summary>
-        /// Set the maximum joint angular rotation speed value. Movement will be constrained so that the fastest joint rotates below this threshold. 
-        /// </summary>
-        /// <param name="jointSpeed">Maximum joint angular rotation speed value in deg/s. Setting this value to zero or less will reset it back to the robot's default.</param>
-        /// <returns></returns>
-        public static MAction JointSpeedTo(double jointSpeed) => new ActionJointSpeed(jointSpeed, false);
+        ///// <summary>
+        ///// Increase the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold.
+        ///// </summary>
+        ///// <param name="jointAccelerationInc">Maximum joint angular rotation acceleration increment in deg/s^2. Decreasing the total to zero or less will reset it back to the robot's default.</param>
+        ///// <returns></returns>
+        //public static MAction JointAcceleration(double jointAccelerationInc) => new ActionJointAcceleration(jointAccelerationInc, true);
 
-        /// <summary>
-        /// Increase the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold.
-        /// </summary>
-        /// <param name="jointAccelerationInc">Maximum joint angular rotation acceleration increment in deg/s^2. Decreasing the total to zero or less will reset it back to the robot's default.</param>
-        /// <returns></returns>
-        public static MAction JointAcceleration(double jointAccelerationInc) => new ActionJointAcceleration(jointAccelerationInc, true);
-
-        /// <summary>
-        /// Set the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold. 
-        /// </summary>
-        /// <param name="jointAcceleration">Maximum joint angular rotation acceleration value in deg/s^2. Setting this value to zero or less will reset it back to the robot's default.</param>
-        /// <returns></returns>
-        public static MAction JointAccelerationTo(double jointAcceleration) => new ActionJointAcceleration(jointAcceleration, false);
+        ///// <summary>
+        ///// Set the maximum joint angular rotation acceleration value. Movement will be constrained so that the fastest joint accelerates below this threshold. 
+        ///// </summary>
+        ///// <param name="jointAcceleration">Maximum joint angular rotation acceleration value in deg/s^2. Setting this value to zero or less will reset it back to the robot's default.</param>
+        ///// <returns></returns>
+        //public static MAction JointAccelerationTo(double jointAcceleration) => new ActionJointAcceleration(jointAcceleration, false);
 
 
 
@@ -452,73 +428,6 @@ namespace MachinaDynamo
 
 
 
-
-        //   ██████╗ ██████╗  █████╗ ██╗   ██╗███████╗██╗   ██╗ █████╗ ██████╗ ██████╗ 
-        //  ██╔════╝ ██╔══██╗██╔══██╗██║   ██║██╔════╝╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
-        //  ██║  ███╗██████╔╝███████║██║   ██║█████╗   ╚████╔╝ ███████║██████╔╝██║  ██║
-        //  ██║   ██║██╔══██╗██╔══██║╚██╗ ██╔╝██╔══╝    ╚██╔╝  ██╔══██║██╔══██╗██║  ██║
-        //  ╚██████╔╝██║  ██║██║  ██║ ╚████╔╝ ███████╗   ██║   ██║  ██║██║  ██║██████╔╝
-        //   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
-        //                                                                             
-        // Legacy components, deprecated or on their way to change. 
-
-
-        /// <summary>
-        /// LET'S PUT A PIN ON THIS ONE... SOME DEEP CHANGES NEED TO HAPPEN AT CORE, SO THIS IS STAYING HERE
-        /// FOR LEGACY PURPOSES, AND WILL BE REWRITTEN AS SOON AS CORE BRINGS IN A NEW MODEL
-        /// </summary>
-        /// <summary>
-        /// Sets the coordinate system that will be used for future relative actions. This can be "global" or "world" (default) to refer to the system's global reference coordinates, or "local" to refer to the device's local reference frame. For example, for a robotic arm, the "global" coordinate system will be the robot's base, and the "local" one will be the coordinates of the tool tip.
-        /// </summary>
-        /// <param name="type">"global" or "local"</param>
-        /// <returns>Set Reference Coordinate System Action</returns>
-        [IsVisibleInDynamoLibrary(false)]
-        public static MAction Coordinates(string type = "global")
-        {
-            ReferenceCS refcs;
-            type = type.ToLower();
-            if (type.Equals("global") || type.Equals("world"))
-            {
-                refcs = ReferenceCS.World;
-            }
-            else if (type.Equals("local"))
-            {
-                refcs = ReferenceCS.Local;
-            }
-            else
-            {
-                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Invalid reference coordinate system");
-                return null;
-            }
-
-            return new ActionCoordinates(refcs);
-        }
-
-        /// <summary>
-        /// Turn digital output off. Alias for `WriteDigital(ioNum, false)` 
-        /// </summary>
-        /// <param name="ioNum"></param>
-        /// <returns></returns>
-        [IsVisibleInDynamoLibrary(false)]
-        public static MAction TurnOff(int ioNum)
-        {
-            //return new ActionIODigital(ioNum, false);
-            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Deprecated component: use WriteDigital(ioNum, false) instead");
-            return null;
-        }
-
-        /// <summary>
-        /// Turn digital output on. Alias for `WriteDigital(ioNum, true)`
-        /// </summary>
-        /// <param name="ioNum">Digital pin number</param>
-        /// <returns></returns>
-        [IsVisibleInDynamoLibrary(false)]
-        public static MAction TurnOn(int ioNum)
-        {
-            //return new ActionIODigital(ioNum, true);
-            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Deprecated component: use WriteDigital(ioNum, true) instead");
-            return null;
-        }
 
         
 

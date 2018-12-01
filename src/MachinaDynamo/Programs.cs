@@ -40,33 +40,33 @@ namespace MachinaDynamo
         internal Programs() { }
 
 
-        /// <summary>
-        /// Compiles a list of Actions into the device's native language. This is the code you would typically need to load into the device's controller to run the program.
-        /// </summary>
-        /// <param name="bot">The Robot instance that will export this program</param>
-        /// <param name="actions">A program in the form of a list of Actions</param>
-        /// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables</param>
-        /// <param name="machinaComments">If true, Machina-style comments with code information will be added to the end of the code instructions</param>
-        /// <returns name="code">Device-specific code</returns>
-        public static string CompileProgram(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
-        {
-            bot.ControlMode(ControlType.Offline);
+        ///// <summary>
+        ///// Compiles a list of Actions into the device's native language. This is the code you would typically need to load into the device's controller to run the program.
+        ///// </summary>
+        ///// <param name="bot">The Robot instance that will export this program</param>
+        ///// <param name="actions">A program in the form of a list of Actions</param>
+        ///// <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared and used as independent variables</param>
+        ///// <param name="machinaComments">If true, Machina-style comments with code information will be added to the end of the code instructions</param>
+        ///// <returns name="code">Device-specific code</returns>
+        //public static string CompileProgram(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
+        //{
+        //    bot.ControlMode(ControlType.Offline);
 
-            foreach (MAction a in actions)
-            {
-                bot.Do(a);
-            }
+        //    foreach (MAction a in actions)
+        //    {
+        //        bot.Do(a);
+        //    }
 
-            List<string> codeLines = bot.Export(inlineTargets, machinaComments);
-            StringWriter writer = new StringWriter();
-            for (var i = 0; i < codeLines.Count; i++)
-            {
-                writer.WriteLine(codeLines[i]);
-            }
-            string code = writer.ToString();
-            writer.Dispose();  // just in case ;)
-            return code;
-        }
+        //    List<string> codeLines = bot.Export(inlineTargets, machinaComments);
+        //    StringWriter writer = new StringWriter();
+        //    for (var i = 0; i < codeLines.Count; i++)
+        //    {
+        //        writer.WriteLine(codeLines[i]);
+        //    }
+        //    string code = writer.ToString();
+        //    writer.Dispose();  // just in case ;)
+        //    return code;
+        //}
 
 
 
@@ -96,76 +96,76 @@ namespace MachinaDynamo
         private static string _url;
 
 
-        /// <summary>
-        /// Send a list of Actions to the Machina Bridge App to be streamed to a robot.
-        /// /// </summary>
-        /// <param name="actions">A program in the form of a list of Actions.</param>
-        /// <param name="url">The URL of the Machina Bridge App.</param>
-        /// <param name="connect">Connect to Machina Bridge App?</param>
-        /// <param name="send">Send Actions?</param>
-        /// <returns></returns>
-        [MultiReturn(new[] { "Connected?", "Sent?", "Instructions" })]
-        public static Dictionary<string, object> SendToBridge(List<MAction> actions, string url = "ws://127.0.0.1:6999/Bridge", bool connect = false,  bool send = false)
-        {
-            List<string> instructions = new List<string>();
+        ///// <summary>
+        ///// Send a list of Actions to the Machina Bridge App to be streamed to a robot.
+        ///// /// </summary>
+        ///// <param name="actions">A program in the form of a list of Actions.</param>
+        ///// <param name="url">The URL of the Machina Bridge App.</param>
+        ///// <param name="connect">Connect to Machina Bridge App?</param>
+        ///// <param name="send">Send Actions?</param>
+        ///// <returns></returns>
+        //[MultiReturn(new[] { "Connected?", "Sent?", "Instructions" })]
+        //public static Dictionary<string, object> SendToBridge(List<MAction> actions, string url = "ws://127.0.0.1:6999/Bridge", bool connect = false,  bool send = false)
+        //{
+        //    List<string> instructions = new List<string>();
 
-            bool connectedResult;
-            if (connect)
-            {
-                if (_ws == null || !_ws.IsAlive)
-                {
-                    _ws = new WebSocket(url);
-                    _ws.Connect();
-                }
-                connectedResult = _ws.IsAlive;
+        //    bool connectedResult;
+        //    if (connect)
+        //    {
+        //        if (_ws == null || !_ws.IsAlive)
+        //        {
+        //            _ws = new WebSocket(url);
+        //            _ws.Connect();
+        //        }
+        //        connectedResult = _ws.IsAlive;
 
-                if (!connectedResult)
-                {
-                    DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Could not connect to Machina Bridge App");
-                    return null;
-                }
-            }
-            else
-            {
-                if (_ws != null)
-                {
-                    _ws.Close();
-                }
-                connectedResult = _ws.IsAlive;
-            }
+        //        if (!connectedResult)
+        //        {
+        //            DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Could not connect to Machina Bridge App");
+        //            return null;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (_ws != null)
+        //        {
+        //            _ws.Close();
+        //        }
+        //        connectedResult = _ws.IsAlive;
+        //    }
 
-            string sentResult = "Nothing sent";
-            if (send && connectedResult)
-            {
-                string ins = "";
+        //    string sentResult = "Nothing sent";
+        //    if (send && connectedResult)
+        //    {
+        //        string ins = "";
 
-                foreach (MAction a in actions)
-                {
-                    // If attaching a tool, send the tool description first.
-                    // This is quick and dirty, a result of this component not taking the robot object as an input.
-                    // How coud this be improved...? Should tool creation be an action?
-                    if (a.type == Machina.ActionType.Attach)
-                    {
-                        ActionAttach aa = (ActionAttach)a;
-                        ins = aa.tool.ToInstruction();
-                        instructions.Add(ins);
-                        _ws.Send(ins);
-                    }
+        //        foreach (MAction a in actions)
+        //        {
+        //            // If attaching a tool, send the tool description first.
+        //            // This is quick and dirty, a result of this component not taking the robot object as an input.
+        //            // How coud this be improved...? Should tool creation be an action?
+        //            if (a.type == Machina.ActionType.Attach)
+        //            {
+        //                ActionAttach aa = (ActionAttach)a;
+        //                ins = aa.tool.ToInstruction();
+        //                instructions.Add(ins);
+        //                _ws.Send(ins);
+        //            }
 
-                    ins = a.ToInstruction();
-                    instructions.Add(ins);
-                    _ws.Send(ins);
-                }
-                sentResult = "Sent!";
-            }
+        //            ins = a.ToInstruction();
+        //            instructions.Add(ins);
+        //            _ws.Send(ins);
+        //        }
+        //        sentResult = "Sent!";
+        //    }
 
-            return new Dictionary<string, object>
-            {
-                { "Connected?", connectedResult },
-                { "Sent?", sentResult },
-                { "Instructions", instructions }
-            };
-        }
+        //    return new Dictionary<string, object>
+        //    {
+        //        { "Connected?", connectedResult },
+        //        { "Sent?", sentResult },
+        //        { "Instructions", instructions }
+        //    };
+        //}
 
 
 

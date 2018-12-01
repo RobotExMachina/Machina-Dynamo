@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions.cs" />
+    <Compile Include="Actions\AttachTool.cs" />
     <Compile Include="Actions\ArmAngle.cs" />
     <Compile Include="Actions\Acceleration.cs" />
     <Compile Include="Actions\_graveyard.cs" />
@@ -158,12 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MachinaDynamo.Actions.ActionMode.Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Attach.Large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MachinaDynamo.Actions.Attach.Small.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MachinaDynamo.Actions.Comment.Large.png" />
@@ -358,6 +353,8 @@
     <Content Include="Resources\MachinaDynamo.Actions.AccelerationTo.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.ArmAngleTo.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.ArmAngleTo.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.AttachTool.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Actions.AttachTool.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Axes.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.Axes.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.AxesTo.Large.png" />
@@ -376,8 +373,7 @@ copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.dll" MachinaDynamo.dll
 copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.xml" MachinaDynamo.xml
 copy /y "$(ProjectDir)$(OutDir)MachinaDynamo.customization.dll" MachinaDynamo.customization.dll
 echo "IF CHANGES WERE MADE TO THE RESOURCE FILE, PLEASE BUILD AGAIN"
-      <!-- :END --> 
-</PostBuildEvent>
+      <!-- :END --></PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
