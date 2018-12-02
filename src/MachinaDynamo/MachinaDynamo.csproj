@@ -113,6 +113,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -162,6 +163,7 @@
     <Compile Include="Actions\_base.cs" />
     <Compile Include="Bridge\Connect.cs" />
     <Compile Include="Bridge\Listen.cs" />
+    <Compile Include="Bridge\ActionExecuted.cs" />
     <Compile Include="Bridge\Send.cs" />
     <Compile Include="Bridge\_base.cs" />
     <Compile Include="Programs\Compile.cs" />

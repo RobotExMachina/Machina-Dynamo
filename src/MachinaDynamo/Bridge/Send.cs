@@ -40,13 +40,13 @@ namespace MachinaDynamo
         /// <returns name="log">Status messages.</returns>
         /// <returns name="instructions">Streamed instructions.</returns>
         [MultiReturn(new[] {"log", "instructions"})]
-        public static Dictionary<string, object> Send(object bridge, List<MAction> actions, bool send = false)
+        public static Dictionary<string, object> Send(object Bridge, List<MAction> actions, bool send = false)
         {
             MachinaBridgeSocket ms = null;
 
             try
             {
-                ms = bridge as MachinaBridgeSocket;
+                ms = Bridge as MachinaBridgeSocket;
             }
             catch
             {

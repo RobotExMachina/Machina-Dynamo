@@ -34,13 +34,13 @@ namespace MachinaDynamo
     {
         [CanUpdatePeriodically(true)]
         [MultiReturn(new[] { "log", "messages" })]
-        public static Dictionary<string, object> Listen(object bridge)
+        public static Dictionary<string, object> Listen(object Bridge)
         {
             MachinaBridgeSocket ms = null;
 
             try
             {
-                ms = bridge as MachinaBridgeSocket;
+                ms = Bridge as MachinaBridgeSocket;
             }
             catch
             {
@@ -53,7 +53,6 @@ namespace MachinaDynamo
                 DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Invalid Bridge connection.");
                 return null;
             }
-
 
             List<string> msgBuffer;
             string logMsg;
@@ -68,7 +67,7 @@ namespace MachinaDynamo
                 logMsg = "No messages received.";
                 msgBuffer = new List<string>();
             }
-           
+        
             return new Dictionary<string, object>
             {
                 {"log", logMsg},
