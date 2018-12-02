@@ -44,7 +44,7 @@
   - [x] `MotionUpdate`
 
 - [x] Add `Robot.Logger`
-
+- [x] Icon update
 - [ ] Update sample files
 
 ---

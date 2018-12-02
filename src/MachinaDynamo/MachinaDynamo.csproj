@@ -399,10 +399,28 @@
     <Content Include="Resources\MachinaDynamo.Actions.ExternalAxis.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.ExternalAxisTo.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.ExternalAxisTo.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.ActionExecuted.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.ActionExecuted.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.ActionIssued.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.ActionIssued.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.ActionReleased.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.ActionReleased.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.Connect.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.Connect.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.Listen.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.Listen.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.MotionUpdate.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.MotionUpdate.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.Send.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Bridge.Send.Small.png" />
     <Content Include="Resources\MachinaDynamo.Programs.Compile.Large.png" />
     <Content Include="Resources\MachinaDynamo.Programs.Compile.Small.png" />
     <Content Include="Resources\MachinaDynamo.Programs.Display.Large.png" />
     <Content Include="Resources\MachinaDynamo.Programs.Display.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Robots.Create.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Robots.Create.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Robots.Logger.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Robots.Logger.Small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
