@@ -25,21 +25,20 @@ using WebSocketSharp.Server;
 
 namespace MachinaDynamo
 {
-    //   █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗                   
-    //  ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║                   
-    //  ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║                   
-    //  ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║                   
-    //  ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║                   
-    //  ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝                   
-    //                                                                    
-    //  ███████╗██╗  ██╗███████╗ ██████╗██╗   ██╗████████╗███████╗██████╗ 
-    //  ██╔════╝╚██╗██╔╝██╔════╝██╔════╝██║   ██║╚══██╔══╝██╔════╝██╔══██╗
-    //  █████╗   ╚███╔╝ █████╗  ██║     ██║   ██║   ██║   █████╗  ██║  ██║
-    //  ██╔══╝   ██╔██╗ ██╔══╝  ██║     ██║   ██║   ██║   ██╔══╝  ██║  ██║
-    //  ███████╗██╔╝ ██╗███████╗╚██████╗╚██████╔╝   ██║   ███████╗██████╔╝
-    //  ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝    ╚═╝   ╚══════╝╚═════╝ 
-    //                                                                    
-
+    //   █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗                 
+    //  ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║                 
+    //  ███████║██║        ██║   ██║██║   ██║██╔██╗ ██║                 
+    //  ██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║                 
+    //  ██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║                 
+    //  ╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝                 
+    //                                                                  
+    //  ██████╗ ███████╗██╗     ███████╗ █████╗ ███████╗███████╗██████╗ 
+    //  ██╔══██╗██╔════╝██║     ██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗
+    //  ██████╔╝█████╗  ██║     █████╗  ███████║███████╗█████╗  ██║  ██║
+    //  ██╔══██╗██╔══╝  ██║     ██╔══╝  ██╔══██║╚════██║██╔══╝  ██║  ██║
+    //  ██║  ██║███████╗███████╗███████╗██║  ██║███████║███████╗██████╔╝
+    //  ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ 
+    //                                                                  
     public partial class Bridge
     {
         /// <summary>
@@ -47,7 +46,7 @@ namespace MachinaDynamo
         /// @TODO: each noce should have its own instance not shared across Dynamo,
         /// especially on multi-bridge listening... 
         /// </summary>
-        internal static ActionExecutedOutputs actionExecutedOutputs = new ActionExecutedOutputs();
+        internal static ActionReleasedOutputs actionReleasedOutputs = new ActionReleasedOutputs();
 
 
         /// <summary>
@@ -56,53 +55,52 @@ namespace MachinaDynamo
         /// <param name="bridgeMessages">The last batch of messages received from the Bridge.</param>
         /// <param name="onlyMostRecent">If true, only the single most recent message will be output.</param>
         /// <returns name="log">Status messages.</returns>
-        /// <returns name="lastAction">Last Action that was successfully executed by the robot.</returns>
+        /// <returns name="lastAction">Last Action that was successfully released to the robot.</returns>
         /// <returns name="actionTCP">Last known TCP position for this Action.</returns>
         /// <returns name="actionAxes">Last known axes for this Action.</returns>
         /// <returns name="actionExternalAxes">Last known external axes for this Action.</returns>
-        /// <returns name="pendingActions">How many Actions are left in the queue to be executed?</returns>
-        /// <returns name="pendingActionsOnDevice">How many Actions are left on the device to be executed? This only accounts for the ones that have already been released to it.</returns>
+        /// <returns name="pendingActions">How many actions are pending release to device?</returns>
         [MultiReturn(new[]
         {
             "log", "lastAction", "actionTCP", "actionAxes", "actionExternalAxes", "pendingActions",
-            "pendingActionsOnDevice"
         })]
-        public static Dictionary<string, object> ActionExecuted(List<string> bridgeMessages,
+        public static Dictionary<string, object> ActionReleased(List<string> bridgeMessages,
             bool onlyMostRecent = false)
         {
 
             if (bridgeMessages == null || bridgeMessages.Count == 0)
             {
-                actionExecutedOutputs.ClearLog();
-                actionExecutedOutputs.Log("No new messages to parse");
-                return actionExecutedOutputs.GetOutputs();
+                actionReleasedOutputs.ClearLog();
+                actionReleasedOutputs.Log("No new messages to parse");
+                return actionReleasedOutputs.GetOutputs();
             }
 
-            actionExecutedOutputs.ParseIncomingMessages(bridgeMessages, onlyMostRecent);
+            actionReleasedOutputs.ParseIncomingMessages(bridgeMessages, onlyMostRecent);
 
-            return actionExecutedOutputs.GetOutputs();
+            return actionReleasedOutputs.GetOutputs();
         }
 
     }
 
 
-    
-    //  ╔═╗┌─┐┌┬┐┬┌─┐┌┐┌╔═╗─┐ ┬┌─┐┌─┐┬ ┬┌┬┐┌─┐┌┬┐╔═╗┬ ┬┌┬┐┌─┐┬ ┬┌┬┐┌─┐
-    //  ╠═╣│   │ ││ ││││║╣ ┌┴┬┘├┤ │  │ │ │ ├┤  ││║ ║│ │ │ ├─┘│ │ │ └─┐
-    //  ╩ ╩└─┘ ┴ ┴└─┘┘└┘╚═╝┴ └─└─┘└─┘└─┘ ┴ └─┘─┴┘╚═╝└─┘ ┴ ┴  └─┘ ┴ └─┘
+
+
+
+    //  ╔═╗┌─┐┌┬┐┬┌─┐┌┐┌╦═╗┌─┐┬  ┌─┐┌─┐┌─┐┌─┐┌┬┐╔═╗┬ ┬┌┬┐┌─┐┬ ┬┌┬┐┌─┐
+    //  ╠═╣│   │ ││ ││││╠╦╝├┤ │  ├┤ ├─┤└─┐├┤  ││║ ║│ │ │ ├─┘│ │ │ └─┐
+    //  ╩ ╩└─┘ ┴ ┴└─┘┘└┘╩╚═└─┘┴─┘└─┘┴ ┴└─┘└─┘─┴┘╚═╝└─┘ ┴ ┴  └─┘ ┴ └─┘
     //
     /// <summary>
     /// A helper class to maintain output data for this Node.
     /// </summary>
-    internal class ActionExecutedOutputs
+    internal class ActionReleasedOutputs
     {
-        public static readonly string EVENT_NAME = "action-executed";
+        public static readonly string EVENT_NAME = "action-released";
 
         public List<int> _ids;
         public List<string> _logMsgs;
         public List<string> _instructions;
-        public List<int> _pendingExecutionOnDevice;
-        public List<int> _pendingExecutionTotal;
+        public List<int> _pendingRelease;
         public List<Plane> _tcps;
         public List<double?[]> _axes;
         public List<double?[]> _externalAxes;
@@ -111,13 +109,12 @@ namespace MachinaDynamo
         internal static JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
         internal static List<dynamic> objBuff = new List<dynamic>();
 
-        internal ActionExecutedOutputs()
+        internal ActionReleasedOutputs()
         {
             _ids = new List<int>();
             _logMsgs = new List<string>();
             _instructions = new List<string>();
-            _pendingExecutionOnDevice = new List<int>();
-            _pendingExecutionTotal = new List<int>();
+            _pendingRelease = new List<int>();
             _tcps = new List<Plane>();
             _axes = new List<double?[]>();
             _externalAxes = new List<double?[]>();
@@ -225,8 +222,7 @@ namespace MachinaDynamo
                 _axes.Add(Machina.Utilities.Conversion.NullableDoublesFromObjects(json["axes"]));
                 _externalAxes.Add(Machina.Utilities.Conversion.NullableDoublesFromObjects(json["extax"]));
 
-                _pendingExecutionTotal.Add(json["pendTot"]);
-                _pendingExecutionOnDevice.Add(json["pendDev"]);
+                _pendingRelease.Add(json["pend"]);
             }
             catch
             {
@@ -263,8 +259,7 @@ namespace MachinaDynamo
         {
             _ids.Clear();
             _instructions.Clear();
-            _pendingExecutionOnDevice.Clear();
-            _pendingExecutionTotal.Clear();
+            _pendingRelease.Clear();
             _tcps.Clear();
             _axes.Clear();
             _externalAxes.Clear();
@@ -279,8 +274,7 @@ namespace MachinaDynamo
                 { "actionTCP", _tcps},
                 { "actionAxes", _axes},
                 { "actionExternalAxes", _externalAxes},
-                { "pendingActions", _pendingExecutionTotal},
-                { "pendingActionsOnDevice", _pendingExecutionOnDevice}
+                { "pendingActions", _pendingRelease},
             };
         }
 

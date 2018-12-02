@@ -161,6 +161,8 @@
     <Compile Include="Actions\Acceleration.cs" />
     <Compile Include="Actions\_graveyard.cs" />
     <Compile Include="Actions\_base.cs" />
+    <Compile Include="Bridge\ActionIssued.cs" />
+    <Compile Include="Bridge\ActionReleased.cs" />
     <Compile Include="Bridge\Connect.cs" />
     <Compile Include="Bridge\Listen.cs" />
     <Compile Include="Bridge\ActionExecuted.cs" />
