@@ -43,7 +43,7 @@
   - [x] `ActionReleased`
   - [x] `MotionUpdate`
 
-- [ ] Add `Robot.Logger`
+- [x] Add `Robot.Logger`
 
 - [ ] Update sample files
 

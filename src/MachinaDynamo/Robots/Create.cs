@@ -18,13 +18,13 @@ using System.IO;
 
 namespace MachinaDynamo
 {
-    //  ██████╗  ██████╗ ██████╗  ██████╗ ████████╗███████╗
-    //  ██╔══██╗██╔═══██╗██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝
-    //  ██████╔╝██║   ██║██████╔╝██║   ██║   ██║   ███████╗
-    //  ██╔══██╗██║   ██║██╔══██╗██║   ██║   ██║   ╚════██║
-    //  ██║  ██║╚██████╔╝██████╔╝╚██████╔╝   ██║   ███████║
-    //  ╚═╝  ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝    ╚═╝   ╚══════╝
-    //                                                     
+    //   ██████╗██████╗ ███████╗ █████╗ ████████╗███████╗
+    //  ██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝
+    //  ██║     ██████╔╝█████╗  ███████║   ██║   █████╗  
+    //  ██║     ██╔══██╗██╔══╝  ██╔══██║   ██║   ██╔══╝  
+    //  ╚██████╗██║  ██║███████╗██║  ██║   ██║   ███████╗
+    //   ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+    //                                                   
     /// <summary>
     /// Robot creation and manipulation tools.
     /// </summary>
@@ -37,7 +37,7 @@ namespace MachinaDynamo
         /// <param name="name">A name for this Robot</param>
         /// <param name="brand">Input "ABB", "UR", "KUKA", "ZMorph" or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
         /// <returns name="Robot">Your brand new Machina Robot object</returns>
-        public static Robot RobotCreate(string name = "RobotExMachina", string brand = "ABB") 
+        public static Robot Create(string name = "RobotExMachina", string brand = "ABB") 
             => Robot.Create(name, brand);
 
        

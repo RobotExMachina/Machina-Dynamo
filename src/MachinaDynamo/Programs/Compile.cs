@@ -42,6 +42,12 @@ namespace MachinaDynamo
         /// <returns name="code">Device-specific code</returns>
         public static string Compile(Robot bot, List<MAction> actions, bool inlineTargets = true, bool machinaComments = true)
         {
+            if (bot == null)
+            {
+                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Invalid Robot instance.");
+                return null;
+            }
+
             bot.ControlMode(ControlType.Offline);
 
             foreach (MAction a in actions)
