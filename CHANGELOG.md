@@ -26,11 +26,11 @@
 - Core update to `v0.8.6`.
 - [x] Deprecate all the weird joint Actions
 - [x] Add `Acceleration`
-- [ ] Add `ArmAngle`
-- [ ] Add `DefineTool`
-- [ ] Update `Attach` and `Detach`
-- [ ] Icons for `WriteDigital/Analog`
-- [ ] Add `ExternalAxis`
+- [x] Add `ArmAngle`
+- [x] Add `DefineTool`
+- [x] Update `Attach` and `Detach`
+- [x] Icons for `WriteDigital/Analog`
+- [x] Add `ExternalAxis`
 
 - [ ] Add `Bridge` section
 - [ ] Add `Bridge.Connect`

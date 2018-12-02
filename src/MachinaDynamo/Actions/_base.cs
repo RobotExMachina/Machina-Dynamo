@@ -29,7 +29,7 @@ namespace MachinaDynamo
     /// <summary>
     /// All possible Actions.
     /// </summary>
-    partial class Actions
+    public partial class Actions
     {
         /// <summary>
         /// Make constructor internal so that it doesn't show up on the menu.

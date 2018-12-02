@@ -29,21 +29,12 @@ namespace MachinaDynamo
     partial class Actions
     {
         /// <summary>
-        /// Moves the device along a speficied vector relative to its current position.
+        /// Pause program execution for a specified amount of time.
         /// </summary>
-        /// <param name="direction">Translation vector</param>
-        /// <returns name="Action">Move Action</returns>
-        public static MAction Move(Autodesk.DesignScript.Geometry.Vector direction) 
-            => new ActionTranslation(direction.X, direction.Y, direction.Z, true);
-
-
-        /// <summary>
-        /// Moves the device to an absolute location.
-        /// </summary>
-        /// <param name="location">Target Point</param>
-        /// <returns name="Action">Move Action</returns>
-        public static MAction MoveTo(Autodesk.DesignScript.Geometry.Point location) 
-            => new ActionTranslation(location.X, location.Y, location.Z, false);
+        /// <param name="millis">Pause time in milliseconds</param>
+        /// <returns name="Action">Wait Action</returns>
+        public static MAction Wait(double millis = 0) 
+            => new ActionWait((long)Math.Round(millis));
 
     }
 }
