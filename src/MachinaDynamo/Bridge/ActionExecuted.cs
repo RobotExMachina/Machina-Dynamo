@@ -39,45 +39,97 @@ namespace MachinaDynamo
     //  ███████╗██╔╝ ██╗███████╗╚██████╗╚██████╔╝   ██║   ███████╗██████╔╝
     //  ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝    ╚═╝   ╚══════╝╚═════╝ 
     //                                                                    
+
     public partial class Bridge
     {
-
-        // Outputs: use persistent data to avoid null outcomes when most recent message is other than ActionExecuted.
-        private static List<int> _ids = new List<int>();
-        private static List<string> _logMsgs = new List<string>();
-        private static List<string> _instructions = new List<string>();
-        private static List<int> _pendingExecutionOnDevice = new List<int>();
-        private static List<int> _pendingExecutionTotal = new List<int>();
-        private static List<Plane> _tcps = new List<Plane>();
-        private static List<double?[]> _axes = new List<double?[]>();
-        private static List<double?[]> _externalAxes = new List<double?[]>();
-
-        // Parsing stuff and buffers.
-        private static readonly string EVENT_NAME = "action-executed";
-        private static JavaScriptSerializer ser = new JavaScriptSerializer();
-        private static List<dynamic> objBuff = new List<dynamic>();
+        /// <summary>
+        /// The main object that stores output properties over time.
+        /// @TODO: each noce should have its own instance not shared across Dynamo,
+        /// especially on multi-bridge listening... 
+        /// </summary>
+        internal static ActionExecutedOutputs aeout = new ActionExecutedOutputs();
 
 
-
-        [MultiReturn(new[] {"log", "lastAction", "actionTCP", "actionAxes", "actionExternalAxes", "pendingActions", "pendingActionsOnDevice" })]
-        public static Dictionary<string, object> ActionExecuted(List<string> bridgeMessages, bool onlyMostRecent = false)
+        /// <summary>
+        /// Will update every time an Action has been successfully executed by the robot.
+        /// </summary>
+        /// <param name="bridgeMessages">The last batch of messages received from the Bridge.</param>
+        /// <param name="onlyMostRecent">If true, only the single most recent message will be output.</param>
+        /// <returns name="log">Status messages.</returns>
+        /// <returns name="lastAction">Last Action that was successfully executed by the robot.</returns>
+        /// <returns name="actionTCP">Last known TCP position for this Action.</returns>
+        /// <returns name="actionAxes">Last known axes for this Action.</returns>
+        /// <returns name="actionExternalAxes">Last known external axes for this Action.</returns>
+        /// <returns name="pendingActions">How many Actions are left in the queue to be executed?</returns>
+        /// <returns name="pendingActionsOnDevice">How many Actions are left on the device to be executed? This only accounts for the ones that have already been released to it.</returns>
+        [MultiReturn(new[]
         {
-            
+            "log", "lastAction", "actionTCP", "actionAxes", "actionExternalAxes", "pendingActions",
+            "pendingActionsOnDevice"
+        })]
+        public static Dictionary<string, object> ActionExecuted(List<string> bridgeMessages,
+            bool onlyMostRecent = false)
+        {
+
             if (bridgeMessages == null || bridgeMessages.Count == 0)
             {
-                _logMsgs.Clear();
-                _logMsgs.Add("No new messages to parse");
-                return GetOutputs();
+                aeout.ClearLog();
+                aeout.Log("No new messages to parse");
+                return aeout.GetOutputs();
             }
 
-            ParseIncomingMessages(bridgeMessages, onlyMostRecent);
-            
-            return GetOutputs();
+            aeout.ParseIncomingMessages(bridgeMessages, onlyMostRecent);
+
+            return aeout.GetOutputs();
+        }
+
+    }
+
+
+
+
+
+
+    /// <summary>
+    /// A helper class to maintain output data for this Node.
+    /// </summary>
+    internal class ActionExecutedOutputs
+    {
+        public static readonly string EVENT_NAME_ACTION_EXECUTED = "action-executed";
+
+        public List<int> _ids;
+        public List<string> _logMsgs;
+        public List<string> _instructions;
+        public List<int> _pendingExecutionOnDevice;
+        public List<int> _pendingExecutionTotal;
+        public List<Plane> _tcps;
+        public List<double?[]> _axes;
+        public List<double?[]> _externalAxes;
+
+        // Parsing stuff and buffers.
+        internal static JavaScriptSerializer jsonSerializer = new JavaScriptSerializer();
+        internal static List<dynamic> objBuff = new List<dynamic>();
+
+        internal ActionExecutedOutputs()
+        {
+            _ids = new List<int>();
+            _logMsgs = new List<string>();
+            _instructions = new List<string>();
+            _pendingExecutionOnDevice = new List<int>();
+            _pendingExecutionTotal = new List<int>();
+            _tcps = new List<Plane>();
+            _axes = new List<double?[]>();
+            _externalAxes = new List<double?[]>();
         }
 
 
-
-        private static bool ParseIncomingMessages(List<string> messages, bool keepOnlyMostRecent)
+        /// <summary>
+        /// Take a list of string json objects, check how fresh the data is, and store it if applicable. 
+        /// </summary>
+        /// <param name="messages"></param>
+        /// <param name="keepOnlyMostRecent"></param>
+        /// <returns></returns>
+        public bool ParseIncomingMessages(List<string> messages, bool keepOnlyMostRecent)
         {
             objBuff.Clear();
             _logMsgs.Clear();
@@ -88,10 +140,10 @@ namespace MachinaDynamo
             {
                 try
                 {
-                    json = ser.Deserialize<dynamic>(msg);
+                    json = jsonSerializer.Deserialize<dynamic>(msg);
 
                     // Keep this message if it is of the right type and has not been received before. 
-                    if (json["event"].Equals(EVENT_NAME) && !_ids.Contains(json["id"]))
+                    if (json["event"].Equals(EVENT_NAME_ACTION_EXECUTED) && !_ids.Contains(json["id"]))
                     {
                         it++;
                         objBuff.Add(json);
@@ -135,7 +187,14 @@ namespace MachinaDynamo
             return it != 0;
         }
 
-        private static bool ParseMessage(dynamic json)
+
+
+        /// <summary>
+        /// Take a json object and add addd its properties to output lists
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        private bool ParseMessage(dynamic json)
         {
             try
             {
@@ -158,7 +217,7 @@ namespace MachinaDynamo
                         Autodesk.DesignScript.Geometry.Vector.ByCoordinates(Convert.ToDouble(ori[0]),
                             Convert.ToDouble(ori[1]), Convert.ToDouble(ori[2])),
                         Autodesk.DesignScript.Geometry.Vector.ByCoordinates(Convert.ToDouble(ori[3]), Convert.ToDouble(ori[4]), Convert.ToDouble(ori[5]))
-                        );
+                    );
                     _tcps.Add(p);
                 }
 
@@ -178,9 +237,28 @@ namespace MachinaDynamo
         }
 
         /// <summary>
+        /// Add a message to the log output.
+        /// </summary>
+        /// <param name="msg"></param>
+        public void Log(string msg)
+        {
+            _logMsgs.Add(msg);
+        }
+
+        /// <summary>
+        /// Clears the messages in the log output.
+        /// </summary>
+        public void ClearLog()
+        {
+            _logMsgs.Clear();
+        }
+
+
+
+        /// <summary>
         /// Clear all output lists except log messages.
         /// </summary>
-        private static void ClearOutputs()
+        private void ClearOutputs()
         {
             _ids.Clear();
             _instructions.Clear();
@@ -192,16 +270,18 @@ namespace MachinaDynamo
         }
 
         // Build the object and return it. 
-        private static Dictionary<string, object> GetOutputs() 
-            => new Dictionary<string, object> {
-            { "log", _logMsgs },
-            { "lastAction", _instructions},
-            { "actionTCP", _tcps},
-            { "actionAxes", _axes},
-            { "actionExternalAxes", _externalAxes},
-            { "pendingActions", _pendingExecutionTotal},
-            { "pendingActionsOnDevice", _pendingExecutionOnDevice}
-        };
+        public Dictionary<string, object> GetOutputs()
+        {
+            return new Dictionary<string, object> {
+                { "log", _logMsgs },
+                { "lastAction", _instructions},
+                { "actionTCP", _tcps},
+                { "actionAxes", _axes},
+                { "actionExternalAxes", _externalAxes},
+                { "pendingActions", _pendingExecutionTotal},
+                { "pendingActionsOnDevice", _pendingExecutionOnDevice}
+            };
+        }
 
     }
 }

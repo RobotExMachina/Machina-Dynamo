@@ -34,7 +34,7 @@ namespace MachinaDynamo
         /// <summary>
         /// Send a list of Actions to the Bridge.
         /// </summary>
-        /// <param name="bridge">The (websocket) object managing connection to the Machina Bridge.</param>
+        /// <param name="Bridge">The (websocket) object managing connection to the Machina Bridge.</param>
         /// <param name="actions">A ist of Actions to send to the Bridge.</param>
         /// <param name="send">Send Actions?</param>
         /// <returns name="log">Status messages.</returns>

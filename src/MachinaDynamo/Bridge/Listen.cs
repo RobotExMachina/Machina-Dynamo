@@ -32,8 +32,14 @@ namespace MachinaDynamo
     //                                                
     public partial class Bridge
     {
+        /// <summary>
+        /// Listen to messages from the Machina Bridge.
+        /// </summary>
+        /// <param name="Bridge">The (websocket) object managing connection to the Machina Bridge.</param>
+        /// <returns name="log">Status messages.</returns>
+        /// <returns name="bridgeMessages">Last messags received from the bridge. Will only update once per received message.</returns>
         [CanUpdatePeriodically(true)]
-        [MultiReturn(new[] { "log", "messages" })]
+        [MultiReturn(new[] { "log", "bridgeMessages" })]
         public static Dictionary<string, object> Listen(object Bridge)
         {
             MachinaBridgeSocket ms = null;
@@ -71,7 +77,7 @@ namespace MachinaDynamo
             return new Dictionary<string, object>
             {
                 {"log", logMsg},
-                {"messages", msgBuffer}
+                {"bridgeMessages", msgBuffer}
             };
         }
     }
