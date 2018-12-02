@@ -160,7 +160,13 @@
     <Compile Include="Actions\Acceleration.cs" />
     <Compile Include="Actions\_graveyard.cs" />
     <Compile Include="Actions\_base.cs" />
-    <Compile Include="Programs.cs" />
+    <Compile Include="Bridge\Connect.cs" />
+    <Compile Include="Bridge\Send.cs" />
+    <Compile Include="Bridge\_base.cs" />
+    <Compile Include="Programs\Compile.cs" />
+    <Compile Include="Programs\Display.cs" />
+    <Compile Include="Programs\_graveyard.cs" />
+    <Compile Include="Programs\_base.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robots.cs" />
     <Compile Include="Utils.cs" />
@@ -382,6 +388,10 @@
     <Content Include="Resources\MachinaDynamo.Actions.ExternalAxis.Small.png" />
     <Content Include="Resources\MachinaDynamo.Actions.ExternalAxisTo.Large.png" />
     <Content Include="Resources\MachinaDynamo.Actions.ExternalAxisTo.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Programs.Compile.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Programs.Compile.Small.png" />
+    <Content Include="Resources\MachinaDynamo.Programs.Display.Large.png" />
+    <Content Include="Resources\MachinaDynamo.Programs.Display.Small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

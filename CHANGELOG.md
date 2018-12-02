@@ -45,6 +45,7 @@
 
 - [ ] Add `Robot.Logger`
 
+- [ ] Update sample files
 
 ---
 # v0.6.4
