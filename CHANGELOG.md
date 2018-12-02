@@ -37,11 +37,11 @@
 - [x] Rewrite `Bridge.Send`
 
 - [x] Add `Bridge.Listen` --> Outputs all the messages received since last update.
-- [ ] Add listener parsers:
+- [x] Add listener parsers:
   - [x] `ActionExecuted`
-  - [ ] `ActionIssued`
-  - [ ] `ActionReleased`
-  - [ ] `MotionUpdate`
+  - [x] `ActionIssued`
+  - [x] `ActionReleased`
+  - [x] `MotionUpdate`
 
 - [ ] Add `Robot.Logger`
 
