@@ -54,5 +54,25 @@ namespace MachinaDynamo
                 return first;
             }
         }
+
+        public List<string> FetchBuffer(bool remove)
+        {
+            lock (bufferLock)
+            {
+                if (receivedMessages.Count == 0)
+                {
+                    return new List<string>();
+                }
+                
+                List<string> clone = new List<string>(receivedMessages);
+
+                if (remove)
+                {
+                    Flush();
+                }
+
+                return clone;
+            }
+        }
     }
 }

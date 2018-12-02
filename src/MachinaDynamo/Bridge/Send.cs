@@ -31,7 +31,6 @@ namespace MachinaDynamo
     //  ╚══════╝╚══════╝╚═╝  ╚═══╝╚═════╝ 
     public partial class Bridge
     {
-
         /// <summary>
         /// Send a list of Actions to the Bridge.
         /// </summary>

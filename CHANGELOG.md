@@ -32,11 +32,11 @@
 - [x] Icons for `WriteDigital/Analog`
 - [x] Add `ExternalAxis`
 
-- [ ] Add `Bridge` section
-- [ ] Add `Bridge.Connect`
-- [ ] Rewrite `Bridge.Send`
+- [x] Add `Bridge` section
+- [x] Add `Bridge.Connect`
+- [x] Rewrite `Bridge.Send`
 
-- [ ] Add `Bridge.Listen`
+- [x] Add `Bridge.Listen` --> Outputs all the messages received since last update. 
 - [ ] Add listener parsers:
   - [ ] `ActionIssued`
   - [ ] `ActionReleased`
