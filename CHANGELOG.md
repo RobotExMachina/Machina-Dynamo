@@ -18,9 +18,6 @@
 # WISHLIST
 
 
-
-
-
 # REVISIONS
 # v0.8.6
 - Core update to `v0.8.6`.
@@ -49,7 +46,8 @@
 
 - [x] Update sample files
 
-- [ ] Dist + release + package manager
+- [x] Dist + release
+- [ ] Package manager
 
 ---
 # v0.6.4
