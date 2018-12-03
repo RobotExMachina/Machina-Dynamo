@@ -47,7 +47,7 @@
 - [x] Update sample files
 
 - [x] Dist + release
-- [ ] Package manager
+- [x] Package manager
 
 ---
 # v0.6.4
