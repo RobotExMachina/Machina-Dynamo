@@ -44,8 +44,12 @@
   - [x] `MotionUpdate`
 
 - [x] Add `Robot.Logger`
+
 - [x] Icon update
-- [ ] Update sample files
+
+- [x] Update sample files
+
+- [ ] Dist + release + package manager
 
 ---
 # v0.6.4

@@ -256,8 +256,8 @@ desktop.ini
 
 
 # Byproducts of debugging with the sample files... 
-package/Machina/extra/backup/
-package/Machina/extra/*.prg
-package/Machina/extra/*.mod
-package/Machina/extra/*.src
-package/Machina/extra/*.script
+dist/nightly/Machina/extra/backup/
+dist/nightly/Machina/extra/*.prg
+dist/nightly/Machina/extra/*.mod
+dist/nightly/Machina/extra/*.src
+dist/nightly/Machina/extra/*.script

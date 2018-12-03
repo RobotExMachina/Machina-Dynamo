@@ -48,6 +48,12 @@ namespace MachinaDynamo
                 return null;
             }
 
+            if (actions == null)
+            {
+                DynamoServices.LogWarningMessageEvents.OnLogWarningMessage("Please provide at least one action for this program.");
+                return null;
+            }
+
             bot.ControlMode(ControlType.Offline);
 
             foreach (MAction a in actions)
