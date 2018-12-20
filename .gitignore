@@ -261,3 +261,6 @@ dist/nightly/Machina/extra/*.prg
 dist/nightly/Machina/extra/*.mod
 dist/nightly/Machina/extra/*.src
 dist/nightly/Machina/extra/*.script
+
+# Force nightly dist folders with dlls...?
+!dist/nightly/Machina/bin/
