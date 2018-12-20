@@ -33,7 +33,7 @@ namespace MachinaDynamo
         /// <summary>
         /// This API's version
         /// </summary>
-        internal static string MachinaDynamoAPIVersion() => "0.8.6";
+        internal static string MachinaDynamoAPIVersion() => "0.8.8";
         
         /// <summary>
         /// Returns version and build numbers of the Machina Core library and Dynamo API.

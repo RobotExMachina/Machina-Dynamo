@@ -1,4 +1,4 @@
-<Workspace Version="1.3.0.862" X="-150.248909981022" Y="-249.157114620736" zoom="0.247139218486101" ScaleFactor="1" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="1.3.0.862" X="-175.248909981022" Y="-278.157114620736" zoom="0.247139218486101" ScaleFactor="1" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap>
     <ClassMap partialName="Math" resolvedName="DSCore.Math" assemblyName="DSCoreNodes.dll" />
     <ClassMap partialName="Vector" resolvedName="Autodesk.DesignScript.Geometry.Vector" assemblyName="ProtoGeometry.dll" />
@@ -113,6 +113,53 @@
       <PortInfo index="1" default="True" />
     </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="d10a00d7-fe76-4ba4-a856-b8c8b72e1f15" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="6606.24816476293" y="1292.51063854064" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;04_SimpleToolPath.prg&quot;;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="c6e976e3-ce12-41c3-b186-75c7ef78fd5e" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Bridge.Connect" x="5967.06051059043" y="2042.01738413813" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="..\bin\MachinaDynamo.dll" function="MachinaDynamo.Bridge.Connect@string,string,bool">
+      <PortInfo index="0" default="True" />
+      <PortInfo index="1" default="True" />
+      <PortInfo index="2" default="True" />
+    </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
+    <CoreNodeModels.Input.BoolSelector guid="2126ba7f-c18c-4524-8206-764a43b1cacd" type="CoreNodeModels.Input.BoolSelector" nickname="Listen to only most recent messages?" x="5728.56952296" y="2204.83688730047" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+      <System.Boolean>True</System.Boolean>
+    </CoreNodeModels.Input.BoolSelector>
+    <CoreNodeModels.Input.BoolSelector guid="5cbb89b3-d707-4362-ac1b-1b1aee7cc6eb" type="CoreNodeModels.Input.BoolSelector" nickname="Connect to Bridge?" x="5727.42707811345" y="2095.78735499933" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+      <System.Boolean>False</System.Boolean>
+    </CoreNodeModels.Input.BoolSelector>
+    <CoreNodeModels.Input.BoolSelector guid="60530a6f-5e91-4824-bd75-8f383c3d12be" type="CoreNodeModels.Input.BoolSelector" nickname="Send actions to Bridge?" x="5726.26144283024" y="2296.01119806914" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+      <System.Boolean>False</System.Boolean>
+    </CoreNodeModels.Input.BoolSelector>
+    <CoreNodeModels.Watch guid="4ea3cdce-5244-4f1e-9452-8ef580f19cb0" type="CoreNodeModels.Watch" nickname="Watch" x="6281.05735091587" y="2042.12186969112" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+    </CoreNodeModels.Watch>
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="c74605b3-38a4-4d1b-a80f-baeefd669a94" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Bridge.Listen" x="6278.15042211918" y="2175.41990752154" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="..\bin\MachinaDynamo.dll" function="MachinaDynamo.Bridge.Listen@var">
+      <PortInfo index="0" default="False" />
+    </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
+    <CoreNodeModels.Watch guid="d736254d-004a-4163-954c-8d08536f98a1" type="CoreNodeModels.Watch" nickname="Watch" x="6614.67128164252" y="2171.27803465923" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+    </CoreNodeModels.Watch>
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="f40a0386-2d2a-428e-b5a9-f59c9baf4483" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Bridge.ActionExecuted" x="6618.7720143658" y="2279.50439109026" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="..\bin\MachinaDynamo.dll" function="MachinaDynamo.Bridge.ActionExecuted@string[],bool">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="True" />
+    </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
+    <CoreNodeModels.Watch guid="3fd663f1-f70c-42df-b408-97f702f86c4f" type="CoreNodeModels.Watch" nickname="Watch" x="6619.7784869444" y="2568.7680058746" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+    </CoreNodeModels.Watch>
+    <CoreNodeModels.Watch guid="f07e3163-a1fa-4f9a-9c78-fc0e1ba2c49c" type="CoreNodeModels.Watch" nickname="Watch" x="7123.05605058719" y="2570.01119660051" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+    </CoreNodeModels.Watch>
+    <CoreNodeModels.Watch guid="10613e81-7589-4198-aa04-7f38b1cabbaa" type="CoreNodeModels.Watch" nickname="Watch" x="7119.47077821789" y="2398.32172721588" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+    </CoreNodeModels.Watch>
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="89c1e697-cb84-4b1a-97f3-cc461dd912a9" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Bridge.Send" x="6241.11949892443" y="2663.13884607289" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="..\bin\MachinaDynamo.dll" function="MachinaDynamo.Bridge.Send@var,var[],bool">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
+      <PortInfo index="2" default="True" />
+    </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
+    <CoreNodeModels.Watch guid="c7c5c196-a1a0-47b8-a91f-3b01b685ff63" type="CoreNodeModels.Watch" nickname="Watch" x="6622.2219142157" y="2703.63373138036" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+    </CoreNodeModels.Watch>
+    <CoreNodeModels.Watch guid="42092c01-0182-4435-97d2-d4e995570329" type="CoreNodeModels.Watch" nickname="Watch" x="7116.11951130993" y="2259.54864106697" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+    </CoreNodeModels.Watch>
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="ea0ce5cc-540d-41d0-a999-661d9aefeafa" start_index="0" end="2263eedf-5c86-4879-bb88-1e9c574b6d80" end_index="0" portType="0" />
@@ -137,6 +184,7 @@
     <Dynamo.Graph.Connectors.ConnectorModel start="1310a234-82ce-4b89-9216-b89b9457baec" start_index="0" end="899acb23-8bb1-4f2a-8696-afade5c817b6" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="87dea61f-eff8-49a6-b6b0-2ffedd65ce21" start_index="0" end="cefe16ed-11d2-42ce-bbf4-ba156c7bdd34" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="cefe16ed-11d2-42ce-bbf4-ba156c7bdd34" start_index="0" end="1b3e20cb-1af3-4509-bfa3-442ad5bcfd4b" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="cefe16ed-11d2-42ce-bbf4-ba156c7bdd34" start_index="0" end="89c1e697-cb84-4b1a-97f3-cc461dd912a9" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="9ccdb2bf-ec61-4763-9694-9e1e20b8dbc5" start_index="0" end="87dea61f-eff8-49a6-b6b0-2ffedd65ce21" end_index="2" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="f59c2d55-7883-4e1a-a3be-6c28755560bf" start_index="0" end="1b3e20cb-1af3-4509-bfa3-442ad5bcfd4b" end_index="2" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="95fc2e4e-2390-43ff-91b4-cd8a8d772180" start_index="0" end="56f90ad6-b83b-452b-a2bd-7bf6c7988df0" end_index="2" portType="0" />
@@ -158,11 +206,25 @@
     <Dynamo.Graph.Connectors.ConnectorModel start="ebaa47e5-830d-416c-b5e6-a50c2478c62b" start_index="0" end="1b3e20cb-1af3-4509-bfa3-442ad5bcfd4b" end_index="3" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="7bce91b7-3a1a-45bf-ab08-b77c7d87a6ae" start_index="0" end="1b3e20cb-1af3-4509-bfa3-442ad5bcfd4b" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="d10a00d7-fe76-4ba4-a856-b8c8b72e1f15" start_index="0" end="2e1b3f23-f4c2-4c13-b2cd-cbde4d89e709" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="c6e976e3-ce12-41c3-b186-75c7ef78fd5e" start_index="0" end="4ea3cdce-5244-4f1e-9452-8ef580f19cb0" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="c6e976e3-ce12-41c3-b186-75c7ef78fd5e" start_index="1" end="c74605b3-38a4-4d1b-a80f-baeefd669a94" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="c6e976e3-ce12-41c3-b186-75c7ef78fd5e" start_index="1" end="89c1e697-cb84-4b1a-97f3-cc461dd912a9" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="2126ba7f-c18c-4524-8206-764a43b1cacd" start_index="0" end="f40a0386-2d2a-428e-b5a9-f59c9baf4483" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="5cbb89b3-d707-4362-ac1b-1b1aee7cc6eb" start_index="0" end="c6e976e3-ce12-41c3-b186-75c7ef78fd5e" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="60530a6f-5e91-4824-bd75-8f383c3d12be" start_index="0" end="89c1e697-cb84-4b1a-97f3-cc461dd912a9" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="c74605b3-38a4-4d1b-a80f-baeefd669a94" start_index="0" end="d736254d-004a-4163-954c-8d08536f98a1" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="c74605b3-38a4-4d1b-a80f-baeefd669a94" start_index="1" end="f40a0386-2d2a-428e-b5a9-f59c9baf4483" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f40a0386-2d2a-428e-b5a9-f59c9baf4483" start_index="1" end="42092c01-0182-4435-97d2-d4e995570329" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f40a0386-2d2a-428e-b5a9-f59c9baf4483" start_index="2" end="10613e81-7589-4198-aa04-7f38b1cabbaa" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f40a0386-2d2a-428e-b5a9-f59c9baf4483" start_index="5" end="f07e3163-a1fa-4f9a-9c78-fc0e1ba2c49c" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="89c1e697-cb84-4b1a-97f3-cc461dd912a9" start_index="0" end="3fd663f1-f70c-42df-b408-97f702f86c4f" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="89c1e697-cb84-4b1a-97f3-cc461dd912a9" start_index="1" end="c7c5c196-a1a0-47b8-a91f-3b01b685ff63" end_index="0" portType="0" />
   </Connectors>
   <Notes>
     <Dynamo.Graph.Notes.NoteModel guid="5b6b1c83-d288-49d6-9034-2d8cbd6da524" text="We flip the Planes to make it easier for the Robot to reach this orientation." x="3630.17134457721" y="1756.77045713359" />
     <Dynamo.Graph.Notes.NoteModel guid="83084bb4-69df-46f8-9a4d-f301b2cd5196" text="" x="2184.06659666981" y="1372.82745663698" />
     <Dynamo.Graph.Notes.NoteModel guid="a4bc6287-e5dd-4c88-92cd-079b9912e27a" text="" x="843.461444457035" y="1379.54532737158" />
+    <Dynamo.Graph.Notes.NoteModel guid="02addd20-c9cb-4c0c-a9ab-7f0950ed7da2" text="Check these tutorials on how to set up real-time control with your machine: https://www.youtube.com/playlist?list=PLvxxYImPCApXj3tHVKmpTS_AuMPngnA47" x="5601.08961443071" y="1930.72195317139" />
   </Notes>
   <Annotations>
     <Dynamo.Graph.Annotations.AnnotationModel guid="e1438591-8987-4e5f-8b82-8bc9666dbe0b" annotationText="Get curves from a DWG file" left="824.840096211754" top="1678.46152448367" width="1475.24608882449" height="336.54447940794" fontSize="30" InitialTop="1724.46152448367" InitialHeight="320.544479407943" TextblockHeight="36" backgrouund="#FFC1D676">
@@ -215,9 +277,26 @@
       <Models ModelGuid="a4bc6287-e5dd-4c88-92cd-079b9912e27a" />
       <Models ModelGuid="83084bb4-69df-46f8-9a4d-f301b2cd5196" />
     </Dynamo.Graph.Annotations.AnnotationModel>
+    <Dynamo.Graph.Annotations.AnnotationModel guid="5a25357e-3a9e-4334-a557-b659ad72b329" annotationText="Stream program in real-time to device via the Machina Bridge" left="5591.08961443071" top="1900.72195317139" width="1753.02989687923" height="911.911778208967" fontSize="14" InitialTop="1930.72195317139" InitialHeight="896.911778208967" TextblockHeight="0" backgrouund="#FFFFB8D8">
+      <Models ModelGuid="42092c01-0182-4435-97d2-d4e995570329" />
+      <Models ModelGuid="f40a0386-2d2a-428e-b5a9-f59c9baf4483" />
+      <Models ModelGuid="4ea3cdce-5244-4f1e-9452-8ef580f19cb0" />
+      <Models ModelGuid="c74605b3-38a4-4d1b-a80f-baeefd669a94" />
+      <Models ModelGuid="d736254d-004a-4163-954c-8d08536f98a1" />
+      <Models ModelGuid="10613e81-7589-4198-aa04-7f38b1cabbaa" />
+      <Models ModelGuid="c6e976e3-ce12-41c3-b186-75c7ef78fd5e" />
+      <Models ModelGuid="3fd663f1-f70c-42df-b408-97f702f86c4f" />
+      <Models ModelGuid="f07e3163-a1fa-4f9a-9c78-fc0e1ba2c49c" />
+      <Models ModelGuid="89c1e697-cb84-4b1a-97f3-cc461dd912a9" />
+      <Models ModelGuid="2126ba7f-c18c-4524-8206-764a43b1cacd" />
+      <Models ModelGuid="60530a6f-5e91-4824-bd75-8f383c3d12be" />
+      <Models ModelGuid="c7c5c196-a1a0-47b8-a91f-3b01b685ff63" />
+      <Models ModelGuid="5cbb89b3-d707-4362-ac1b-1b1aee7cc6eb" />
+      <Models ModelGuid="02addd20-c9cb-4c0c-a9ab-7f0950ed7da2" />
+    </Dynamo.Graph.Annotations.AnnotationModel>
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="359.605419877799" eyeY="458.399378895455" eyeZ="40.5610323458191" lookX="8.15047411464275" lookY="-168.620577164401" lookZ="-276.346952517891" upX="0.00959801654933744" upY="0.945518656798023" upZ="-0.325426649585512" />
+    <Camera Name="Background Preview" eyeX="359.605407714844" eyeY="458.399383544922" eyeZ="40.5610313415527" lookX="8.15047454833984" lookY="-168.620574951172" lookZ="-276.346954345703" upX="0.0095980167388916" upY="0.945518672466278" upZ="-0.325426638126373" />
   </Cameras>
 </Workspace>
