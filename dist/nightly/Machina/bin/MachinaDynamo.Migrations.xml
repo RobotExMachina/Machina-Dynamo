@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<migrations>
+  <priorNameHint>
+  	<oldName>MachinaDynamo.Actions.Zone</oldName>
+  	<newName>MachinaDynamo.Actions.Precision</newName>
+  </priorNameHint>
+  <priorNameHint>
+  	<oldName>MachinaDynamo.Actions.ZoneTo</oldName>
+  	<newName>MachinaDynamo.Actions.PrecisionTo</newName>
+  </priorNameHint>
+  <priorNameHint>
+  	<oldName>MachinaDynamo.Actions.Joints</oldName>
+  	<newName>MachinaDynamo.Actions.Axes</newName>
+  </priorNameHint>
+  <priorNameHint>
+  	<oldName>MachinaDynamo.Actions.JointsTo</oldName>
+  	<newName>MachinaDynamo.Actions.AxesTo</newName>
+  </priorNameHint>
+
+  <!-- This has changed so much too, better to yield error and rewrite script
+  <priorNameHint>
+    <oldName>MachinaDynamo.Tools.Create</oldName>
+    <newName>MachinaDynamo.Tools.New</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>MachinaDynamo.Tools.New</oldName>
+    <newName>MachinaDynamo.Actions.DefineTool</newName>
+  </priorNameHint>
+    -->
+
+  <!-- It is name-based now, so avoid this conversion
+  <priorNameHint>
+    <oldName>MachinaDynamo.Actions.Attach</oldName>
+    <newName>MachinaDynamo.Actions.AttachTool</newName>
+  </priorNameHint>
+    -->
+
+  <priorNameHint>
+    <oldName>MachinaDynamo.Actions.Detach</oldName>
+    <newName>MachinaDynamo.Actions.DetachTool</newName>
+  </priorNameHint>
+
+  <priorNameHint>
+    <oldName>MachinaDynamo.Actions.Motion</oldName>
+    <newName>MachinaDynamo.Actions.MotionMode</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>MachinaDynamo.Actions.MotionType</oldName>
+    <newName>MachinaDynamo.Actions.MotionMode</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>MachinaDynamo.Programs.DisplayProgram</oldName>
+    <newName>MachinaDynamo.Programs.Display</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>MachinaDynamo.Programs.ExportCode</oldName>
+    <newName>MachinaDynamo.Programs.Compile</newName>
+  </priorNameHint>
+  <priorNameHint>
+    <oldName>MachinaDynamo.Programs.CompileProgram</oldName>
+    <newName>MachinaDynamo.Programs.Compile</newName>
+  </priorNameHint>
+
+  <priorNameHint>
+    <oldName>MachinaDynamo.Robots.RobotCreate</oldName>
+    <newName>MachinaDynamo.Robots.Create</newName>
+  </priorNameHint>
+
+</migrations>

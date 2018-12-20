@@ -1,0 +1,650 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MachinaDynamo</name>
+    </assembly>
+    <members>
+        <member name="T:MachinaDynamo.Actions">
+            <summary>
+            All possible Actions.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Actions.WriteDigital(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Activate/deactivate digital output. 
+            </summary>
+            <param name="digitalPin">Digital pin name or number</param>
+            <param name="isOn">Turn on?</param>
+            <param name="toolPin">Is this pin on the robot's tool?</param>
+            <returns name="Action"></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.WriteAnalog(System.String,System.Double,System.Boolean)">
+            <summary>
+            Send a value to analog output.
+            </summary>
+            <param name="analogPin">Analog pin name or number</param>
+            <param name="value">Value to send to pin</param>
+            <param name="toolPin">Is this pin on the robot's tool?</param>
+            <returns name="Action"></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Wait(System.Double)">
+            <summary>
+            Pause program execution for a specified amount of time.
+            </summary>
+            <param name="millis">Pause time in milliseconds</param>
+            <returns name="Action">Wait Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.TransformTo(Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Performs a compound absolute transformation to target Plane. The device's new absolute position and orientation will be those of the Plane.
+            </summary>
+            <param name="plane">Target Plane to transform to</param>
+            <returns name="Action">Transform Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Temperature(System.Double,System.String,System.Boolean)">
+            <summary>
+            Increment the working temperature of one of the device's parts. Useful for 3D printing operations.
+            </summary>
+            <param name="tempInc">Temperature increment in °C</param>
+            <param name="part">Device's part that will change temperature, e.g. "extruder", "bed", etc.</param>
+            <param name="wait">If true, execution will wait for the part to heat up and resume when reached the target.</param>
+            <returns name="Action">Temperature Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.TemperatureTo(System.Double,System.String,System.Boolean)">
+            <summary>
+            Set the working temperature of one of the device's parts. Useful for 3D printing operations.
+            </summary>
+            <param name="temp">Temperature value in °C</param>
+            <param name="part">Device's part that will change temperature, e.g. "extruder", "bed", etc.</param>
+            <param name="wait">If true, execution will wait for the part to heat up and resume when reached the target.</param>
+            <returns name="Action">Temperature Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Speed(System.Double)">
+            <summary>
+            Increases the speed at which future actions will execute.
+            </summary>
+            <param name="speedInc">Speed increment in mm/s or deg/sec</param>
+            <returns name="Action">Speed Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.SpeedTo(System.Double)">
+            <summary>
+            Sets the speed at which future actions will execute.
+            </summary>
+            <param name="speed">Speed value in mm/s or deg/sec</param>
+            <returns name="Action">Speed Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Rotate(Autodesk.DesignScript.Geometry.Vector,System.Double)">
+            <summary>
+            Rotates the device a specified angle in degrees along the specified vector.
+            </summary>
+            <param name="axis">Rotation axis, with positive rotation direction is defined by the right-hand rule.</param>
+            <param name="angDegs">Rotation angle in degrees</param>
+            <returns name="Action">Rotate Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.RotateTo(Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Rotates the device to a specified orientation without translating the TCP.
+            </summary>
+            <param name="targetPlane">Target spatial orientation</param>
+            <returns name="Action">Rotate Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Precision(System.Double)">
+            <summary>
+            Increase the precision at which future actions will execute. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as "Zone", "Approximate Positioning" or "Blending Radius" in different platforms. 
+            </summary>
+            <param name="radiusInc">Radius increment in mm</param>
+            <returns name="Action">Precision Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.PrecisionTo(System.Double)">
+            <summary>
+            Set the precision at which future actions will execute. Precision is measured as the radius of the smooth interpolation between motion targets. This is refered to as "Zone", "Approximate Positioning" or "Blending Radius" in different platforms. 
+            </summary>
+            <param name="radius">Radius value in mm</param>
+            <returns name="Action">Precision Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.PushSettings">
+            <summary>
+            Stores current state settings to a buffer, so that temporary changes can be made, and settings can be reverted to the stored state later with PopSettings().
+            </summary>
+            <returns name="Action">PushSettings Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.PopSettings">
+            <summary>
+            Reverts current settings to the state store by the last call to PushSettings().
+            </summary>
+            <returns name="Action">PopSettings Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Move(Autodesk.DesignScript.Geometry.Vector)">
+            <summary>
+            Moves the device along a speficied vector relative to its current position.
+            </summary>
+            <param name="direction">Translation vector</param>
+            <returns name="Action">Move Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.MoveTo(Autodesk.DesignScript.Geometry.Point)">
+            <summary>
+            Moves the device to an absolute location.
+            </summary>
+            <param name="location">Target Point</param>
+            <returns name="Action">Move Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.MotionMode(System.String)">
+            <summary>
+            Sets the current motion mode to be applied to future actions. This can be "linear" (default) for straight line movements in euclidean space, or "joint" for smooth interpolation between axes angles. NOTE: "joint" motion may produce unexpected trajectories resulting in reorientations or collisions; use with caution!
+            </summary>
+            <param name="mode">"linear" or "joint"</param>
+            <returns name="Action">MotionMode Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Message(System.String)">
+            <summary>
+            Displays a text message on the device. This will depend on the device's configuration, e.g. ABB robots it will display it on the FlexPendant's log window.
+            </summary>
+            <param name="message">Text message to display</param>
+            <returns name="Action">Message Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.ExtrusionRate(System.Double)">
+            <summary>
+            Increases the extrusion rate of filament for 3D printers.
+            </summary>
+            <param name="rateInc">Increment of mm of filament per mm of movement</param>
+            <returns name="Action">ExtrusionRate Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.ExtrusionRateTo(System.Double)">
+            <summary>
+            Sets the extrusion rate of filament for 3D printers.
+            </summary>
+            <param name="rate">Value of mm of filament per mm of movement</param>
+            <returns name="Action">ExtrusionRate Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Extrude(System.Boolean)">
+            <summary>
+            Turns extrusion in 3D printers on/off.
+            </summary>
+            <param name="extrude">True/false for on/off</param>
+            <returns name="Action">Extrude Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.ExternalAxis(System.Int32,System.Double,System.String)">
+            <summary>
+            Increase the value of one of the robot's external axis. Values expressed in degrees or milimeters, depending on the nature of the external axis. Note that the effect of this change of external axis will go in effect on the next motion Action.
+            </summary>
+            <param name="axisNumber">Axis number from 1 to 6.</param>
+            <param name="increment">Value in mm or degrees.</param>
+            <param name="target">Which set of External Axes to target? "All", "Cartesian" or "Joint"?</param>
+            <returns name="Action">ExternalAxis Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.ExternalAxisTo(System.Int32,System.Double,System.String)">
+            <summary>
+            Set the value of one of the robot's external axis. Values expressed in degrees or milimeters, depending on the nature of the external axis. Note that the effect of this change of external axis will go in effect on the next motion Action.
+            </summary>
+            <param name="axisNumber">Axis number from 1 to 6.</param>
+            <param name="value">Value in mm or degrees.</param>
+            <param name="target">Which set of External Axes to target? "All", "Cartesian" or "Joint"?</param>
+            <returns name="Action">ExternalAxis Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.CustomCode(System.String,System.Boolean)">
+            <summary>
+            Insert a line of custom code directly into a compiled program. This is useful for obscure instructions that are not covered by Machina's API. Note that this Action cannot be checked for validity by Machina, and you are responsible for correct syntax.
+            </summary>
+            <param name="statement">Code in the machine's native language.</param>
+            <param name="isDeclaration">Is this a declaration, like a variable or a workobject? If so, this statement will be placed at the beginning of the program.</param>
+            <returns name="Action">CustomCode Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Comment(System.String)">
+            <summary>
+            Displays an internal comment in a program compilation. This is useful for internal annotations or reminders, but has no effect on the Robot's behavior.
+            </summary>
+            <param name="comment">Comment to be displayed on code compilation</param>
+            <returns name="Action">Comment Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Axes(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Increase the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.
+            </summary>
+            <param name="a1inc">Rotational increment in degrees for Axis 1</param>
+            <param name="a2inc">Rotational increment in degrees for Axis 2</param>
+            <param name="a3inc">Rotational increment in degrees for Axis 3</param>
+            <param name="a4inc">Rotational increment in degrees for Axis 4</param>
+            <param name="a5inc">Rotational increment in degrees for Axis 5</param>
+            <param name="a6inc">Rotational increment in degrees for Axis 6</param>
+            <returns name="Action">Axes Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.AxesTo(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Set the axes' rotation angle in degrees at the joints of mechanical devices, specially robotic arms.
+            </summary>
+            <param name="a1">Angular value in degrees for Axis 1</param>
+            <param name="a2">Angular value in degrees for Axis 2</param>
+            <param name="a3">Angular value in degrees for Axis 3</param>
+            <param name="a4">Angular value in degrees for Axis 4</param>
+            <param name="a5">Angular value in degrees for Axis 5</param>
+            <param name="a6">Angular value in degrees for Axis 6</param>
+            <returns name="Action">Axes Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.DefineTool(System.String,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Plane,System.Double)">
+            <summary>
+            Define a Tool object on the Robot's internal library to make it avaliable for future Attach/Detach actions.
+            </summary>
+            <param name="name">Tool name</param>
+            <param name="basePlane">Base Plane where the Tool will be attached to the Robot</param>
+            <param name="toolTipPlane">Plane of the Tool Tip Center (TCP)</param>
+            <param name="weight">Tool weight in Kg</param>
+            <returns name="Action">DefineTool Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.DetachTool">
+            <summary>
+            Detach any Tool currently attached to the Robot. Note that the Tool Center Point (TCP) will now be reverted back to the Robot's flange.
+            </summary>
+            <returns name="Action">DetachTool Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.AttachTool(System.String)">
+            <summary>
+            Attach a Tool to the flange of the Robot, replacing whichever tool was on it before. Note that the Tool Center Point (TCP) will be translated/rotated according to the tool change.
+            </summary>
+            <param name="toolName">The name of the Tool to attach to the Robot flange. Please note it should have been previously defined with "DefineTool"</param>
+            <returns name="Action">AttachTool Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.ArmAngleTo(System.Double)">
+            <summary>
+            Set the value of the arm-angle parameter. This value represents the planar offset around the 7th axis for 7-dof robotic arms.
+            </summary>
+            <param name="angle">Angular value in degrees.</param>
+            <returns name="Action">ArmAngle Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Acceleration(System.Double)">
+            <summary>
+            Increase the TCP acceleration value new Actions will be ran at.
+            </summary>  
+            <param name="accInc">TCP acceleration increment in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.</param>
+            <returns name="Action">Acceleration Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.AccelerationTo(System.Double)">
+            <summary>
+            Set the TCP acceleration value new Actions will be ran at.
+            </summary>
+            <param name="acceleration">TCP acceleration value in mm/s^2. Decreasing the total to zero or less will reset it back the robot's default.</param>
+            <returns name="Action">Acceleration Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.Coordinates(System.String)">
+            <summary>
+            LET'S PUT A PIN ON THIS ONE... SOME DEEP CHANGES NEED TO HAPPEN AT CORE, SO THIS IS STAYING HERE
+            FOR LEGACY PURPOSES, AND WILL BE REWRITTEN AS SOON AS CORE BRINGS IN A NEW MODEL
+            </summary>
+            <summary>
+            Sets the coordinate system that will be used for future relative actions. This can be "global" or "world" (default) to refer to the system's global reference coordinates, or "local" to refer to the device's local reference frame. For example, for a robotic arm, the "global" coordinate system will be the robot's base, and the "local" one will be the coordinates of the tool tip.
+            </summary>
+            <param name="type">"global" or "local"</param>
+            <returns>Set Reference Coordinate System Action</returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.TurnOff(System.Int32)">
+            <summary>
+            Turn digital output off. Alias for `WriteDigital(ioNum, false)` 
+            </summary>
+            <param name="ioNum"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.TurnOn(System.Int32)">
+            <summary>
+            Turn digital output on. Alias for `WriteDigital(ioNum, true)`
+            </summary>
+            <param name="ioNum">Digital pin number</param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Actions.#ctor">
+            <summary>
+            Make constructor internal so that it doesn't show up on the menu.
+            </summary>
+        </member>
+        <member name="T:MachinaDynamo.Bridge">
+            <summary>
+            Bridge connection and communication.
+            </summary>
+            <summary>
+            Bridge connection and communication.
+            </summary>
+        </member>
+        <member name="F:MachinaDynamo.Bridge.motionUpdateOutputs">
+            <summary>
+            The main object that stores output properties over time.
+            @TODO: each noce should have its own instance not shared across Dynamo,
+            especially on multi-bridge listening... 
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Bridge.MotionUpdate(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Will update every time real-time motion data is received from the device.
+            </summary>
+            <param name="bridgeMessages">The last batch of messages received from the Bridge.</param>
+            <param name="onlyMostRecent">If true, only the single most recent message will be output.</param>
+            <returns name="log">Status messages.</returns>
+            <returns name="actionTCP">Last known real-time TCP position.</returns>
+            <returns name="actionAxes">Last known real-time robot axes.</returns>
+            <returns name="actionExternalAxes">Last known real-time external axes.</returns>
+        </member>
+        <member name="F:MachinaDynamo.Bridge.actionIssuedOutputs">
+            <summary>
+            The main object that stores output properties over time.
+            @TODO: each noce should have its own instance not shared across Dynamo,
+            especially on multi-bridge listening... 
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Bridge.ActionIssued(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Will update every time an Action has been successfully issued and is pending release to the device.
+            </summary>
+            <param name="bridgeMessages">The last batch of messages received from the Bridge.</param>
+            <param name="onlyMostRecent">If true, only the single most recent message will be output.</param>
+            <returns name="log">Status messages.</returns>
+            <returns name="lastAction">Last Action that was successfully issued to the robot.</returns>
+            <returns name="actionTCP">Last known TCP position for this Action.</returns>
+            <returns name="actionAxes">Last known axes for this Action.</returns>
+            <returns name="actionExternalAxes">Last known external axes for this Action.</returns>
+        </member>
+        <member name="F:MachinaDynamo.Bridge.actionReleasedOutputs">
+            <summary>
+            The main object that stores output properties over time.
+            @TODO: each noce should have its own instance not shared across Dynamo,
+            especially on multi-bridge listening... 
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Bridge.ActionReleased(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Will update every time an Action has been successfully executed by the robot.
+            </summary>
+            <param name="bridgeMessages">The last batch of messages received from the Bridge.</param>
+            <param name="onlyMostRecent">If true, only the single most recent message will be output.</param>
+            <returns name="log">Status messages.</returns>
+            <returns name="lastAction">Last Action that was successfully released to the robot.</returns>
+            <returns name="actionTCP">Last known TCP position for this Action.</returns>
+            <returns name="actionAxes">Last known axes for this Action.</returns>
+            <returns name="actionExternalAxes">Last known external axes for this Action.</returns>
+            <returns name="pendingActions">How many actions are pending release to device?</returns>
+        </member>
+        <member name="M:MachinaDynamo.Bridge.Connect(System.String,System.String,System.Boolean)">
+            <summary>
+            Establish connection with the Machina Bridge.
+            </summary>
+            <param name="url">The URL of the Machina Bridge App. Use default unless you know what you are doing ;)</param>
+            <param name="name">The name of this connecting client.</param>
+            <param name="connect">Connect to Machina Bridge App?</param>
+            <returns name="log">Status messages.</returns>
+            <returns name="Bridge">The (websocket) object managing connection to the Machina Bridge.</returns>
+        </member>
+        <member name="M:MachinaDynamo.Bridge.Listen(System.Object)">
+            <summary>
+            Listen to messages from the Machina Bridge.
+            </summary>
+            <param name="Bridge">The (websocket) object managing connection to the Machina Bridge.</param>
+            <returns name="log">Status messages.</returns>
+            <returns name="bridgeMessages">Last messags received from the bridge. Will only update once per received message.</returns>
+        </member>
+        <member name="F:MachinaDynamo.Bridge.actionExecutedOutputs">
+            <summary>
+            The main object that stores output properties over time.
+            @TODO: each noce should have its own instance not shared across Dynamo,
+            especially on multi-bridge listening... 
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Bridge.ActionExecuted(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Will update every time an Action has been successfully executed by the robot.
+            </summary>
+            <param name="bridgeMessages">The last batch of messages received from the Bridge.</param>
+            <param name="onlyMostRecent">If true, only the single most recent message will be output.</param>
+            <returns name="log">Status messages.</returns>
+            <returns name="lastAction">Last Action that was successfully executed by the robot.</returns>
+            <returns name="actionTCP">Last known TCP position for this Action.</returns>
+            <returns name="actionAxes">Last known axes for this Action.</returns>
+            <returns name="actionExternalAxes">Last known external axes for this Action.</returns>
+            <returns name="pendingActions">How many Actions are left in the queue to be executed?</returns>
+            <returns name="pendingActionsOnDevice">How many Actions are left on the device to be executed? This only accounts for the ones that have already been released to it.</returns>
+        </member>
+        <member name="M:MachinaDynamo.Bridge.Send(System.Object,System.Collections.Generic.List{Machina.Action},System.Boolean)">
+            <summary>
+            Send a list of Actions to the Bridge.
+            </summary>
+            <param name="Bridge">The (websocket) object managing connection to the Machina Bridge.</param>
+            <param name="actions">A ist of Actions to send to the Bridge.</param>
+            <param name="send">Send Actions?</param>
+            <returns name="log">Status messages.</returns>
+            <returns name="instructions">Streamed instructions.</returns>
+        </member>
+        <member name="T:MachinaDynamo.MotionUpdateOutputs">
+            <summary>
+            A helper class to maintain output data for this Node.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.MotionUpdateOutputs.ParseIncomingMessages(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Take a list of string json objects, check how fresh the data is, and store it if applicable. 
+            </summary>
+            <param name="messages"></param>
+            <param name="keepOnlyMostRecent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.MotionUpdateOutputs.ParseMessage(System.Object)">
+            <summary>
+            Take a json object and add addd its properties to output lists
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.MotionUpdateOutputs.Log(System.String)">
+            <summary>
+            Add a message to the log output.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:MachinaDynamo.MotionUpdateOutputs.ClearLog">
+            <summary>
+            Clears the messages in the log output.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.MotionUpdateOutputs.ClearOutputs">
+            <summary>
+            Clear all output lists except log messages.
+            </summary>
+        </member>
+        <member name="T:MachinaDynamo.ActionIssuedOutputs">
+            <summary>
+            A helper class to maintain output data for this Node.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.ActionIssuedOutputs.ParseIncomingMessages(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Take a list of string json objects, check how fresh the data is, and store it if applicable. 
+            </summary>
+            <param name="messages"></param>
+            <param name="keepOnlyMostRecent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.ActionIssuedOutputs.ParseMessage(System.Object)">
+            <summary>
+            Take a json object and add addd its properties to output lists
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.ActionIssuedOutputs.Log(System.String)">
+            <summary>
+            Add a message to the log output.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:MachinaDynamo.ActionIssuedOutputs.ClearLog">
+            <summary>
+            Clears the messages in the log output.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.ActionIssuedOutputs.ClearOutputs">
+            <summary>
+            Clear all output lists except log messages.
+            </summary>
+        </member>
+        <member name="T:MachinaDynamo.ActionReleasedOutputs">
+            <summary>
+            A helper class to maintain output data for this Node.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.ActionReleasedOutputs.ParseIncomingMessages(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Take a list of string json objects, check how fresh the data is, and store it if applicable. 
+            </summary>
+            <param name="messages"></param>
+            <param name="keepOnlyMostRecent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.ActionReleasedOutputs.ParseMessage(System.Object)">
+            <summary>
+            Take a json object and add addd its properties to output lists
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.ActionReleasedOutputs.Log(System.String)">
+            <summary>
+            Add a message to the log output.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:MachinaDynamo.ActionReleasedOutputs.ClearLog">
+            <summary>
+            Clears the messages in the log output.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.ActionReleasedOutputs.ClearOutputs">
+            <summary>
+            Clear all output lists except log messages.
+            </summary>
+        </member>
+        <member name="T:MachinaDynamo.ActionExecutedOutputs">
+            <summary>
+            A helper class to maintain output data for this Node.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.ActionExecutedOutputs.ParseIncomingMessages(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Take a list of string json objects, check how fresh the data is, and store it if applicable. 
+            </summary>
+            <param name="messages"></param>
+            <param name="keepOnlyMostRecent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.ActionExecutedOutputs.ParseMessage(System.Object)">
+            <summary>
+            Take a json object and add addd its properties to output lists
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.ActionExecutedOutputs.Log(System.String)">
+            <summary>
+            Add a message to the log output.
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:MachinaDynamo.ActionExecutedOutputs.ClearLog">
+            <summary>
+            Clears the messages in the log output.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.ActionExecutedOutputs.ClearOutputs">
+            <summary>
+            Clear all output lists except log messages.
+            </summary>
+        </member>
+        <member name="T:MachinaDynamo.Programs">
+            <summary>
+            Program creation and visualization options.
+            </summary>
+            <summary>
+            Program creation and visualization options.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Programs.Compile(Machina.Robot,System.Collections.Generic.List{Machina.Action},System.Boolean,System.Boolean)">
+            <summary>
+            Compiles a list of Actions into the device's native language. This is the code you would typically need to load into the device's controller to run the program.
+            </summary>
+            <param name="bot">The Robot instance that will export this program</param>
+            <param name="actions">A program in the form of a list of Actions</param>
+            <param name="inlineTargets">If true, targets will be declared inline with the instruction. Otherwise, the will be declared at the beginning of the programs and used as independent variables</param>
+            <param name="machinaComments">If true, Machina-style comments with code information will be added to the end of the code instructions</param>
+            <returns name="code">Device-specific code</returns>
+        </member>
+        <member name="M:MachinaDynamo.Programs.Display(System.Collections.Generic.List{Machina.Action})">
+            <summary>
+            Returns a human-readable representation of a list of Actions.
+            </summary>
+            <param name="actions">The list of Actions that conforms a program</param>
+            <returns name="program">Human-readable representation of the program</returns>
+        </member>
+        <member name="M:MachinaDynamo.Programs.WriteToFile(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Writes a list of strings to a file. Make sure Dynamo has the adequate Admin rights to write files to your system. 
+            </summary>
+            <param name="code">A List of Strings</param>
+            <param name="filepath">The path where the file will be saved</param>
+            <returns name="resultMsg">Success?</returns>
+        </member>
+        <member name="T:MachinaDynamo.Robots">
+            <summary>
+            Robot creation and manipulation tools.
+            </summary>
+            <summary>
+            Robot creation and manipulation tools.
+            </summary>
+            <summary>
+            Robot creation and manipulation tools.
+            </summary>
+            <summary>
+            Robot creation and manipulation tools.
+            </summary>
+            <summary>
+            Robot creation and manipulation tools.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Robots.MachinaDynamoAPIVersion">
+            <summary>
+            This API's version
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Robots.Version">
+            <summary>
+            Returns version and build numbers of the Machina Core library and Dynamo API.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MachinaDynamo.Robots.SetIOName(Machina.Robot,System.String,System.Int32,System.Boolean)">
+            <summary>
+            Change the name of a Robot's IO pin.
+            </summary>
+            <param name="bot">Robot to change the IO name to</param>
+            <param name="name">New IO name</param>
+            <param name="pin">Pin number</param>
+            <param name="digital">Is this a digital pin?</param>
+            <returns name="Robot">Robot with named IO</returns>
+        </member>
+        <member name="M:MachinaDynamo.Robots.#ctor">
+            <summary>
+            Make the constructor internal to hide it from the menu.
+            </summary>
+        </member>
+        <member name="M:MachinaDynamo.Robots.Create(System.String,System.String)">
+            <summary>
+            Creates a new Robot instance.
+            </summary>
+            <param name="name">A name for this Robot</param>
+            <param name="brand">Input "ABB", "UR", "KUKA", "ZMorph" or "HUMAN" (if you only need a human-readable representation of the actions of this Robot...)</param>
+            <returns name="Robot">Your brand new Machina Robot object</returns>
+        </member>
+        <member name="T:MachinaDynamo.MachinaBridgeSocket">
+            <summary>
+            A quick wrapper class that incorporates a log of received messages...
+            </summary>
+        </member>
+        <member name="T:MachinaDynamo.Utils">
+            <summary>
+            Internal utilities, mainly data type conversion.
+            </summary>
+        </member>
+    </members>
+</doc>
