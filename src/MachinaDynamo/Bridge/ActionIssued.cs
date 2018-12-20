@@ -270,7 +270,7 @@ namespace MachinaDynamo
                 { "lastAction", _instructions},
                 { "actionTCP", _tcps},
                 { "actionAxes", _axes},
-                { "actionExternalAxes", _externalAxes},
+                { "actionExternalAxes", _externalAxes}
             };
         }
 

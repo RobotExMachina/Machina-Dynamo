@@ -54,7 +54,7 @@ namespace MachinaDynamo
             _ms = _ms ?? new MachinaBridgeSocket(name);
 
             bool connectedResult = false;
-            List<string> msgs = new List<string>();
+            string logMsg = "Not connected";
 
             // @TODO: move all socket management inside the wrapper
             if (connect)
@@ -75,7 +75,7 @@ namespace MachinaDynamo
 
                 if (connectedResult)
                 {
-                    msgs.Add("Connected to Machina Bridge");
+                    logMsg = "Connected to Machina Bridge";
                 }
                 else
                 {
@@ -91,14 +91,14 @@ namespace MachinaDynamo
                     _ms.socket = null;
                     _ms.Flush();
 
-                    msgs.Add("Disconnected from the bridge");
+                    logMsg = "Disconnected from the bridge";
                 }
                 connectedResult = false;
             }
 
             return new Dictionary<string, object>
             {
-                {"status", msgs},
+                {"log", logMsg},
                 {"Bridge", connectedResult ? _ms : null}
             };
         }

@@ -62,7 +62,7 @@ namespace MachinaDynamo
         /// <returns name="pendingActions">How many actions are pending release to device?</returns>
         [MultiReturn(new[]
         {
-            "log", "lastAction", "actionTCP", "actionAxes", "actionExternalAxes", "pendingActions",
+            "log", "lastAction", "actionTCP", "actionAxes", "actionExternalAxes", "pendingActions"
         })]
         public static Dictionary<string, object> ActionReleased(List<string> bridgeMessages,
             bool onlyMostRecent = false)
@@ -274,7 +274,7 @@ namespace MachinaDynamo
                 { "actionTCP", _tcps},
                 { "actionAxes", _axes},
                 { "actionExternalAxes", _externalAxes},
-                { "pendingActions", _pendingRelease},
+                { "pendingActions", _pendingRelease}
             };
         }
 
