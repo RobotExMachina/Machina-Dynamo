@@ -19,6 +19,10 @@
 
 
 # REVISIONS
+# v0.8.8
+- Fix `Connect` log typo
+- Core update
+
 # v0.8.6
 - Core update to `v0.8.6`.
 - [x] Deprecate all the weird joint Actions
