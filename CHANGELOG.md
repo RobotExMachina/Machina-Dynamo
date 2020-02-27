@@ -17,13 +17,19 @@
 
 # WISHLIST
 
+# TODO
+## CHANGES IN GH v0.8.12
+- [ ] Change `Compile` to spit out a `RobotProgram` instance
+- [ ] Change `Display` to render it as a `List<string>`
+- [ ] Add `Save` to write the program to a file somewhere on the system
+
 
 # REVISIONS
-# v0.8.8
+## v0.8.8
 - Fix `Connect` log typo
 - Core update
 
-# v0.8.6
+## v0.8.6
 - Core update to `v0.8.6`.
 - [x] Deprecate all the weird joint Actions
 - [x] Add `Acceleration`
@@ -54,6 +60,6 @@
 - [x] Package manager
 
 ---
-# v0.6.4
+## v0.6.4
 
 _(lost previous history...)_
